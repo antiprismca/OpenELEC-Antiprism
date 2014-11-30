@@ -1,0 +1,10 @@
+--- LVM2-2.02.105/udev/Makefile.in	2014-07-29 22:24:18.154907701 -0400
++++ LVM2-2.02.105.patch/udev/Makefile.in	2014-07-29 22:25:00.990906888 -0400
+@@ -59,6 +59,7 @@
+ 	$(INSTALL_DATA) -D $< $(udevdir)/$(<F)
+ 
+ install_device-mapper: $(DM_RULES:.rules=_install)
++device-mapper: $(DM_RULES)
+ install_lvm2: $(LVM_RULES:.rules=_install)
+ 
+ install: install_lvm2 install_device-mapper

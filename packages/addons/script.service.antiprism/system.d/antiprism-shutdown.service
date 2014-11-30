@@ -1,0 +1,13 @@
+[Unit]
+Description=Shutdown handling
+DefaultDependencies=false
+Before=systemd-exit.service
+
+[Service]
+Type=oneshot
+ExecStop=/usr/lib/openelec/antiprism-shutdown
+StandardOutput=tty
+
+[Install]
+Alias=antiprism-shutdown.target
+

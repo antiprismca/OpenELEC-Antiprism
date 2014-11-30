@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="zope.interface"
-PKG_VERSION="3.3.0"
+PKG_VERSION="4.1.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
-PKG_SITE="http://zope.org/Products/ZopeInterface/"
-PKG_URL="http://www.zope.org/Products/ZopeInterface/$PKG_VERSION/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_SITE="https://pypi.python.org/pypi/zope.interface"
+PKG_URL="https://pypi.python.org/packages/source/z/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain Python distutilscross:host"
 PKG_PRIORITY="optional"
 PKG_SECTION="python/web"

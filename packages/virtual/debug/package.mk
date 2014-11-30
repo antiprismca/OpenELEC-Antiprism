@@ -32,10 +32,7 @@ PKG_LONGDESC="debug is a Metapackage for installing debugging tools"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-# configure GPU drivers and dependencies:
-  get_graphicdrivers
-
-if [ "$VDPAU_SUPPORT" = "yes" ]; then
+if [ "$VDPAU" = "yes" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET vdpauinfo"
 fi
 

@@ -17,13 +17,12 @@
 ################################################################################
 
 PKG_NAME="fuse-exfat"
-PKG_VERSION="1.1.0"
+PKG_VERSION="1.0.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://code.google.com/p/exfat"
-#PKG_URL="http://exfat.googlecode.com/files/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_URL="http://distfiles.gentoo.org/distfiles/$PKG_NAME-$PKG_VERSION.tar.gz"
+PKG_URL="http://exfat.googlecode.com/files/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain scons:host fuse"
 PKG_PRIORITY="optional"
 PKG_SECTION="system"
@@ -35,7 +34,7 @@ PKG_AUTORECONF="no"
 
 
 make_target() {
-  export CCFLAGS="$CFLAGS -std=c99"
+  export CCFLAGS="$CFLAGS"
 
   scons
 }

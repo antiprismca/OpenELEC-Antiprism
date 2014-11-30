@@ -1,0 +1,31 @@
+#!/bin/sh
+################################################################################
+#      This file is part of OpenELEC - http://www.openelec.tv
+#      Copyright (C) 2009-2014 Stephan Raue (stephan@openelec.tv)
+#
+#  OpenELEC is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  OpenELEC is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
+################################################################################
+
+[ -e /dev/loop1 ] || mknod /dev/loop1 b 7 1
+[ -e /dev/loop2 ] || mknod /dev/loop2 b 7 2
+[ -e /dev/loop3 ] || mknod /dev/loop3 b 7 3
+[ -e /dev/loop4 ] || mknod /dev/loop4 b 7 4
+[ -e /dev/loop5 ] || mknod /dev/loop5 b 7 5
+[ -e /dev/loop6 ] || mknod /dev/loop6 b 7 6
+[ -e /dev/loop7 ] || mknod /dev/loop7 b 7 7
+[ -e /dev/loop8 ] || mknod /dev/loop8 b 7 8
+[ -e /dev/loop9 ] || mknod /dev/loop9 b 7 9
+[ -e /dev/loop10 ] || mknod /dev/loop10 b 7 10 
+
+

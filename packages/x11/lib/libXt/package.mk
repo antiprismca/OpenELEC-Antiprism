@@ -39,7 +39,7 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-static \
 
 pre_make_target() {
   make -C util CC=$HOST_CC \
-               CFLAGS="$HOST_CFLAGS " \
+               CFLAGS="$HOST_CFLAGS -I$SYSROOT_PREFIX/usr/include" \
                LDFLAGS="$HOST_LDFLAGS" \
                makestrs
 }

@@ -32,8 +32,8 @@ PKG_LONGDESC="The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-if [ ! "$OPENGL" = "no" ]; then
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $OPENGL glu"
+if [ "$OPENGL" = "Mesa" ]; then
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET Mesa glu"
 fi
 
 make_target() {

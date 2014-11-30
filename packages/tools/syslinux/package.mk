@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="syslinux"
-PKG_VERSION="6.03"
+PKG_VERSION="6.02"
 PKG_REV="1"
 PKG_ARCH="i386 x86_64"
 PKG_LICENSE="GPL"
 PKG_SITE="http://syslinux.zytor.com/"
-PKG_URL="http://www.kernel.org/pub/linux/utils/boot/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.xz"
+PKG_URL="http://www.kernel.org/pub/linux/utils/boot/$PKG_NAME/$PKG_NAME-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS_HOST="util-linux:host"
 PKG_DEPENDS_TARGET="toolchain util-linux e2fsprogs syslinux:host"
 PKG_PRIORITY="optional"
@@ -71,9 +71,10 @@ make_host() {
 makeinstall_host() {
   mkdir -p $ROOT/$TOOLCHAIN/bin
     cp bios/extlinux/extlinux $ROOT/$TOOLCHAIN/bin
-    cp bios/linux/syslinux $ROOT/$TOOLCHAIN/bin
+    cp bios/linux/syslinux-nomtools $ROOT/$TOOLCHAIN/bin/syslinux
 
   mkdir -p $ROOT/$TOOLCHAIN/share/syslinux
+    cp bios/com32/menu/menu.c32 $ROOT/$TOOLCHAIN/share/syslinux
     cp bios/com32/menu/vesamenu.c32 $ROOT/$TOOLCHAIN/share/syslinux
     cp bios/com32/lib/libcom32.c32 $ROOT/$TOOLCHAIN/share/syslinux
     cp bios/com32/libutil/libutil.c32 $ROOT/$TOOLCHAIN/share/syslinux

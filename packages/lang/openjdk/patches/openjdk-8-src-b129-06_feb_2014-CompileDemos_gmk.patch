@@ -1,0 +1,11 @@
+--- openjdk-8-src-b129-06_feb_2014/jdk/make/CompileDemos.gmk	2014-02-23 18:57:46.426175964 -0500
++++ openjdk-8-src-b129-06_feb_2014.patch/jdk/make/CompileDemos.gmk	2014-02-23 18:58:04.078175962 -0500
+@@ -251,7 +251,7 @@
+       LANG := $$(BUILD_DEMO_JVMTI_$1_LANG), \
+       OPTIMIZATION := LOW, \
+       CXXFLAGS := $$($1_CXXFLAGS), \
+-      LDFLAGS := $(filter-out -incremental:no -opt:ref, $(LDFLAGS_JDKLIB)), \
++      LDFLAGS := $$(LDFLAGS_JDKLIB), \
+       LDFLAGS_macosx := $(call SET_EXECUTABLE_ORIGIN), \
+       LDFLAGS_SUFFIX := $$($1_EXTRA_CXX), \
+       LDFLAGS_SUFFIX_posix := $5, \

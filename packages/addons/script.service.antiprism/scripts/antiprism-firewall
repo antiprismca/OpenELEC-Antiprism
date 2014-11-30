@@ -1,0 +1,16 @@
+#!/bin/sh
+
+cat << EOF | iptables-restore -v >/dev/null
+*filter
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:FORWARD DROP [0:0]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p icmp --icmp-type any -j ACCEPT
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -j DROP
+COMMIT
+EOF
+
+exit 0
+

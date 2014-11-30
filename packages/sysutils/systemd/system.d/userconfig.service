@@ -1,6 +1,8 @@
 [Unit]
 Description=Setup User config dir
 DefaultDependencies=no
+Before=local-fs.target shutdown.target
+Conflicts=shutdown.target
 
 [Service]
 Type=oneshot
@@ -8,4 +10,4 @@ ExecStart=/bin/sh -c "mkdir -p /storage/.config; false | cp -iR /usr/config/* /s
 RemainAfterExit=yes
 
 [Install]
-WantedBy=sysinit.target
+WantedBy=local-fs.target

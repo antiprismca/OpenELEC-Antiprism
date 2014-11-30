@@ -1,20 +1,21 @@
 VIProductVersion "1.0.0.0"
-VIAddVersionKey ProductName "OpenELEC USB Stick Creator"
-VIAddVersionKey Comments "A bootable OpenElec Installer Stick creation tool."
+VIAddVersionKey ProductName "OpenELEC-Antiprism USB Stick Creator"
+VIAddVersionKey Comments "A bootable OpenElec-Antiprism Installer Stick creation tool."
 VIAddVersionKey CompanyName "OpenELEC"
 VIAddVersionKey LegalCopyright "OpenELEC"
-VIAddVersionKey FileDescription "OpenELEC USB Stick Creator"
+VIAddVersionKey FileDescription "OpenELEC-Antiprism USB Stick Creator"
 VIAddVersionKey FileVersion "1.0"
 VIAddVersionKey ProductVersion "1.0"
-VIAddVersionKey InternalName "OpenELEC USB Stick Creator"
+VIAddVersionKey InternalName "OpenELEC-Antiprism USB Stick Creator"
 
-!define PRODUCT_NAME "OpenELEC USB Stick Creator"
+!define PRODUCT_NAME "OpenELEC-Antiprism USB Stick Creator"
 !define PRODUCT_VERSION "1.0"
 !define PRODUCT_PUBLISHER "OpenELEC"
 !define PRODUCT_WEB_SITE "http://openelec.tv"
 BrandingText " "
 
 Var "DRIVE_LETTER"
+Var "STORAGE_SIZE_IN_KB"
 
 !include "MUI.nsh"
 !include LogicLib.nsh
@@ -35,12 +36,13 @@ Var "DRIVE_LETTER"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp"
 !define MUI_ABORTWARNING
 
-!define MUI_WELCOMEPAGE_TITLE "Welcome to the OpenELEC USB Stick Creator"
+!define MUI_WELCOMEPAGE_TITLE "Welcome to the OpenELEC-Antiprism USB Stick Creator"
+!define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the creation of an OpenELEC USB Installer Stick.\n\nPlease read the following pages carefully."
 !insertmacro MUI_PAGE_WELCOME
 
 !define MUI_PAGE_HEADER_TEXT "License Agreement"
-!define MUI_PAGE_HEADER_SUBTEXT "Please review the GPLv2 license below before using the OpenELEC USB Stick Creator"
+!define MUI_PAGE_HEADER_SUBTEXT "Please review the GPLv2 license below before using the OpenELEC-Antiprism USB Stick Creator"
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "If you accept the GPL license terms, click Continue."
 !define MUI_LICENSEPAGE_BUTTON "Continue"
 !insertmacro MUI_PAGE_LICENSE "gpl-2.0.txt"
@@ -89,7 +91,7 @@ Section "oeusbstart"
   ExpandEnvStrings $0 %COMSPEC%
 
   DetailPrint "- Formatting USB Device ($DRIVE_LETTER) ..."
-  nsExec::Exec `"$0" /c format $DRIVE_LETTER /V:OPENELEC /Q /FS:FAT32 /X`
+  nsExec::Exec `"$0" /c format $DRIVE_LETTER /V:LIVESYSTEM /Q /FS:FAT32 /X`
 
   DetailPrint "- Making Device Bootable ..."
   nsExec::Exec `"3rdparty\syslinux\win32\syslinux.exe" -f -m -a $DRIVE_LETTER`
@@ -105,17 +107,39 @@ Section "oeusbstart"
   nsExec::Exec `"$0" /c copy README.md $DRIVE_LETTER`
   nsExec::Exec `"$0" /c copy RELEASE $DRIVE_LETTER`
 
+  DetailPrint "- Copying menu files..."
+  nsExec::Exec `"$0" /c copy 3rdparty\syslinux\com32\* $DRIVE_LETTER`
+  
+  StrCpy $0 '$DRIVE_LETTER\'
+  Call FreeDiskSpace
+  IntOp $1 $1 - 20480
+  IntCmp $1 4194303 fileSizeOk fileSizeOk fileSizeTooBig
+fileSizeTooBig:
+  StrCpy "$1" 4194303
+fileSizeOk:
+  StrCpy '$STORAGE_SIZE_IN_KB' $1
+  DetailPrint "- STORAGE size is $STORAGE_SIZE_IN_KB kilobytes"
+  
   DetailPrint "- Creating Bootloader configuration ..."
   Delete '$DRIVE_LETTER\syslinux.cfg'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'DEFAULT menu.c32'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'PROMPT 0'
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'DEFAULT installer'
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ''
-
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL installer'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'MENU TITLE OpenELEC-Antiprism Live Stick'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ' '
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL livestorage'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Live Storage (use storage on live stick)'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  KERNEL /KERNEL'
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=OPENELEC installer quiet tty'
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ''
-  DetailPrint ""
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM disk=FILE=/flash/STORAGE STORAGE_SIZE_IN_KB=$STORAGE_SIZE_IN_KB max_loop=10 xbmc quiet tty'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ' '
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL storage'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Storage (use your local storage - may be dangerous)'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  KERNEL /KERNEL'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM disk=LABEL=Storage quiet tty'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ' '
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL installer'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Install Antiprism on your local storage'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  KERNEL /KERNEL'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM installer quiet tty'
 SectionEnd
 
 Function CustomCreate
@@ -171,8 +195,8 @@ Function GetDrivesCallBack
   Push $0
 FunctionEnd
 
-!define MUI_FINISHPAGE_TITLE "OpenELEC USB Stick Successfully Created"
-!define MUI_FINISHPAGE_TEXT "An OpenELEC USB Installer Stick has been created on the device $DRIVE_LETTER.\n\nPlease boot your HTPC off this USB stick and follow the on-screen instructions."
+!define MUI_FINISHPAGE_TITLE "OpenELEC-Antiprism USB Stick Successfully Created"
+!define MUI_FINISHPAGE_TEXT "An OpenELEC-Antiprism USB Installer Stick has been created on the device $DRIVE_LETTER.\n\nPlease boot your HTPC off this USB stick and follow the on-screen instructions."
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW "FinishShow"
 !insertmacro MUI_PAGE_FINISH
@@ -190,3 +214,14 @@ Function .onInit
   GetTempFileName $0
   Rename $0 '$PLUGINSDIR\custom.ini'
 FunctionEnd
+
+!define sysGetDiskFreeSpaceEx 'kernel32::GetDiskFreeSpaceExA(t, *l, *l, *l) i'
+; $0 - Path to check (can be a drive 'C:' or a full path 'C:\Windows')
+; $1 - Return value, free space in kb
+ 
+function FreeDiskSpace
+  System::Call '${sysGetDiskFreeSpaceEx}(r0,.,,.r1)'
+  System::Int64Op $1 / 1024
+  Pop $1
+functionend
+

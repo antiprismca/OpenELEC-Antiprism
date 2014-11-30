@@ -36,23 +36,20 @@ for i in $SKINS; do
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET $MEDIACENTER-theme-$i"
 done
 
-if [ "$MEDIACENTER" = "kodi" ]; then
+if [ "$MEDIACENTER" = "xbmc" ]; then
 # some python stuff needed for various addons
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET Imaging"
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET simplejson"
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET pycrypto"
 
-# Kodi audio encoder addons
-  if [ "$KODI_OPTICAL_SUPPORT" = "yes" ]; then
-    for audioencoder in $KODI_AUDIOENCODER_ADDONS; do
-      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET kodi-audioencoder-$audioencoder"
-    done
-  fi
-
 # various PVR clients
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET kodi-pvr-addons"
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET kodi-addon-xvdr"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET xbmc-pvr-addons"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET xbmc-addon-xvdr"
 
 # other packages
-  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET OpenELEC-settings"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET service.openelec.settings"
 fi
+
+# if [ ! "$LCD_DRIVER" = "none" ]; then
+#   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET script.xbmc.lcd"
+# fi

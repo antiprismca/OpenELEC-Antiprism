@@ -1,0 +1,38 @@
+--- openjdk-8-src-b129-06_feb_2014/hotspot/src/share/vm/oops/oop.hpp	2014-02-24 21:16:33.577857234 -0500
++++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/src/share/vm/oops/oop.hpp	2014-02-24 21:20:56.485852239 -0500
+@@ -113,7 +113,7 @@
+   bool is_instanceMirror()     const;
+   bool is_instanceRef()        const;
+   bool is_array()              const;
+-  bool is_objArray()           const;
++  bool is_objArray()           const __attribute__((noinline));
+   bool is_typeArray()          const;
+ 
+  private:
+@@ -157,7 +157,7 @@
+ 
+   // Load an oop out of the Java heap
+   static narrowOop load_heap_oop(narrowOop* p);
+-  static oop       load_heap_oop(oop* p);
++  static oop       load_heap_oop(oop* p) __attribute__((noinline));
+ 
+   // Load an oop out of Java heap and decode it to an uncompressed oop.
+   static oop load_decode_heap_oop_not_null(narrowOop* p);
+@@ -171,7 +171,7 @@
+ 
+   // Encode oop if UseCompressedOops and store into the heap.
+   static void encode_store_heap_oop_not_null(narrowOop* p, oop v);
+-  static void encode_store_heap_oop_not_null(oop* p, oop v);
++  static void encode_store_heap_oop_not_null(oop* p, oop v) __attribute__((noinline));
+   static void encode_store_heap_oop(narrowOop* p, oop v);
+   static void encode_store_heap_oop(oop* p, oop v);
+ 
+@@ -305,7 +305,7 @@
+   bool is_scavengable() const;
+ 
+   // Forward pointer operations for scavenge
+-  bool is_forwarded() const;
++  bool is_forwarded() const __attribute__((noinline));
+ 
+   void forward_to(oop p);
+   bool cas_forward_to(oop p, markOop compare);

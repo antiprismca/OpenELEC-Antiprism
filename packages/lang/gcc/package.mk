@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="gcc"
-PKG_VERSION="4.9.2"
+PKG_VERSION="4.9.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -97,7 +97,7 @@ PKG_CONFIGURE_OPTS_HOST="--target=$TARGET_NAME \
                          --disable-libgomp \
                          --enable-tls \
                          --enable-shared \
-                         --disable-static \
+                         --enable-static \
                          --enable-c99 \
                          --enable-long-long \
                          --enable-threads=posix \
@@ -106,7 +106,8 @@ PKG_CONFIGURE_OPTS_HOST="--target=$TARGET_NAME \
                          --enable-clocale=gnu \
                          $GCC_OPTS \
                          --disable-nls \
-                         --enable-checking=release"
+                         --enable-checking=release \
+                         --disable-cloog-version-check"
 
 pre_configure_bootstrap() {
   setup_toolchain host
@@ -172,6 +173,8 @@ makeinstall_target() {
   mkdir -p $INSTALL/usr/lib
     cp -P $ROOT/$PKG_BUILD/.$HOST_NAME/$TARGET_NAME/libgcc/libgcc_s.so* $INSTALL/usr/lib
     cp -P $ROOT/$PKG_BUILD/.$HOST_NAME/$TARGET_NAME/libstdc++-v3/src/.libs/libstdc++.so* $INSTALL/usr/lib
+    (cd $ROOT/$PKG_BUILD/.$HOST_NAME/$TARGET_NAME/libstdc++-v3/src/.libs; ar rvs libstdc++.a compatibility.o)
+    cp -P $ROOT/$PKG_BUILD/.$HOST_NAME/$TARGET_NAME/libstdc++-v3/src/.libs/libstdc++.a $SYSROOT_PREFIX/usr/lib
 }
 
 configure_init() {

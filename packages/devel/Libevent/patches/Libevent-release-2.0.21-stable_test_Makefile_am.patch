@@ -1,0 +1,11 @@
+--- Libevent-release-2.0.21-stable/test/Makefile.am-orig	2014-07-28 23:08:20.586105179 -0400
++++ Libevent-release-2.0.21-stable.patch/test/Makefile.am	2014-07-28 23:08:46.218104693 -0400
+@@ -19,7 +19,7 @@
+ EXTRA_PROGRAMS = regress
+ noinst_HEADERS = tinytest.h tinytest_macros.h regress.h tinytest_local.h
+ 
+-TESTS = $(top_srcdir)/test/test.sh
++TESTS = 
+ 
+ BUILT_SOURCES =
+ if BUILD_REGRESS

@@ -1,0 +1,13 @@
+--- service.openelec.settings/defaults.py	2014-10-04 18:05:06.210613051 -0400
++++ service.openelec.settings-patched/defaults.py	2014-10-04 18:06:39.710610513 -0400
+@@ -101,8 +101,8 @@ system = \
+         "SET_CLOCK_CMD"       : "/sbin/hwclock --systohc --utc",
+ 
+       #UPDATE
+-        "UPDATE_REQUEST_URL"  : "http://update.openelec.tv/updates.php",
+-        "UPDATE_DOWNLOAD_URL" : "http://%s.openelec.tv/%s",
++        "UPDATE_REQUEST_URL"  : "http://www.antiprism.ca/updates.php",
++        "UPDATE_DOWNLOAD_URL" : "http://www.antiprism.ca/%s/%s",
+         "LOCAL_UPDATE_DIR"    : "/storage/.update/",
+         "GET_CPU_FLAG"        : "cat /proc/cpuinfo | grep -q 'flags.* lm ' && echo '1' || echo '0'",
+         

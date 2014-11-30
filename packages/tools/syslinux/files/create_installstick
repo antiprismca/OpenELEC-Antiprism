@@ -187,11 +187,11 @@ echo "#########################################################"
 
 # create filesystem
   echo "creating filesystem on $PART..."
-  mkfs.vfat "$PART" -n OpenELEC
+  mkfs.vfat "$PART" -n LIVESTORAGE
 
 # install syslinux
   echo "installing syslinux to $PART..."
-  syslinux -f "$PART"
+  3rdparty/syslinux/Linux/syslinux -i -f "$PART"
 
 # mount partition
   echo "mounting partition $PART on $OE_TMP..."
@@ -202,19 +202,6 @@ echo "#########################################################"
   echo -n "finding partition UUID for $PART ..."
   UUID=`blkid $PART -s UUID -o value`
   echo "$UUID"
-
-# create bootloader configuration
-  echo "creating bootloader configuration..."
-
-cat >$OE_TMP/syslinux.cfg << EOF
-PROMPT 0
-DEFAULT installer
-
-LABEL installer
-  KERNEL /KERNEL
-  APPEND boot=UUID=$UUID installer quiet tty
-
-EOF
 
 # copy files
   echo "copying files to $PART..."
@@ -228,6 +215,36 @@ EOF
   cp INSTALL $OE_TMP
   cp README.md $OE_TMP
   cp RELEASE $OE_TMP
+  cp 3rdparty/syslinux/com32/* $OE_TMP
+
+# create bootloader configuration
+  echo "creating bootloader configuration..."
+
+  FREE_SPACE=`df -k "$OE_TMP" | tail -1 | tr -s ' ' | cut -d' ' -f4`
+  STORAGE_SIZE_IN_KB=`expr $FREE_SPACE - 20480`
+  if test "$STORAGE_SIZE_IN_KB" -gt 4194303; then
+      STORAGE_SIZE_IN_KB=4194303
+  fi
+cat >$OE_TMP/syslinux.cfg << EOF
+DEFAULT menu.c32
+PROMPT 0
+MENU TITLE OpenELEC-Antiprism Live Stick
+ 
+LABEL livestorage
+  MENU LABEL ^Live Storage (use storage on live stick)
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID disk=FILE=/flash/STORAGE STORAGE_SIZE_IN_KB=$STORAGE_SIZE_IN_KB max_loop=10 xbmc quiet tty
+ 
+LABEL storage
+  MENU LABEL ^Storage (use your local storage - may be dangerous)
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID disk=LABEL=Storage quiet tty
+
+LABEL installer
+  MENU LABEL ^Install Antiprism on your local storage
+  KERNEL /KERNEL
+  APPEND boot=UUID=$UUID installer quiet tty
+EOF
 
 # sync disk
   echo "syncing disk..."
@@ -239,21 +256,7 @@ EOF
 
 # write mbr
   echo "writing mbr..."
-  if [ -f /usr/lib/syslinux/mbr.bin ]; then
-    MBR="/usr/lib/syslinux/mbr.bin"       # example: debian, ubuntu
-  elif [ -f /usr/share/syslinux/mbr.bin ]; then
-    MBR="/usr/share/syslinux/mbr.bin"     # example: fedora
-  elif [ -f /usr/lib/syslinux/bios/mbr.bin ]; then
-    MBR="/usr/lib/syslinux/bios/mbr.bin"  # example: arch
-  elif [ -f /usr/lib/syslinux/mbr/mbr.bin ]; then
-    MBR="/usr/lib/syslinux/mbr/mbr.bin"   # example: Debian Jessie
-   else
-    echo "ERROR: Can't find syslinux's mbr.bin on Host OS" >&2
-  fi
-
-  if [ -n "$MBR" ]; then
-    cat "$MBR" > "$DISK"
-  fi
+  cat 3rdparty/syslinux/mbr/mbr.bin > "$DISK"
 
 # syncing disk
   echo "syncing disk..."

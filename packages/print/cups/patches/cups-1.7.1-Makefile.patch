@@ -1,0 +1,20 @@
+--- cups-1.7.1/Makefile	2014-02-22 21:06:11.338432578 -0500
++++ cups-1.7.1.patch/Makefile	2014-02-22 21:08:03.558430443 -0500
+@@ -201,7 +201,7 @@
+ install-headers:
+ 	for dir in $(DIRS); do\
+ 		echo Installing header files in $$dir... ;\
+-		(cd $$dir; $(MAKE) $(MFLAGS) install-headers) || exit 1;\
++		(cd $$dir; $(MAKE) $(MFLAGS) INCLUDEDIR=$(DESTDIR)$(INCLUDEDIR) install-headers) || exit 1;\
+ 	done
+ 	if test "x$(privateinclude)" != x; then \
+ 		echo Installing config.h into $(PRIVATEINCLUDE)...; \
+@@ -228,7 +228,7 @@
+ install-libs:	libs
+ 	for dir in $(DIRS); do\
+ 		echo Installing libraries in $$dir... ;\
+-		(cd $$dir; $(MAKE) $(MFLAGS) install-libs) || exit 1;\
++		(cd $$dir; $(MAKE) $(MFLAGS) LIBDIR=$(DESTDIR)$(LIBDIR) install-libs) || exit 1;\
+ 	done
+ 
+ 

@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="vdr-plugin-dvbapi"
-PKG_VERSION="2617a7f"
+PKG_VERSION="bdcad3f"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/manio/vdr-plugin-dvbapi"
 PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS_TARGET="toolchain vdr libdvbcsa"
+PKG_DEPENDS_TARGET="toolchain vdr openssl libdvbcsa"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="TV"

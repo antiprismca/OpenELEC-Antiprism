@@ -1,0 +1,20 @@
+--- i2p-0.9.12/installer/resources/postinstall.sh	2014-02-25 23:05:31.085033101 -0500
++++ i2p-0.9.12.patch/installer/resources/postinstall.sh	2014-02-25 23:07:30.445031055 -0500
+@@ -25,7 +25,7 @@
+ ERROR_MSG="Cannot determine operating system type. From the subdirectory in lib/wrapper matching your operating system, please move i2psvc to your base I2P directory, and move the remaining two files to the lib directory."
+ LOGFILE=./postinstall.log
+ 
+-HOST_OS=`./osid`
++HOST_OS=`./osid | sed 's%^.*openelec-\([^-]\+\)-.*$%\1%'`
+ 
+ if [ "X$HOST_OS" = "X" -o "X$HOST_OS" = "Xunknown" ]; then
+     echo "$ERROR_MSG"
+@@ -35,7 +35,7 @@
+     exit 1
+ fi
+ 
+-OS_ARCH=`uname -m`
++OS_ARCH=`./osid`
+ X86_64=`echo "${OS_ARCH}" | grep x86_64`
+ 
+ case $HOST_OS in

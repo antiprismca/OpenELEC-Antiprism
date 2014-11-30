@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="glibc"
-PKG_VERSION="2.20"
+PKG_VERSION="2.19"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -109,7 +109,6 @@ libc_cv_c_cleanup=yes
 libc_cv_gnu89_inline=yes
 libc_cv_ssp=no
 libc_cv_ctors_header=yes
-libc_cv_slibdir=/lib
 EOF
 
 echo "libdir=/usr/lib" >> configparms
@@ -165,6 +164,7 @@ makeinstall_init() {
     cp -PR $ROOT/$PKG_BUILD/.$TARGET_NAME/elf/ld*.so* $INSTALL/lib
     cp $ROOT/$PKG_BUILD/.$TARGET_NAME/libc.so.6 $INSTALL/lib
     cp $ROOT/$PKG_BUILD/.$TARGET_NAME/nptl/libpthread.so.0 $INSTALL/lib
+    cp -d $ROOT/$PKG_BUILD/.$TARGET_NAME/math/libm.so* $INSTALL/lib
 
     if [ "$TARGET_ARCH" = "arm" -a "$TARGET_FLOAT" = "hard" ]; then
       ln -sf ld.so $INSTALL/lib/ld-linux.so.3

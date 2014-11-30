@@ -1,0 +1,11 @@
+--- i2p-0.9.12/apps/susimail/build.xml	2014-04-11 20:47:08.406555034 -0400
++++ i2p-0.9.12.patch/apps/susimail/build.xml	2014-04-11 20:47:24.674555032 -0400
+@@ -6,7 +6,7 @@
+         <!-- run from top level build.xml to get dependencies built -->
+     </target>
+ 
+-    <property name="javac.compilerargs" value="" />
++    <property name="javac.compilerargs" value="-encoding utf8" />
+     <property name="javac.version" value="1.6" />
+     <property name="require.gettext" value="true" />
+ 

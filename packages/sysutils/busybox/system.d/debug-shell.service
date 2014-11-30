@@ -1,7 +1,6 @@
 [Unit]
 Description=Debug Shell
 
-DefaultDependencies=no
 ConditionKernelCommandLine=|tty
 ConditionKernelCommandLine=|debugging
 ConditionPathExists=|/storage/.cache/debug.openelec
@@ -22,4 +21,4 @@ IgnoreSIGPIPE=no
 KillSignal=SIGHUP
 
 [Install]
-WantedBy=sysinit.target
+WantedBy=basic.target

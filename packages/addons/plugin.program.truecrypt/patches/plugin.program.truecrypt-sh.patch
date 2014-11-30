@@ -1,0 +1,553 @@
+--- plugin.program.truecrypt-3.1.1/resources/lib/tcitem.py	2014-11-22 22:32:58.958483317 -0500
++++ plugin.program.truecrypt-3.1.1.patch/resources/lib/tcitem.py	2014-11-23 16:35:51.196430635 -0500
+@@ -56,9 +56,9 @@
+         if debug:
+             print("Truecrypt executing shell script:\n" + cmd + ("\"" + escapedPassword  + "\"" if debugLogPassword else "\"*****\""));
+         
+-        cmd += "\"" + escapedPassword + "\"";
++        cmd += "\"" + "\""; # password
+-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
+-        output, errors = p.communicate();
++        output, errors = p.communicate(input = escapedPassword + "\n")
+         
+         if debug:
+             print("Truecrypt shell's err out:\n" + str(errors));
+@@ -134,11 +134,11 @@
+         if debug:
+             print("Truecrypt executing shell script:\n" + cmd + ("\"" + escapedOldPass  + "\" " + "\"" + escapedNewPass + "\"" if debugLogPassword else "\"*****\" \"*****\""));
+             
+-        cmd += "\"" + escapedOldPass + "\" ";
+-        cmd += "\"" + escapedNewPass + "\"";
++        cmd += "\"" + "\" "; # old password
++        cmd += "\"" + "\""; # new password
+  
+-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
+-        output, errors = p.communicate();
++        output, errors = p.communicate(input = escapedOldPass + "\n" + escapedNewPass + "\n")
+         
+         if debug:
+             print("Truecrypt shell's err out:\n" + str(errors));
+@@ -198,10 +198,10 @@
+         if debug:
+             print("Truecrypt executing shell script:\n" + cmd + (escapedPassword + "\" "  if debugLogPassword else "******\" ") + str(size));
+ 
+-        cmd = cmd + escapedPassword + "\" " + str(size);
++        cmd = cmd + "\" " + str(size);
+         
+-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True);
+-        output, errors = p.communicate();
++        output, errors = p.communicate(input = escapedPassword + "\n")
+         if debug:
+             print("Truecrypt shell's err out:\n" + str(errors));
+             print("Truecrypt shell's std out:\n" + str(output));
+--- plugin.program.truecrypt-3.1.1/bin/truecrypt.sh	2014-11-24 01:48:59.143799654 -0500
++++ plugin.program.truecrypt-3.1.1/bin/truecrypt.sh	2014-11-24 01:53:22.479794647 -0500
+@@ -1,7 +1,8 @@
+ #!/bin/ash
+ 
+ ################################################################################
+-#  Copyright (C) Peter Smorada 2013
++#  Copyright (C) AntiPrism.ca 2014
++#  Based on the code created by Peter Smorada
+ #  Based on the code created by Stephan Raue (stephan@openelec.tv) and code
+ #  originally found in http://linux.sparsile.org/2009/09/automated-truecrypt-container-creation.html
+ #
+@@ -26,11 +27,6 @@
+ 
+ ADDON_DIR="$HOME/.xbmc/addons/plugin.program.truecrypt"
+ ADDON_HOME="$HOME/.xbmc/userdata/addon_data/plugin.program.truecrypt"
+-echo $PATH | grep -q $ADDON_DIR/bin
+-if [ $? != "0" ]; then
+-	echo "Adding addon bin dir to PATH." >&2
+-	export PATH=$PATH:$ADDON_DIR/bin
+-fi
+ used_tc_aux_mnt=$(mount | awk '/truecrypt_aux_mnt/ {print $3}')
+ 
+ # The function will return tc_aux_mnt created after truecrypt attempt to mount a device
+@@ -55,47 +51,28 @@
+ 	echo "$tc_aux_mnt"
+ }
+ 
+-# The function will return tc_aux_mnt created after truecrypt attempt to mount a device
+-# by searching in mounts and used loop devices
+-getTcauxmntFromMountPoint() {
+-	drive=$1
+-		
+-	loop_dev=$(mount | grep $drive | cut -d" " -f 1)
+-	echo "Loop device connected to the mount point: $loop_dev" >&2
+-	tc_mnt=$(losetup -a | grep $loop_dev | awk '/truecrypt_aux_mnt/ {print substr($3, 2, length($3)-9)}')
+-	echo "Found tc_aux_mnt: $tc_mnt" >&2
+-	echo $tc_mnt
+-	
+-	if [ "$tc_mnt" != "" ]; then
+-		return 0
+-	else
+-		return 1
+-	fi
+-}
+-
+ mountdrive() {
+ 	tcfile=$1
+ 	drive=$2
+ 	pass=$3
+ 	keyfiles=$4
++	filesystem=$5
++	fs_options=$6
+ 	#mkdir -p $drive
++
++	[ -z "$pass" ] && read pass
++
+ 	echo "Used tc_aux_mnt at start: $used_tc_aux_mnt" >&2
+ 	
+-	echo "Available loop device: " $(losetup -f) >&2
+-	truecrypt --non-interactive --protect-hidden=no -m=nokernelcrypto -k "$keyfiles" -p "$pass" "$tcfile" "$drive" >&2
+-	#cmd="truecrypt --non-interactive --protect-hidden=no -m=nokernelcrypto -k \"\" -p\"\$pass\" \"\$tcfile\" \"\$drive\""
+-	#eval $cmd 1>&2
++	echo "Existing device-mapper devices: " $(dmsetup ls | awk '{print $1}') >&2
++	echo "$pass" | truecrypt --protect-hidden=no --filesystem="$filesystem" --keyfiles="$keyfiles" --mount-options="$fs_options" "$tcfile" "$drive" >&2
+ 	
+ 	tc_exit_value=$?
+-	if [ "$tc_exit_value" != "0" ]; then
+-		echo "Execution of truecrypt unsuccessfull. Executing it with NTFS option." >&2
+-		truecrypt --non-interactive --protect-hidden=no -m=nokernelcrypto --filesystem=ntfs-3g -k "$keyfiles" -p "$pass" "$tcfile" "$drive" >&2
+-		tc_exit_value=$?
+-	fi
+-	
++	[ "$filesystem" = "none" ] && return $tc_exit_value
++
+ 	echo "truecrypt return value: $tc_exit_value" >&2
+-	echo "Mounted loop devices after truecrypt bin being executed:" >&2
+-	echo $(mount | grep "loop") >&2
++	echo "Mounted device-mapper devices after truecrypt bin being executed:" >&2
++	echo $(mount | grep "^/dev/mapper") >&2
+ 	echo "Mounted truecrypt devices after truecrypt bin being executed:" >&2
+ 	echo $(mount | grep "truecrypt") >&2
+ 	
+@@ -109,28 +86,55 @@
+ 	if [ "$?" == "0" ]; then
+ 		echo "Mounted successfuly directly by truecrypt." >&2
+ 		rv=0
+-	else
+-		echo "Mounting by TrueCrypt failed. Remounting within script." >&2
+-		loop_dev=$(losetup -f)
+-		echo "Setting up a loop device - $tc_aux_mnt/volume on $loop_dev" >&2
+-		losetup "$loop_dev" "$tc_aux_mnt/volume" >&2
+-		echo "Mounting $loop_dev on $drive" >&2
+-		mount "$loop_dev" "$drive" >&2
+-
+-		# if previous attempt to mount FS was unsuccessful, it will try to mount it as NTFS drive.
+-		if [ "$?" != "0" ]; then  
+-			echo "Mounting was unsuccessful, will try as NTFS drive." >&2
+-			ntfs-3g "$loop_dev" "$drive" >&2
+-		fi
+-	
+-		ismounted $tcfile $drive
+-		if [ "$?" == "0" ]; then
+-			echo "Mounting was successful." >&2
+-			rv=0
+-		else
+-			echo "Mounting was unsuccessful." >&2
+-			rv=1
++		if [ "$ANTIPRISM" = "1" ]; then
++			mkdir -p "$drive/.keys" >&2
++			if [ $? -eq 0 ]; then
++				echo "$pass" | /usr/bin/ecc_key_gen "$drive/.keys/key_file.dat" >&2
++			fi
++			if [ -n "$ANTIPRISM_WRITE_FILE" ] && [ -n "$ANTIPRISM_WRITE_BUFFER" ]; then
++				echo -e "$ANTIPRISM_WRITE_BUFFER" > "$ANTIPRISM_WRITE_FILE"
++			fi
++			mkdir -p "$drive/.openvpn" >&2
++			[ -f "$drive/.openvpn/secret.key" ] || openvpn --genkey --secret "$drive/.openvpn/static.key" >&2
++			[ -f "$drive/.openvpn/config" ] || echo -e "dev tun\nifconfig 10.8.0.1 10.8.0.2\nsecret static.key\n" > "$drive/.openvpn/config"
++			for f in /usr/lib/i2p/dist-plugins/plugins/* 
++			do 
++				BN="`basename $f`"
++				if ([ ! -d $drive/i2p/plugins/$BN ]) || ([ "`grep '^version=' $f/plugin.config`" != "`grep '^version=' $drive/i2p/plugins/$BN/plugin.config`" ]); then
++					mkdir -p $drive/i2p/plugins >&2; cp -r -f $f/ $drive/i2p/plugins/ >&2
++				fi 
++			done
++			if [ "$ANTIPRISM_NOSSH" = "1" ]; then
++				rm -rf /storage/.cache/ssh/password >/dev/null
++			else
++				if [ ! -f /storage/.cache/ssh/password ]; then
++					read sshpass
++					echo "$sshpass" | ecc_hashpassword /storage/.cache/ssh/password >&2
++				fi
++				if (test ! -d "$drive/.ssh") || (test ! -f "$drive/.ssh/ssh_host_key") || (test ! -f "$drive/.ssh/ssh_host_key.pub"); then
++					rm -rf "$drive/.ssh"
++					mkdir -p "$drive/.ssh"
++	 				/usr/bin/ssh-keygen -t rsa1 -f "$drive/.ssh/ssh_host_key" -N "" >&2
++	 				/usr/bin/ssh-keygen -t dsa -f "$drive/.ssh/ssh_host_dsa_key" -N "" >&2
++	 				/usr/bin/ssh-keygen -t rsa -f "$drive/.ssh/ssh_host_rsa_key" -N "" >&2
++	 				/usr/bin/ssh-keygen -t ed25519 -f "$drive/.ssh/ssh_host_ed25519_key" -N "" >&2
++	 				/usr/bin/ssh-keygen -t ecdsa -f "$drive/.ssh/ssh_host_ecdsa_key" -N "" >&2
++	 			fi
++	 			/usr/sbin/sshd \
++	 				-h "$drive/.ssh/ssh_host_key" \
++	 				-h "$drive/.ssh/ssh_host_dsa_key" \
++	 				-h "$drive/.ssh/ssh_host_rsa_key" \
++	 				-h "$drive/.ssh/ssh_host_ed25519_key" \
++	 				-h "$drive/.ssh/ssh_host_ecdsa_key" >&2
++	 			if test $? -ne 0; then exit 1; fi
++			fi
++			if [ -n "$ANTIPRISM_IPTABLES" ]; then
++				echo -e "$ANTIPRISM_IPTABLES" | iptables-restore -v >&2
++			fi
+ 		fi
++	else
++		echo "Mounting by TrueCrypt failed." >&2
++		rv=1
+ 	fi
+ 	# Returning used tc_aux_mnt to the python script for easier unmount or other tasks.
+ 	echo -n "$tc_aux_mnt"
+@@ -142,6 +146,17 @@
+ 	tcfile=$1
+ 	drive=$2
+ 	
++	if (test -z "$drive") || (test "$drive" == "-"); then
++	    drive=$(truecrypt -l "$tcfile" | awk '{print $4}')
++	    if test "$drive" == "-"; then
++	        drive=$(truecrypt -l "$tcfile" | awk '{print $3}')
++	    fi
++	fi
++	if test -z "$drive"; then
++	    echo "Volume $tcfile is not mounted" >&2
++	    return 0
++	fi
++	
+ 	# check for links and their usage in case they are found
+ 	linkTest=$(readlink -f $drive) >&2
+ 	if [ "${linkTest}" != "" ]; then
+@@ -155,13 +170,13 @@
+ 	fi
+ 
+ 	if [ "$3" == "" ]; then
+-		echo "tc_aux_mnt was not supplied. Searching for it..." >&2
+-		tc_aux_mnt=$(getTcauxmntFromMountPoint $drive)
++		echo "tc_aux_mnt was not supplied. Will use device or mount point: $drive" >&2
++		tc_aux_mnt="$drive"
+ 	else
+ 		tc_aux_mnt="${3}"
+ 	fi  
+ 
+-	loop_dev=$(mount | grep ${drive%?} | cut -d" " -f 1)
++	loop_dev=$(losetup -a | grep "$tcfile" | awk -F: '{print $1}')
+ 	echo "Loop device used for mounting: $loop_dev" >&2
+   
+ 	echo "Executing truecrypt" >&2
+@@ -185,6 +200,10 @@
+ 		echo "Unmount successfull directly by Truecrypt." >&2
+ 		rv=0
+ 	fi
++
++	if [ -n "$ANTIPRISM_IPTABLES" ]; then
++		echo -e "$ANTIPRISM_IPTABLES" | iptables-restore -v
++	fi
+ 	return $rv
+ }
+ 
+@@ -192,7 +211,18 @@
+ 	tcfile=$1
+ 	drive=$2
+   
+-  # check for links and their usage in case they are found
++	if (test -z "$drive") || (test "$drive" == "-"); then
++	    drive=$(truecrypt -l "$tcfile" | awk '{print $4}')
++	    if test "$drive" == "-"; then
++	        drive=$(truecrypt -l "$tcfile" | awk '{print $3}')
++	    fi
++	fi
++	if test -z "$drive"; then
++	    echo "Volume $tcfile is not mounted" >&2
++	    return 1
++	fi
++	
++	# check for links and their usage in case they are found
+ 	linkTest=$(readlink -f $drive) >&2
+ 	if [ "${linkTest}" != "" ]; then
+ 		drive=${linkTest}
+@@ -217,6 +247,9 @@
+ 	elif [ "$rv1" == "1" ] && [ "$rv2" == "0" ]; then
+ 		echo "Mountpoint is being used by other file or process." >&2
+ 		return 2
++	elif [ "$rv1" == "0" ] && [ "$rv2" == "1" ]; then
++		echo "Truecrypt volume is mounted on device-mapper device." >&2
++		return 0
+ 	else
+ 		echo "Truecrypt drive is not mounted." >&2
+ 		return 1
+@@ -229,41 +262,53 @@
+ 	tc_aux_mnt=$3
+ 	filesys=$4
+ 	
+-	if [ "${drive#${drive%?}}" == "/" ]; then
+-		loop_dev=$(mount | grep ${drive%?} | cut -d" " -f 1) # ${drive%?} = string without last character
+-	else
+-		loop_dev=$(mount | grep $drive | cut -d" " -f 1)
++	if (test -z "$drive") || (test "$drive" == "-"); then
++	    drive=$(truecrypt -l "$tcfile" | awk '{print $4}')
++	    if test "$drive" == "-"; then
++	        drive=$(truecrypt -l "$tcfile" | awk '{print $3}')
++	    fi
++	fi
++	if test -z "$drive"; then
++	    echo "format: Volume $tcfile is not mounted" >&2
++	    return 1
+ 	fi
++	
++	loop_dev=$(losetup -a | grep "$tcfile" | awk -F: '{print $1}')
+ 	echo "Found loop device: $loop_dev" >&2
+ 
+-	echo "Unmounting drive." >&2
+-	umount "$drive" >&2
+-	if [ "$?" != "0" ]; then
+-		echo "Failed to unmount drive before formating." >&2
+-		return 1
++	loop_dev=$(truecrypt -l "$tcfile" | awk '{print $3}')
++	echo "Found device-mapper device: $loop_dev" >&2
++
++	if test "$drive" != "$loop_dev"; then
++		echo "Unmounting drive." >&2
++		umount "$drive" >&2
++		if [ "$?" != "0" ]; then
++			echo "Failed to unmount drive $drive before formating." >&2
++			return 1
++		fi
+ 	fi
+ 
+ 	echo "Setting up loop device with tc_aux_mnt" >&2
+-	losetup "${loop_dev}" "${tc_aux_mnt}/volume" >&2
++	# losetup "${loop_dev}" "${tc_aux_mnt}/volume" >&2
+ 
+ 	echo "Formatting..." >&2
+ 	if [ "$filesys" = "FAT32" ]; then
+-		mkdosfs "$loop_dev" >&2
++		mkfs.vfat "$loop_dev" >&2
+ 	elif [ "$filesys" = "NTFS" ]; then
+-		mkntfs "$loop_dev" >&2
++		mkfs.ntfs -F "$loop_dev" >&2
+ 	else
+-		"mkfs.$4" "$loop_dev" >&2
++		"mkfs.$4" -F "$loop_dev" >&2
+ 	fi
+ 	rv=$?
+ 	sleep 5
+ 	
+ 	echo "Detaching loop device: ${loop_dev}." >&2
+-	losetup -d "${loop_dev}" >&2
++	# losetup -d "${loop_dev}" >&2
+ 	# umount $drive
+ 	
+ 	echo "Unmounting tc_aux_mnt."
+-	umount $tc_aux_mnt >&2
+-	# truecrypt -d $tcfile
++	# umount $tc_aux_mnt >&2
++	truecrypt -d $tcfile
+ 
+ 	if [ "$rv" != "0" ]; then
+ 		echo "Failed to format drive."
+@@ -277,58 +322,94 @@
+ mkcontainer() {
+ 	tcfile=${1}
+ 	drive=${2}
+-	pass="--password=${3}"
+-	SIZE=${4} # in GB
++	pass=${3}
++	SIZE=${4}
+ 	filesys=${5}
+-	keyfiles="$6"
++	keyfiles=${6}
++
++	[ -z "$pass" ] && read pass
++
+ 	if [ "$7" != "" ]; then
+ 		ENTROPY=$7
+ 	else
+ 		ENTROPY="/dev/urandom"
+ 	fi
++	vtype=${8}
+ 	
+ 	mkdir -p "$drive"
+-	
++	[ -z "$filesys" ] && filesys="vfat"	
++	[ -z "$vtype" ] && vtype="normal"	
+ 	echo "Executing unmouning of the drive by truecrypt." >&2
+ 	truecrypt -t -d "$drive" >&2
+ 
+ 	echo "Executing creation of the container." >&2
+-	truecrypt -t \
++	( echo "$pass"; echo "$pass" ) | truecrypt -t \
+ 	--create \
+ 	--keyfiles="$keyfiles" \
+ 	--protect-hidden=no \
+-	--volume-type=normal \
++	--volume-type=${vtype} \
+ 	--size=${SIZE} \
+ 	--encryption=AES \
+ 	--hash=SHA-512 \
+-	--filesystem=FAT \
++	--filesystem=none \
+ 	--random-source=${ENTROPY} \
+-	"$pass" \
+ 	"$tcfile" >&2 
+ 
+ 	if [ "$?" != "0" ]; then
+ 		echo "Container creation failed." >&2
+ 		return 1
++	fi
++
++	mountdrive "$tcfile" "" "$pass" "" "none"
++	if [ "$?" != "0" ]; then
++		echo "Mounting with no filesystem failed." >&2
++		return 1
++	fi
++	
++	echo "Formatting the container with $filesys." >&2
++	if test "$filesys" == "vfat"; then
++	    volume_option="-n"
+ 	else
+-		"Container creation successfully." >&2
+-		return 0
++	    volume_option="-L"
++	fi
++	mkfs.$filesys $volume_option TC_VOLUME `truecrypt -l | grep "$tcfile" | cut -f 3-3 -d " "`
++	if [ "$?" != "0" ]; then
++		echo "Formatting failed." >&2
++		return 2
+ 	fi
++
++	unmountdrive "$tcfile"
++	if [ "$?" != "0" ]; then
++		echo "Unmounting failed." >&2
++		return 3
++	fi
++	
++	return 0
+ }
+ 
+ changepassword(){
+ 	tcfile=$1
+ 	oldpass=$2
+ 	newpass=$3
++	keyfiles="$4"
++	if [ "$5" != "" ]; then
++		ENTROPY=$5
++	else
++		ENTROPY="/dev/urandom"
++	fi
++
++	[ -z "$oldpass" ] && read oldpass
++	[ -z "$newpass" ] && read newpass
+ 
+ 	echo "Executing truecrypt password change." >&2
+-	truecrypt -t \
+-	-C \
+-	--non-interactive \
+-	--password="${oldpass}" \
+-	--new-password="${newpass}" \
++	( echo $oldpass; echo $newpass; echo $newpass ) | truecrypt \
++	-C --protect-hidden=no \
++	--keyfiles="$keyfiles" \
++	--new-keyfiles="$keyfiles" \
++	--random-source=${ENTROPY} \
+ 	"$tcfile" >&2
+   
+-if [ "$?" != "0" ]; then
++	if [ "$?" != "0" ]; then
+ 		echo "Password change failed." >&2
+ 		return 1
+ 	else
+@@ -358,25 +439,59 @@
+ 	return $?	
+ }
+ 
++checkdrive() {
++	tcfile=${1}
++	pass=${2}
++	fsystem=${3}
++	options=${4}
++	
++	[ -z "$pass" ] && read pass
++
++        mountdrive "$tcfile" "" "$pass" "" "none"
++        if [ "$?" != "0" ]; then
++                echo "Mounting with no filesystem failed." >&2
++                return 1
++        fi
++
++	mounted=`truecrypt -l | grep "$tcfile" | cut -f 3-3 -d " "`
++	echo "Checking $mounted..." >&2	
++	if [ -n "$fsystem" ]
++	then
++		fsck.$fsystem $options $mounted
++	else
++		fsck $mounted
++	fi
++	rv=$?
++
++	unmountdrive "$tcfile"
++	if [ "$?" != "0" ]; then
++		echo "Unmounting failed." >&2
++		return 2
++	fi
++
++        return $rv
++}
++
+ showinfo() {
+ 	echo "This script is primarily meant to be excecuted by an addon"
+ 	echo "from OpenElec's XBMC interface (plugin.program.truecrypt)."
+ 	echo
+ 	echo "Usage:" 
+-	echo "mount TRUECRYPT_FILE/PARTION MOUNT_POINT PASSWORD [KEY_FILES]"
++	echo "mount TRUECRYPT_FILE/PARTION MOUNT_POINT PASSWORD [KEY_FILES FILE_SYSTEM MNT_OPTIONS]"
+ 	echo "dismount TRUECRYPT_FILE/PARTION MOUNT_POINT [TC_AUX_MNT]"
+ 	echo "ismounted TRUECRYPT_FILE/PARTION MOUNT_POINT"
+-	echo "changepass TRUECRYPT_FILE/PARTION OLD_PASS NEW_PASS"
+-	echo "create TRUECRYPT_FILE/PARTION MOUNT_POINT PASSWORD SIZE_IN_GB [KEY_FILES RANDOM_DATA_GENERATOR]"
++	echo "changepass TRUECRYPT_FILE/PARTION OLD_PASS NEW_PASS [KEY_FILES RANDOM_DATA_GENERATOR]"
++	echo "create TRUECRYPT_FILE/PARTION MOUNT_POINT PASSWORD SIZE [FILE_SYSTEM KEY_FILES RANDOM_DATA_GENERATOR VOLUME_TYPE]"
+ 	echo "createkey KEY_FILE [RANDOM_DATA_GENERATOR]"
+ 	echo "format TRUECRYPT_FILE/PARTION MOUNT_POINT TC_AUX_MNT FILE_SYSTEM"
++	echo "check TRUECRYPT_FILE/PARTION PASSWORD [FILE_SYSTEM OPTIONS]"
+ 	echo 
+ 	echo "Option \"format\" requires to have drive mounted first."
+ }
+ 
+ 
+ case "$1" in
+-	mount) mountdrive "$2" "$3" "$4" "$5"
++	mount) mountdrive "$2" "$3" "$4" "$5" "$6"
+ 		rv=$?
+ 		;;
+ 	dismount) unmountdrive "$2" "$3" "$4"
+@@ -385,14 +500,14 @@
+ 		rv=$?
+ 		echo "EV:$rv"
+ 		;;
+-	create) mkcontainer "$2" "$3" "$4" "$5" "$6" "$7"
++	create) mkcontainer "$2" "$3" "$4" "$5" "$6" "$7" "$8"
+ 		rv=$?
+ 		;;
+ 	format) format "$2" "$3" "$4" "$5"
+ 		rv=$?
+ 		echo "EV:$rv"
+ 		;;
+-	changepass) changepassword "$2" "$3" "$4"
++	changepass) changepassword "$2" "$3" "$4" "$5" "$6"
+ 		rv=$?
+ 		echo "EV:$rv"
+ 		;;
+@@ -400,6 +515,9 @@
+ 		rv=$?
+ 		echo "EV:$rv"
+ 		;;
++	check) checkdrive "$2" "$3" "$4" "$5"
++		rv=$?
++		;;
+ 	*) showinfo
+ 		rv=0
+ 		;;

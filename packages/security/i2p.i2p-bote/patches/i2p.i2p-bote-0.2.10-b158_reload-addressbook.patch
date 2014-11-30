@@ -1,0 +1,24 @@
+--- i2p.i2p-bote-0.2.10-b158/src/i2p/bote/addressbook/AddressBook.java	2014-09-06 21:47:23.615360180 -0400
++++ i2p.i2p-bote-0.2.10-b158.patch/src/i2p/bote/addressbook/AddressBook.java	2014-09-06 22:31:15.047310152 -0400
+@@ -60,6 +60,7 @@
+     private File addressFile;
+     private PasswordHolder passwordHolder;
+     private SortedSet<Contact> contacts;
++    private long lastModified = 0;
+ 
+     /**
+      * Constructs a new empty <code>AddressBook</code>.
+@@ -72,8 +73,11 @@
+     }
+  
+     private void initializeIfNeeded() throws PasswordException {
+-        if (contacts == null)
++        long lastMod = addressFile.lastModified();
++        if (contacts == null || (lastMod != lastModified)) {
++            lastModified = lastMod;
+             readContacts();
++        }
+     }
+     
+     /**
+

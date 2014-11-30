@@ -17,12 +17,13 @@
 ################################################################################
 
 PKG_NAME="Mesa"
-PKG_VERSION="10.3.4"
+PKG_VERSION="10.3.0-rc3"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.mesa3d.org/"
 PKG_URL="ftp://freedesktop.org/pub/mesa/$PKG_VERSION/MesaLib-$PKG_VERSION.tar.bz2"
+PKG_URL="ftp://freedesktop.org/pub/mesa/10.3/MesaLib-$PKG_VERSION.tar.bz2"
 PKG_DEPENDS_TARGET="toolchain Python:host expat glproto dri2proto presentproto libdrm libXext libXdamage libXfixes libXxf86vm libxcb libX11 systemd dri3proto libxshmfence"
 PKG_PRIORITY="optional"
 PKG_SECTION="graphics"
@@ -43,7 +44,7 @@ else
   MESA_GALLIUM_LLVM="--disable-gallium-llvm"
 fi
 
-if [ "$VDPAU_SUPPORT" = "yes" ]; then
+if [ "$VDPAU" = "yes" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
   MESA_VDPAU="--enable-vdpau"
 else
@@ -94,6 +95,11 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --with-dri-drivers=$DRI_DRIVERS \
                            --with-sysroot=$SYSROOT_PREFIX"
 
+
+pre_configure_target() {
+  # Mesa fails to build with GOLD if we build with --enable-glx-tls
+  strip_gold
+}
 
 post_makeinstall_target() {
   # rename and relink for cooperate with nvidia drivers

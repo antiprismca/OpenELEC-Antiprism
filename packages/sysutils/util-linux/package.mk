@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="util-linux"
-PKG_VERSION="2.25.2"
+PKG_VERSION="2.25.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -91,17 +91,11 @@ PKG_CONFIGURE_OPTS_TARGET="--disable-gtk-doc \
                            --without-systemdsystemunitdir"
 
 PKG_CONFIGURE_OPTS_HOST="$PKG_CONFIGURE_OPTS_TARGET \
-                         --enable-static --disable-shared \
-                         --disable-libsmartcols "
+                         --enable-static --disable-shared"
 
 PKG_CONFIGURE_OPTS_INIT="$PKG_CONFIGURE_OPTS_TARGET \
-                         --prefix=/ \
-                         --bindir=/bin \
-                         --sbindir=/sbin \
-                         --sysconfdir=/etc \
-                         --libexecdir=/lib \
-                         --localstatedir=/var \
-                         --disable-libsmartcols"
+                         --enable-static --disable-shared \
+                         --disable-libsmartcols "
 
 if [ "$SWAP_SUPPORT" = "yes" ]; then
   PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --enable-libsmartcols"
@@ -135,18 +129,7 @@ post_makeinstall_target() {
 }
 
 post_makeinstall_init() {
-  rm -rf $INSTALL/bin
-  rm -rf $INSTALL/sbin
-
-  if [ $INITRAMFS_PARTED_SUPPORT = "yes" ]; then
-    # install libuuid and libblkid here, needed by 'parted'
-    rm -rf $INSTALL/lib/libmount.so*
-
-    mkdir -p $INSTALL/sbin
-      cp mkfs $INSTALL/sbin
-  else
-    rm -rf $INSTALL/lib
-  fi
+  rm -rf $INSTALL/usr
 
   mkdir -p $INSTALL/sbin
     cp fsck $INSTALL/sbin

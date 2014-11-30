@@ -1,0 +1,11 @@
+--- apparmor-2.8.3/common/Make.rules	2014-04-28 21:30:47.821049176 -0400
++++ apparmor-2.8.3patch/common/Make.rules	2014-04-28 21:31:17.389049174 -0400
+@@ -177,7 +177,7 @@
+ # =====================
+ 
+ # emits defined capabilities in a simple list, e.g. "CAP_NAME CAP_NAME2"
+-CAPABILITIES=$(shell echo "\#include <linux/capability.h>" | cpp -dM | LC_ALL=C sed -n -e '/CAP_EMPTY_SET/d' -e 's/^\#define[ \t]\+CAP_\([A-Z0-9_]\+\)[ \t]\+\([0-9xa-f]\+\)\(.*\)$$/CAP_\1/p' | sort)
++CAPABILITIES=$(shell echo "\#include <linux/capability.h>" | $(CPP) -dM | LC_ALL=C sed -n -e '/CAP_EMPTY_SET/d' -e 's/^\#define[ \t]\+CAP_\([A-Z0-9_]\+\)[ \t]\+\([0-9xa-f]\+\)\(.*\)$$/CAP_\1/p' | sort)
+ 
+ .PHONY: list_capabilities
+ list_capabilities: /usr/include/linux/capability.h

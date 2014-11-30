@@ -1,0 +1,43 @@
+--- obfsproxy/setup.py	2014-08-10 00:22:48.490510866 -0400
++++ obfsproxy-patched/setup.py	2014-08-10 11:23:29.701434261 -0400
+@@ -4,12 +4,6 @@ import sys
+ 
+ from setuptools import setup, find_packages
+ 
+-import versioneer
+-versioneer.versionfile_source = 'obfsproxy/_version.py'
+-versioneer.versionfile_build = 'obfsproxy/_version.py'
+-versioneer.tag_prefix = 'obfsproxy-' # tags are like 1.2.0
+-versioneer.parentdir_prefix = 'obfsproxy-' # dirname like 'myproject-1.2.0'
+-
+ setup(
+     name = "obfsproxy",
+     author = "asn",
+@@ -18,26 +12,11 @@ setup(
+     license = "BSD",
+     keywords = ['tor', 'obfuscation', 'twisted'],
+ 
+-    version=versioneer.get_version(),
+-    cmdclass=versioneer.get_cmdclass(),
+-
+     packages = find_packages(),
+     entry_points = {
+         'console_scripts': [
+             'obfsproxy = obfsproxy.pyobfsproxy:run'
+             ]
+-        },
+-
+-    install_requires = [
+-        'setuptools',
+-        'PyCrypto',
+-        'Twisted',
+-        'argparse',
+-        'pyptlib >= 0.0.6',
+-        'pyyaml'
+-        ],
+-
+-    extras_require = {
+-        'SOCKS': ["txsocksx"]
+         }
++
+ )

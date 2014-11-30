@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category id="general" label="32000">
+    <setting id="homepage" type="text" label="32001" default="/usr/share/xbmc/addons/plugin.program.linksbrowser/resources/language/English/warning.html" />
+  </category>
+</settings>

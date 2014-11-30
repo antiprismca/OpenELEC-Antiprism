@@ -17,16 +17,8 @@
 ################################################################################
 
 PKG_NAME="linux"
-case "$LINUX" in
-  imx6)
-    PKG_VERSION="cuboxi-3.14-dc5edb8"
-    PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
-    ;;
-  *)
-    PKG_VERSION="3.17.4"
-    PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
-    ;;
-esac
+PKG_VERSION="3.16.2"
+PKG_URL="http://www.kernel.org/pub/linux/kernel/v3.x/$PKG_NAME-$PKG_VERSION.tar.xz"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -71,9 +63,6 @@ post_patch() {
   cp $KERNEL_CFG_FILE $PKG_BUILD/.config
   sed -i -e "s|^CONFIG_INITRAMFS_SOURCE=.*$|CONFIG_INITRAMFS_SOURCE=\"$ROOT/$BUILD/image/initramfs.cpio\"|" $PKG_BUILD/.config
 
-  # set default hostname based on $DISTRONAME
-    sed -i -e "s|@DISTRONAME@|$DISTRONAME|g" $PKG_BUILD/.config
-
   # disable PPP support if not enabled
   if [ ! "$PPTP_SUPPORT" = yes ]; then
     sed -i -e "s|^CONFIG_PPP=.*$|# CONFIG_PPP is not set|" $PKG_BUILD/.config
@@ -103,10 +92,33 @@ post_patch() {
     sed -i -e "s|^CONFIG_ISCSI_IBFT=.*$|# CONFIG_ISCSI_IBFT is not set|" $PKG_BUILD/.config
   fi
 
+  # disable Antiprism options
+  if [ ! "$ANTIPRISM" = yes ]; then
+    ANTIPRISM_OPTS="\
+      CONFIG_AUDIT \
+      CONFIG_AUDIT_GENERIC \
+      CONFIG_NFS_V4_SECURITY_LABEL \
+      CONFIG_SECURITY \
+      CONFIG_SECURITYFS \
+      CONFIG_SECURITY_NETWORK \
+      CONFIG_SECURITY_PATH \
+      CONFIG_SECURITY_APPARMOR \
+      CONFIG_SECURITY_APPARMOR_BOOTPARAM_VALUE \
+      CONFIG_SECURITY_APPARMOR_HASH \
+      CONFIG_DEFAULT_SECURITY_APPARMOR"
+
+    for opt in $ANTIPRISM_OPTS; do
+      sed -i -e "s|^$opt=.*$|# $opt is not set|" $PKG_BUILD/.config
+    done
+    sed -i -e "s|^CONFIG_DEFAULT_SECURITY=.*$|CONFIG_DEFAULT_SECURITY=\"\"|" $PKG_BUILD/.config
+    sed -i -e "s|^.*CONFIG_DEFAULT_SECURITY_DAC.*$|CONFIG_DEFAULT_SECURITY_DAC=y|" $PKG_BUILD/.config
+  fi
+
   # copy some extra firmware to linux tree
   cp -R $PKG_DIR/firmware/* $PKG_BUILD/firmware
 
-  make -C $PKG_BUILD oldconfig
+  # answer "No" to all questions
+  yes "N" | make -C $PKG_BUILD oldconfig
 }
 
 makeinstall_host() {
@@ -216,8 +228,8 @@ makeinstall_init() {
 }
 
 post_install() {
-  mkdir -p $INSTALL/lib/firmware/
-    ln -sf /storage/.config/firmware/ $INSTALL/lib/firmware/updates
+  mkdir -p $INSTALL/etc/modprobe.d
+    cp $PKG_DIR/modprobe.d/*.conf $INSTALL/etc/modprobe.d
 
   enable_service cpufreq-threshold.service
 }

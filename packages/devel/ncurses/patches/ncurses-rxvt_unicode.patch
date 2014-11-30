@@ -1,0 +1,11 @@
+--- ncurses-5.7/misc/terminfo.src	2014-09-14 10:16:50.314307161 -0400
++++ ncurses-5.7-patched/misc/terminfo.src	2014-09-14 10:18:47.638303973 -0400
+@@ -3949,6 +3949,8 @@ rxvt-color|rxvt terminal emulator (X Win
+ 	use=rxvt,
+ rxvt-256color|rxvt 2.7.9 with xterm 256-colors,
+ 	use=xterm+256color, use=rxvt,
++rxvt-unicode-256color|rxvt-unicode,
++	use=rxvt-256color,
+ rxvt-88color|rxvt 2.7.9 with xterm 88-colors,
+ 	use=xterm+88color, use=rxvt,
+ rxvt-xpm|rxvt terminal emulator (X Window System),

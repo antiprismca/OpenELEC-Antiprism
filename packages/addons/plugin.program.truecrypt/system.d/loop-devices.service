@@ -1,0 +1,15 @@
+[Unit]
+Description=Creating loop devices
+DefaultDependencies=false
+After=show-version.service
+Before=local-fs-pre.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/openelec/loop-devices
+StandardOutput=tty
+
+[Install]
+WantedBy=local-fs-pre.target
+

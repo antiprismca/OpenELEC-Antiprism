@@ -1,0 +1,20 @@
+--- jq-1.4/Makefile.am	2014-08-17 18:35:48.139160558 -0400
++++ jq-1.4.patch/Makefile.am	2014-08-17 18:36:23.703159881 -0400
+@@ -34,7 +34,7 @@
+ 
+ lib_LTLIBRARIES = libjq.la
+ libjq_la_SOURCES = ${LIBJQ_SRC}
+-libjq_la_LIBADD = -lm
++libjq_la_LIBADD = -lm -lcrypto
+ libjq_la_LDFLAGS = -export-symbols-regex '^j[qv]_' -version-info 1:4:0
+ 
+ include_HEADERS = jv.h jq.h
+@@ -54,7 +54,7 @@
+ bin_PROGRAMS = jq
+ jq_SOURCES = main.c
+ jq_LDFLAGS = -static-libtool-libs
+-jq_LDADD = libjq.la -lm
++jq_LDADD = libjq.la -lm -lcrypto
+ 
+ ### Tests (make check)
+ 

@@ -103,6 +103,9 @@
       textmode)
         INIT_ARGS="$INIT_ARGS --unit=textmode.target"
         ;;
+      xbmc)
+        INIT_ARGS="$INIT_ARGS --unit=xbmc.target"
+        ;;
       installer)
         INIT_ARGS="$INIT_ARGS --unit=installer.target"
         ;;
@@ -128,6 +131,9 @@
       break=*)
         BREAK="${arg#*=}"
         ;;
+      STORAGE_SIZE_IN_KB=*)
+        STORAGE_SIZE_IN_KB="${arg#*=}"
+        ;;
     esac
   done
 
@@ -141,6 +147,12 @@
   progress() {
     if test "$PROGRESS" = "yes"; then
       echo "### $1 ###"
+    fi
+  }
+
+  message() {
+    if ! test "$PROGRESS" = "yes"; then
+      echo "$1"
     fi
   }
 
@@ -169,6 +181,36 @@
     esac
   }
 
+  calc() {
+    echo "" | awk -e "{printf \"%.2f\", ($*)}"
+  }
+  
+  icalc() {
+    echo "" | awk -e "{printf \"%d\", ($*)}"
+  }
+  
+  create_storage_file() {
+      STORAGE_FILE_NAME=$1
+      STORAGE_SIZE_IN_MB=`icalc "$2/1024"`
+      STORAGE_SIZE_IN_KB=`icalc "${STORAGE_SIZE_IN_MB}*1024"`
+      dd if=/dev/zero of="$STORAGE_FILE_NAME" bs=1024k count=$STORAGE_SIZE_IN_MB >/dev/null 2>&1 &
+      PID=$!
+      echo ""
+      while kill -0 $PID >/dev/null 2>&1; do
+          cur_size=`ls -l "$STORAGE_FILE_NAME"| tr -s ' ' | awk -F ' ' -e '{print $3}'`
+          megabytes=`calc "$cur_size/1024/1024"`
+          kilobytes=`icalc "$cur_size/1024"`
+          percent=`calc "($kilobytes * 100) / $STORAGE_SIZE_IN_KB"`
+          echo -ne "Written: ${percent}% (${kilobytes} kilobytes)  \r"
+          sleep 10
+     done
+     cur_size=`ls -l "$STORAGE_FILE_NAME"| tr -s ' ' | awk -F ' ' -e '{print $3}'`
+     megabytes=`calc "$cur_size/1024/1024"`
+     kilobytes=`icalc "$cur_size/1024"`
+     percent=`calc "($kilobytes * 100) / $STORAGE_SIZE_IN_KB"`
+     echo "Written: ${percent}% (${kilobytes} kilobytes)"
+  }
+  
   # Mount handlers
   # All handlers take the following parameters:
   # $1:target, $2:mountpoint, $3:mount options, [$4:fs type]
@@ -278,6 +320,31 @@
 
     mount_common "$NFS_EXPORT" "$2" "$3,nolock,soft,timeo=3,retrans=2,rsize=32768,wsize=32768,$NFS_OPTIONS" "nfs"
   }
+  
+  mount_loop() {
+    if test ! -f "$1"; then
+        if test -z "$STORAGE_SIZE_IN_KB"; then
+            progress "The size of STORAGE file is not set. Trying to calculate free space.."
+            FREE_SPACE=`df -k "/flash" | tail -1 | tr -s ' ' | cut -d' ' -f4`
+            STORAGE_SIZE_IN_KB=`icalc $FREE_SPACE - 20480`
+            if test "$STORAGE_SIZE_IN_KB" -gt 4194303; then
+                progress "Free space is $STORAGE_SIZE_IN_KB kilobytes which exceeds the limit 4GB, using 4GB"
+                STORAGE_SIZE_IN_KB=4194303
+            fi
+        fi
+        progress "creating STORAGE file $1 (size=$STORAGE_SIZE_IN_KB kilobytes), it can take a while ..."
+        message "Creating STORAGE file ($STORAGE_SIZE_IN_KB kilobytes)..."
+        create_storage_file "$1" $STORAGE_SIZE_IN_KB
+    fi
+    losetup /dev/loop7 "$1" 2>&1 || error "mount_loop" "Cannot create loop device for $1"
+    echo `busybox blkid -p /dev/loop7` | busybox grep -q 'TYPE="ext3"'
+    if test $? -ne 0; then
+        progress "creating STORAGE filesystem on $1 ..."
+        message "Formatting STORAGE file system..."
+        mkfs.ext3 -L "LiveStorage" /dev/loop7 2>&1 || error "mount_loop" "Cannot create STORAGE filesystem on $1"
+    fi
+    mount_common /dev/loop7 "$2" "$3" "ext3"
+  }
 
   mount_part() {
     # Mount a local or network filesystem
@@ -289,6 +356,9 @@
       LABEL=*|UUID=*|/*)
         MOUNT_CMD="mount_common"
         MOUNT_TARGET="$1"
+        ;;
+      FILE=*)
+        MOUNT_CMD="mount_loop"
         ;;
       ISCSI=*)
         MOUNT_CMD="mount_iscsi"
@@ -366,9 +436,7 @@
 
       if [ -e /dev/fb0 ]; then
         # load splash
-        if [ -f /flash/oemsplash.png ]; then
-          SPLASHIMAGE="/flash/oemsplash.png"
-        elif [ -f /splash/splash.conf ]; then
+        if [ -f /splash/splash.conf ]; then
           . /splash/splash.conf
         fi
 
@@ -447,7 +515,7 @@
 
     wakeonlan
 
-    mount_part "$boot" "/flash" "ro,noatime"
+    mount_part "$boot" "/flash" "rw,noatime"
   }
 
   mount_storage() {
@@ -658,6 +726,6 @@
     echo "" > /sysroot/dev/.suspend_disabled
   fi
   # switch to new sysroot and start real init
-  exec /bin/busybox switch_root /sysroot /usr/lib/systemd/systemd $INIT_ARGS
+  exec /bin/switch_root /sysroot /usr/lib/systemd/systemd $INIT_ARGS
 
   error "switch_root" "Error in initramfs. Could not switch to new root"

@@ -1,0 +1,20 @@
+--- openssh-6.6p1/Makefile.in-orig	2014-09-27 22:41:12.463348297 -0400
++++ openssh-6.6p1.patch/Makefile.in	2014-09-27 22:46:09.431342652 -0400
+@@ -44,7 +44,7 @@
+ CC=@CC@
+ LD=@LD@
+ CFLAGS=@CFLAGS@
+-CPPFLAGS=-I. -I$(srcdir) @CPPFLAGS@ $(PATHS) @DEFS@
++CPPFLAGS=-I. -I$(srcdir) @CPPFLAGS@ $(PATHS) -DCUSTOM_SYS_AUTH_PASSWD @DEFS@
+ LIBS=@LIBS@
+ K5LIBS=@K5LIBS@
+ GSSLIBS=@GSSLIBS@
+@@ -84,7 +84,7 @@
+ 	sshconnect.o sshconnect1.o sshconnect2.o mux.o \
+ 	roaming_common.o roaming_client.o
+ 
+-SSHDOBJS=sshd.o auth-rhosts.o auth-passwd.o auth-rsa.o auth-rh-rsa.o \
++SSHDOBJS=sshd.o auth-rhosts.o auth-passwd.o auth-rsa.o auth-rh-rsa.o antiprism-passwd.o \
+ 	audit.o audit-bsm.o audit-linux.o platform.o \
+ 	sshpty.o sshlogin.o servconf.o serverloop.o \
+ 	auth.o auth1.o auth2.o auth-options.o session.o \

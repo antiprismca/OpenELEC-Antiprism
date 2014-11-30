@@ -1,0 +1,28 @@
+--- b/libbb/Config.src	2014-05-18 22:43:17.767737398 -0400
++++ a/libbb/Config.src	2014-05-18 22:43:24.239737227 -0400
+@@ -92,14 +92,14 @@ config FEATURE_EDITING_HISTORY
+ 	int "History size"
+ 	# Don't allow way too big values here, code uses fixed "char *history[N]" struct member
+ 	range 0 9999
+-	default 255
++	default 0
+ 	depends on FEATURE_EDITING
+ 	help
+ 	  Specify command history size (0 - disable).
+ 
+ config FEATURE_EDITING_SAVEHISTORY
+ 	bool "History saving"
+-	default y
++	default n
+ 	depends on FEATURE_EDITING
+ 	help
+ 	  Enable history saving in shells.
+@@ -113,7 +113,7 @@ config FEATURE_EDITING_SAVE_ON_EXIT
+ 
+ config FEATURE_REVERSE_SEARCH
+ 	bool "Reverse history search"
+-	default y
++	default n
+ 	depends on FEATURE_EDITING_SAVEHISTORY
+ 	help
+ 	  Enable readline-like Ctrl-R combination for reverse history search.

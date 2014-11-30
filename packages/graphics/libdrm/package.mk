@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="libdrm"
-PKG_VERSION="2.4.58"
+PKG_VERSION="2.4.56"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -32,29 +32,42 @@ PKG_LONGDESC="The userspace interface library to kernel DRM services."
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
-get_graphicdrivers
+configure_target() {
+# overwrite default configure_target() to support $(kernel_path)
 
-DRM_CONFIG="--disable-libkms --disable-intel --disable-radeon"
-DRM_CONFIG="$DRM_CONFIG --disable-nouveau --disable-vmwgfx"
+  export LIBUDEV_CFLAGS="-I`ls -d $ROOT/$BUILD/udev*`"
+  export LIBUDEV_LIBS="-I`ls -d $ROOT/$BUILD/udev*`"
 
-for drv in $GRAPHIC_DRIVERS; do
-  [ "$drv" = "i915" -o "$drv" = "i965" ] && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-intel/enable-intel/'`
+  get_graphicdrivers
 
-  [ "$drv" = "r200" -o "$drv" = "r300" -o "$drv" = "r600" -o "$drv" = "radeonsi" ] && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-radeon/enable-radeon/'`
+  DRM_CONFIG="--disable-libkms --disable-intel --disable-radeon"
+  DRM_CONFIG="$DRM_CONFIG --disable-nouveau --disable-vmwgfx"
 
-  [ "$drv" = "nouveau" ] && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
-    DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-nouveau/enable-nouveau/'`
-done
+  for drv in $GRAPHIC_DRIVERS; do
+    [ "$drv" = "i915" -o "$drv" = "i965" ] && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-intel/enable-intel/'`
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-udev \
-                           --enable-largefile \
-                           --with-kernel-source=$(kernel_path) \
-                           $DRM_CONFIG \
-                           --disable-install-test-programs \
-                           --disable-cairo-tests \
-                           --disable-manpages"
+    [ "$drv" = "r200" -o "$drv" = "r300" -o "$drv" = "r600" -o "$drv" = "radeonsi" ] && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-radeon/enable-radeon/'`
+
+    [ "$drv" = "nouveau" ] && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-libkms/enable-libkms/'` && \
+      DRM_CONFIG=`echo $DRM_CONFIG | sed -e 's/disable-nouveau/enable-nouveau/'`
+  done
+
+  ../configure --host=$TARGET_NAME \
+               --build=$HOST_NAME \
+               --prefix=/usr \
+               --sysconfdir=/etc \
+               --disable-static \
+               --enable-shared \
+               --disable-udev \
+               --enable-largefile \
+               --with-kernel-source=$(kernel_path) \
+               $DRM_CONFIG \
+               --disable-install-test-programs \
+               --disable-cairo-tests \
+               --disable-manpages
+}

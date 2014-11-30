@@ -1,0 +1,30 @@
+--- i2p.i2p-bote-0.2.9/build.xml	2014-04-12 20:23:04.905378961 -0400
++++ i2p.i2p-bote-0.2.9.patch/build.xml	2014-04-12 20:25:52.113373248 -0400
+@@ -5,7 +5,7 @@
+         <isset property="env.I2P"/>
+     </condition>
+ 
+-    <property name="i2plib" value="${i2pbase}/lib"/>
++    <property name="i2plib" value="${i2pbase}/build"/>
+     <property name="jstllib" value="${i2pbase}/apps/susidns/src/WEB-INF/lib"/>
+     <property name="lib" value="WebContent/WEB-INF/lib"/>
+     <property name="makeplugin" value="../i2p.scripts/plugin/makeplugin.sh"/>
+@@ -67,8 +67,8 @@
+         <pathelement location="${i2plib}/javax.servlet.jar" />
+         <pathelement location="${i2plib}/commons-logging.jar" />
+         <pathelement location="${i2plib}/commons-el.jar" />
+-        <pathelement location="${i2plib}/jstl.jar" />
+-        <pathelement location="${i2plib}/standard.jar" />
++        <pathelement location="${jstllib}/jstl.jar" />
++        <pathelement location="${jstllib}/standard.jar" />
+         <pathelement location="${lib}/mailapi.jar" />
+         <pathelement location="${lib}/bcprov-ecc-jdk16-146.jar" />
+         <pathelement location="${lib}/ntruenc-1.2.jar" />
+@@ -133,6 +133,7 @@
+             includeAntRuntime="false"
+             destdir="./ant_build/classes"
+             classpathref="cp"
++            encoding="UTF-8"
+             failonerror="true" />
+     </target>
+ 

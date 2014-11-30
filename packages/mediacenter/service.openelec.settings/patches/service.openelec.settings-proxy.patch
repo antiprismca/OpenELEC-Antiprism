@@ -1,0 +1,22 @@
+--- service.openelec.settings-0.3.19/oe.py	2014-10-15 00:30:50.770903639 -0400
++++ service.openelec.settings-0.3.19-patched/oe.py	2014-10-15 01:15:30.294830867 -0400
+@@ -330,6 +330,9 @@ def load_url(url):
+     try:
+ 
+         request = urllib2.Request(url)
++        proxy = urllib2.ProxyHandler({'http': '127.0.0.1:8118'})
++        opener = urllib2.build_opener(proxy)
++        urllib2.install_opener(opener)
+         response = urllib2.urlopen(request)
+         content = response.read()
+ 
+@@ -348,6 +351,9 @@ def download_file(source, destination, s
+             download_dlg = xbmcgui.DialogProgress()
+             download_dlg.create('OpenELEC', _(32181).encode('utf-8'), ' ', ' ')
+ 
++        proxy = urllib2.ProxyHandler({'http': '127.0.0.1:8118'})
++        opener = urllib2.build_opener(proxy)
++        urllib2.install_opener(opener)
+         response = urllib2.urlopen(source)
+         total_size = int(response.info().getheader('Content-Length'
+                          ).strip())

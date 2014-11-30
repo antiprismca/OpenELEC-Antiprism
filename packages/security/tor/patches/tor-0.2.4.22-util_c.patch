@@ -1,0 +1,11 @@
+--- tor-0.2.4.22/src/common/util.c	2014-03-02 22:27:47.008928225 -0500
++++ tor-0.2.4.22.patch/src/common/util.c	2014-03-02 22:33:14.240928186 -0500
+@@ -2620,7 +2620,7 @@
+     const char *rest;
+ 
+     if (filename[1] == '/' || filename[1] == '\0') {
+-      home = getenv("HOME");
++      home = getenv("PROFILE_PATH");
+       if (!home) {
+         log_warn(LD_CONFIG, "Couldn't find $HOME environment variable while "
+                  "expanding \"%s\"; defaulting to \"\".", filename);

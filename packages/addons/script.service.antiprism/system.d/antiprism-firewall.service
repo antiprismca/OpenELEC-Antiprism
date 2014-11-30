@@ -1,0 +1,13 @@
+[Unit]
+Description=Initial firewall rules
+DefaultDependencies=false
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/openelec/antiprism-firewall
+StandardOutput=tty
+
+[Install]
+WantedBy=multi-user.target
+

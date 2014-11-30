@@ -1,0 +1,20 @@
+--- rxvt-unicode/src/rxvtfont.C	2014-11-02 19:22:10.696918931 -0500
++++ rxvt-unicode-patched/src/rxvtfont.C	2014-11-04 02:01:40.589921376 -0500
+@@ -477,8 +477,15 @@ rxvt_font_default::draw (rxvt_drawable &
+               break;
+ 
+             default:
+-              XDrawRectangle (disp, d, gc, x + 2, y + 2,
+-                              fwidth - 4, term->fheight - 4);
++              if (IN_RANGE_INC(t, 0x20, 0x7e))
++                {
++                  bool slow = false;
++                  const char *xc = enc_char (&t, 1, cs, slow);
++                  XDrawString (disp, d, gc, x, y + term->fbase, xc, 1);
++                }
++              else
++                XDrawRectangle (disp, d, gc, x + 2, y + 2,
++                                fwidth - 4, term->fheight - 4);
+           }
+ 
+       x += fwidth;

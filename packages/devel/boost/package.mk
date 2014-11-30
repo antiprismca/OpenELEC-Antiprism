@@ -45,6 +45,9 @@ makeinstall_host() {
 }
 
 pre_configure_target() {
+# boost fails building with LTO support
+  strip_lto
+
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
   export LDFLAGS="$LDFLAGS -fPIC"
@@ -66,13 +69,13 @@ make_target() {
 makeinstall_target() {
   $ROOT/$TOOLCHAIN/bin/bjam -d2 --toolset=gcc link=static \
                                 --prefix=$SYSROOT_PREFIX/usr \
-                                --ignore-site-config \
-                                --layout=system \
-                                --with-thread \
-                                --with-iostreams \
-                                --with-system \
-                                --with-serialization \
-                                --with-filesystem \
-                                --with-regex -sICU_PATH="$SYSROOT_PREFIX/usr" \
-                                install
+				--ignore-site-config \
+                                  --layout=system \
+                                  --with-thread \
+                                  --with-iostreams \
+                                  --with-system \
+                                  --with-serialization \
+                                  --with-filesystem \
+                                  --with-regex -sICU_PATH="$SYSROOT_PREFIX/usr" \
+                                  install
 }

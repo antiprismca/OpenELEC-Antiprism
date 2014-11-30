@@ -1,0 +1,11 @@
+--- openjdk-8-src-b129-06_feb_2014/jdk/make/Images.gmk	2014-02-23 12:43:33.306178644 -0500
++++ openjdk-8-src-b129-06_feb_2014.patch/jdk/make/Images.gmk	2014-02-23 12:43:49.002178642 -0500
+@@ -28,7 +28,7 @@
+ include JavaCompilation.gmk
+ include Setup.gmk
+ 
+-default: images
++default: jre-image
+ 
+ # Prepare the find cache. Only used if running on windows.
+ $(eval $(call FillCacheFind, \

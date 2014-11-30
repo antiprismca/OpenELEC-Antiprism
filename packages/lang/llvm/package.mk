@@ -29,7 +29,7 @@ PKG_DEPENDS_TARGET="toolchain llvm:host"
 PKG_PRIORITY="optional"
 PKG_SECTION="lang"
 PKG_SHORTDESC="llvm: Low Level Virtual Machine"
-PKG_LONGDESC="Low-Level Virtual Machine (LLVM) is a compiler infrastructure designed for compile-time, link-time, run-time, and idle-time optimization of programs from arbitrary programming languages. It currently supports compilation of C, Objective-C, and C++ programs, using front-ends derived from GCC 4.0, GCC 4.2, and a custom new front-end, "clang". It supports x86, x86-64, ia64, PowerPC, and SPARC, with support for Alpha and ARM under development."
+PKG_LONGDESC="Low-Level Virtual Machine (LLVM) is a compiler infrastructure designed for compile-time, link-time, run-time, and idle-time optimization of programs from arbitrary programming languages. It currently supports compilation of C, Objective-C, and C++ programs, using front-ends derived from GCC 4.0, GCC 4.2, and a custom new front-end, \"clang\". It supports x86, x86-64, ia64, PowerPC, and SPARC, with support for Alpha and ARM under development."
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
@@ -49,8 +49,11 @@ PKG_CONFIGURE_OPTS_HOST="--disable-polly \
                          --enable-optimized \
                          --disable-debug-runtime \
                          --disable-debug-symbols \
-                         --enable-keep-symbols \
-                         --enable-targets=r600"
+                         --enable-keep-symbols"
+
+if [ "$TARGET_ARCH" = x86_64 ]; then
+  PKG_CONFIGURE_OPTS_HOST="$PKG_CONFIGURE_OPTS_HOST --enable-targets=r600"
+fi
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-polly \
                            --disable-libcpp \
@@ -83,7 +86,7 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-polly \
                            --disable-ltdl-install"
 
 if [ "$TARGET_ARCH" = i386 ]; then
-  PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --enable-targets=x86,r600"
+  PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --enable-targets=x86"
 elif [ "$TARGET_ARCH" = x86_64 ]; then
   PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --enable-targets=x86_64,r600"
 elif [ "$TARGET_ARCH" = arm ]; then
@@ -105,8 +108,14 @@ pre_configure_host() {
 }
 
 pre_configure_target() {
-  export CFLAGS="$CFLAGS -fPIC"
-  export CXXFLAGS="$CXXFLAGS -fPIC"
+  # llvm fails to build with LTO support
+    strip_lto
+
+  # llvm 3.3+ fails to build with -Os
+  # see https://bugs.gentoo.org/show_bug.cgi?id=489708
+  # please test without this on llvm upgrade
+    export CFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
+    export CXXFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
 }
 
 makeinstall_host() {

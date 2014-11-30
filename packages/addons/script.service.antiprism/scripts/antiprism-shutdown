@@ -1,0 +1,20 @@
+#!/bin/sh
+
+for p in privoxy tor java openvpn
+do
+  echo -e -n "\nStopping $p..."
+  while pidof $p >/dev/null ; do killall $p 2>/dev/null; sleep 1; done
+done
+sync 
+echo -e -n "\nStopping TrueCrypt..."
+truecrypt -d 2>/dev/null
+echo -e -n "\nStopping LUKS..."
+mount | grep cryptsetup-antiprism | while read CRYPTSETUP; do
+ if [ -n "$CRYPTSETUP" ]; then
+  umount `echo "$CRYPTSETUP" | cut -f 3 -d " "` 2>/dev/null
+  cryptsetup luksClose `echo "$CRYPTSETUP" | cut -f 1 -d " "` 2>/dev/null 
+ fi
+done
+echo -e "\nDone."
+exit 0
+

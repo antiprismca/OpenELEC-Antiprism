@@ -1,0 +1,11 @@
+--- i2p-0.9.12/router/java/src/net/i2p/router/startup/WorkingDir.java	2014-04-10 20:47:37.049167853 -0400
++++ i2p-0.9.12.patch/router/java/src/net/i2p/router/startup/WorkingDir.java	2014-04-10 20:47:56.497167851 -0400
+@@ -184,6 +184,8 @@
+         success &= migrateClientsConfig(oldDirf, dirf);
+         // for later news.xml updates (we don't copy initialNews.xml over anymore)
+         success &= (new SecureDirectory(dirf, "docs")).mkdir();
++        // create logs dir
++        success &= (new SecureDirectory(newEep, "logs")).mkdir();
+         // prevent correlation of eepsite timestamps with router first-seen time
+         touchRecursive(new File(dirf, "eepsite/docroot"), EEPSITE_TIMESTAMP);
+ 

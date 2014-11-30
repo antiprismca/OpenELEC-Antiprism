@@ -21,9 +21,9 @@ if [ "$SDL_SUPPORT" = no ]; then
 fi
 
 if [ "$OPENGL_SUPPORT" = no ]; then
-  KODI_SCR_RSXS="no"
-  KODI_VIS_PROJECTM="no"
-  KODI_VIS_GOOM="no"
+  XBMC_SCR_RSXS="no"
+  XBMC_VIS_PROJECTM="no"
+  XBMC_VIS_GOOM="no"
 fi
 
 get_graphicdrivers() {
@@ -40,14 +40,12 @@ get_graphicdrivers() {
       DRI_DRIVERS="$DRI_DRIVERS,i915"
       XORG_DRIVERS="$XORG_DRIVERS intel"
       COMPOSITE_SUPPORT="yes"
-      VAAPI_SUPPORT="yes"
     fi
 
     if [ "$drv" = "i965" ]; then
       DRI_DRIVERS="$DRI_DRIVERS,i965"
       XORG_DRIVERS="$XORG_DRIVERS intel"
       COMPOSITE_SUPPORT="yes"
-      VAAPI_SUPPORT="yes"
     fi
 
     if [ "$drv" = "nouveau" ]; then
@@ -58,16 +56,15 @@ get_graphicdrivers() {
       GALLIUM_DRIVERS="$GALLIUM_DRIVERS,nouveau"
       XORG_DRIVERS="$XORG_DRIVERS nouveau"
       COMPOSITE_SUPPORT="yes"
+#      LLVM_SUPPORT="yes"
     fi
 
     if [ "$drv" = "nvidia" ]; then
       XORG_DRIVERS="$XORG_DRIVERS nvidia"
-      VDPAU_SUPPORT="yes"
     fi
 
     if [ "$drv" = "nvidia-legacy" ]; then
       XORG_DRIVERS="$XORG_DRIVERS nvidia-legacy"
-      VDPAU_SUPPORT="yes"
     fi
 
     if [ "$drv" = "r200" ]; then
@@ -81,7 +78,6 @@ get_graphicdrivers() {
       XORG_DRIVERS="$XORG_DRIVERS ati"
       LLVM_SUPPORT="yes"
       COMPOSITE_SUPPORT="yes"
-      VDPAU_SUPPORT="yes"
     fi
 
     if [ "$drv" = "r600" ]; then
@@ -89,7 +85,6 @@ get_graphicdrivers() {
       XORG_DRIVERS="$XORG_DRIVERS ati"
       LLVM_SUPPORT="yes"
       COMPOSITE_SUPPORT="yes"
-      VDPAU_SUPPORT="yes"
     fi
 
     if [ "$drv" = "radeonsi" ]; then
@@ -97,7 +92,6 @@ get_graphicdrivers() {
       XORG_DRIVERS="$XORG_DRIVERS ati"
       LLVM_SUPPORT="yes"
       COMPOSITE_SUPPORT="yes"
-      VDPAU_SUPPORT="yes"
     fi
 
   done

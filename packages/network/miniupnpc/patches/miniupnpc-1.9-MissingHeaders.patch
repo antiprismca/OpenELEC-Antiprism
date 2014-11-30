@@ -1,0 +1,11 @@
+--- miniupnpc-1.9/CMakeLists.txt	2014-02-09 18:40:10.077975274 -0500
++++ miniupnpc-1.9.patch/CMakeLists.txt	2014-02-09 18:40:56.205975268 -0500
+@@ -162,6 +162,8 @@
+ 	miniupnpc.h
+   miniwget.h
+   upnpcommands.h
++  portlistingparse.h
++  miniupnpctypes.h
+   igd_desc_parse.h
+   upnpreplyparse.h
+   upnperrors.h

@@ -25,7 +25,6 @@ PKG_SITE="http://www.gnu.org/software/parted/"
 PKG_URL="http://ftp.gnu.org/gnu/parted/$PKG_NAME-$PKG_VERSION.tar.xz"
 PKG_DEPENDS_HOST="toolchain util-linux:host"
 PKG_DEPENDS_TARGET="toolchain util-linux parted:host"
-PKG_DEPENDS_INIT="toolchain util-linux:init parted"
 PKG_PRIORITY="optional"
 PKG_SECTION="system"
 PKG_SHORTDESC="parted: GNU partition editor"
@@ -34,24 +33,17 @@ PKG_IS_ADDON="no"
 
 PKG_AUTORECONF="no"
 
+PKG_CONFIGURE_OPTS_HOST="--disable-shared --without-readline"
 PKG_CONFIGURE_OPTS_TARGET="--disable-device-mapper \
-                           --disable-shared \
-                           --without-readline \
-                           --disable-rpath \
-                           --with-gnu-ld"
+            --disable-shared \
+            --without-readline \
+            --disable-rpath \
+            --with-gnu-ld"
 
 PKG_CONFIGURE_OPTS_HOST="$PKG_CONFIGURE_OPTS_TARGET"
 
-configure_init() {
-  : # reuse configure_target()
+post_make_target() {
+  # dont build parallel
+    MAKEFLAGS=-j1
 }
 
-make_init() {
-  : # reuse make_target()
-}
-
-makeinstall_init() {
-  mkdir -p $INSTALL/sbin
-    cp ../.$TARGET_NAME/parted/parted $INSTALL/sbin
-    cp ../.$TARGET_NAME/partprobe/partprobe $INSTALL/sbin
-}

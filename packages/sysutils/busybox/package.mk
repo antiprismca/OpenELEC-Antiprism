@@ -222,12 +222,19 @@ post_install() {
       cp $PKG_DIR/system.d.opt/cron-defaults.service $INSTALL/usr/lib/systemd/system
       enable_service cron-defaults.service
   fi
+
+  (cd $INSTALL
+  for f in `find bin sbin etc lib -lname '*busybox*'`; do 
+    rm -f $f
+    ln bin/busybox $f
+  done)
 }
 
 makeinstall_init() {
   mkdir -p $INSTALL/bin
-    ln -sf busybox $INSTALL/bin/sh
     chmod 4755 $INSTALL/bin/busybox
+    ln -sf busybox $INSTALL/bin/sh
+    ln busybox $INSTALL/bin/switch_root
 
   mkdir -p $INSTALL/etc
     touch $INSTALL/etc/fstab

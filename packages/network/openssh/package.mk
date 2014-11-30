@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="openssh"
-PKG_VERSION="6.7p1"
+PKG_VERSION="6.6p1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.openssh.com/"
 PKG_URL="ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain zlib libressl"
+PKG_DEPENDS_TARGET="toolchain zlib openssl"
 PKG_PRIORITY="optional"
 PKG_SECTION="network"
 PKG_SHORTDESC="openssh: An open re-implementation of the SSH package"
@@ -68,6 +68,4 @@ post_makeinstall_target() {
 post_install() {
   add_user sshd x 74 74 "Privilege-separated SSH" "/var/empty/sshd" "/bin/sh"
   add_group sshd 74
-
-  enable_service sshd.service
 }

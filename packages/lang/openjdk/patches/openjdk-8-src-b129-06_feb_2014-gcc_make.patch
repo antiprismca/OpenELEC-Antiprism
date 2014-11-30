@@ -1,0 +1,11 @@
+--- openjdk-8-src-b129-06_feb_2014/hotspot/make/linux/makefiles/gcc.make	2014-02-22 15:07:45.578841452 -0500
++++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/make/linux/makefiles/gcc.make	2014-02-22 15:12:41.214835831 -0500
+@@ -204,7 +204,7 @@
+ endif
+ 
+ # Compiler warnings are treated as errors
+-WARNINGS_ARE_ERRORS = -Werror
++# WARNINGS_ARE_ERRORS = -Werror
+ 
+ ifeq ($(USE_CLANG), true)
+   # However we need to clean the code up before we can unrestrictedly enable this option with Clang

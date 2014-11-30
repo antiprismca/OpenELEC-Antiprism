@@ -1,0 +1,12 @@
+--- LVM2-2.02.105/Makefile.in	2014-07-29 23:16:51.698847746 -0400
++++ LVM2-2.02.105.patch/Makefile.in	2014-07-29 23:17:15.282847298 -0400
+@@ -64,7 +64,7 @@
+ daemons.device-mapper: libdm.device-mapper
+ tools.device-mapper: libdm.device-mapper
+ scripts.device-mapper: include.device-mapper
+-device-mapper: tools.device-mapper daemons.device-mapper man.device-mapper
++device-mapper: tools.device-mapper daemons.device-mapper man.device-mapper udev.device-mapper
+ 
+ ifeq ("@INTL@", "yes")
+ lib.pofile: include.pofile
+

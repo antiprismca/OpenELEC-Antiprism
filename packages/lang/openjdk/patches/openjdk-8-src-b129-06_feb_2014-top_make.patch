@@ -1,0 +1,11 @@
+--- openjdk-8-src-b129-06_feb_2014/hotspot/make/linux/makefiles/top.make	2014-05-05 20:50:02.139960570 -0400
++++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/make/linux/makefiles/top.make	2014-05-05 20:50:30.623960027 -0400
+@@ -69,7 +69,7 @@
+ 
+ # Wierd argument adjustment for "gnumake -j..."
+ adjust-mflags   = $(GENERATED)/adjust-mflags
+-MFLAGS-adjusted = -r `$(adjust-mflags) "$(MFLAGS)" "$(HOTSPOT_BUILD_JOBS)"`
++MFLAGS-adjusted = -r $(MFLAGS) -j$(HOTSPOT_BUILD_JOBS)
+ 
+ 
+ # default target: update lists, make vm

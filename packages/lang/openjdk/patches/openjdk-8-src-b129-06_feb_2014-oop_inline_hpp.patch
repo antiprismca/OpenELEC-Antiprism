@@ -1,0 +1,43 @@
+--- openjdk-8-src-b129-06_feb_2014/hotspot/src/share/vm/oops/oop.inline.hpp	2014-02-24 21:46:41.109822872 -0500
++++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/src/share/vm/oops/oop.inline.hpp	2014-02-24 21:49:23.173819789 -0500
+@@ -151,7 +151,7 @@
+ inline bool oopDesc::is_instanceMirror()     const { return klass()->oop_is_instanceMirror(); }
+ inline bool oopDesc::is_instanceRef()        const { return klass()->oop_is_instanceRef(); }
+ inline bool oopDesc::is_array()              const { return klass()->oop_is_array(); }
+-inline bool oopDesc::is_objArray()           const { return klass()->oop_is_objArray(); }
++inline bool oopDesc::is_objArray()           const { asm (""); return klass()->oop_is_objArray(); }
+ inline bool oopDesc::is_typeArray()          const { return klass()->oop_is_typeArray(); }
+ 
+ inline void*     oopDesc::field_base(int offset)        const { return (void*)&((char*)this)[offset]; }
+@@ -222,8 +222,8 @@
+ 
+ // Load an oop out of the Java heap as is without decoding.
+ // Called by GC to check for null before decoding.
+-inline oop       oopDesc::load_heap_oop(oop* p)          { return *p; }
+-inline narrowOop oopDesc::load_heap_oop(narrowOop* p)    { return *p; }
++inline oop       oopDesc::load_heap_oop(oop* p)          { asm (""); return *p; }
++inline narrowOop oopDesc::load_heap_oop(narrowOop* p)    { asm (""); return *p; }
+ 
+ // Load and decode an oop out of the Java heap into a wide oop.
+ inline oop oopDesc::load_decode_heap_oop_not_null(oop* p)       { return *p; }
+@@ -243,9 +243,9 @@
+ 
+ // Encode and store a heap oop.
+ inline void oopDesc::encode_store_heap_oop_not_null(narrowOop* p, oop v) {
+-  *p = encode_heap_oop_not_null(v);
++  asm (""); *p = encode_heap_oop_not_null(v);
+ }
+-inline void oopDesc::encode_store_heap_oop_not_null(oop* p, oop v) { *p = v; }
++inline void oopDesc::encode_store_heap_oop_not_null(oop* p, oop v) { asm (""); *p = v; }
+ 
+ // Encode and store a heap oop allowing for null.
+ inline void oopDesc::encode_store_heap_oop(narrowOop* p, oop v) {
+@@ -612,7 +612,7 @@
+ inline bool oopDesc::is_forwarded() const {
+   // The extra heap check is needed since the obj might be locked, in which case the
+   // mark would point to a stack location and have the sentinel bit cleared
+-  return mark()->is_marked();
++  asm (""); return mark()->is_marked();
+ }
+ 
+ // Used by scavengers

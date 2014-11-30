@@ -1,0 +1,15 @@
+[Unit]
+Description=Apparmor
+DefaultDependencies=false
+After=show-version.service
+Before=local-fs-pre.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'for i in /etc/apparmor.d/*.profile; do /sbin/apparmor_parser $i; done'
+StandardOutput=tty
+
+[Install]
+WantedBy=local-fs-pre.target
+

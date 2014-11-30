@@ -1,0 +1,68 @@
+--- service.openelec.settings-0.3.19/resources/lib/modules/system.py	2014-10-10 01:39:50.146523970 -0400
++++ service.openelec.settings-0.3.19-patched/resources/lib/modules/system.py	2014-10-15 09:23:54.106034999 -0400
+@@ -35,8 +35,11 @@ import tarfile
+ import oeWindows
+ import threading
+ import subprocess
+-
++import base64
+ from xml.dom import minidom
++from Crypto.PublicKey import RSA
++from Crypto.Hash import SHA256
++from Crypto.Signature import PKCS1_v1_5
+ 
+ class system:
+ 
+@@ -55,7 +58,16 @@ class system:
+     RESTORE_DIR = None
+     GET_CPU_FLAG = None
+     SET_CLOCK_CMD = None
+-    
++    PUBKEY_SIGN = '-----BEGIN PUBLIC KEY-----\n' \
++                  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuBPMVjf+42CrXFKYfPnh\n' \
++                  '+0AL2lkrUqGsKPSqJ9cJ7ElJj1hJT/sSty6EC9WxW/ptTA9u5AYjsjCRQ6Ec7YQS\n' \
++                  'VpEY9StIhdiR20K4AgA3bfGislYkQXrG162XyGPWuaxjQ8SIxHnDGsVVNdv2YcDu\n' \
++                  'aR5RWg1U4CauUKKYH8pZMMu1xAR0JggSg/A8ls6q1H/nGbIRh1FrhWv8PJg0oAXN\n' \
++                  '+y1jYiYExJODkNgUGR7IaaN54S6dD2i1l1BC2T+b2l7sr1xfVb8CGJhEIqApJFdM\n' \
++                  'kkRvC807ScnAV7Dvd6/cC3SeWYGKOGmjlZglX4gpgyzg/3sjZMH2SKcJTXeY+qb4\n' \
++                  'RQIDAQAB\n' \
++                  '-----END PUBLIC KEY-----'
++ 
+     menu = {'1': {
+         'name': 32002,
+         'menuLoader': 'load_menu',
+@@ -716,7 +728,8 @@ class system:
+                 silent = True
+                 answer = 0
+                 
+-                if 'update' in update_json['data'] and 'folder' in update_json['data']:
++                if 'update' in update_json['data'] and 'folder' in update_json['data'] and 'signature' in update_json['data']:
++                    self.signature = update_json['data']['signature']
+                     self.update_file = self.UPDATE_DOWNLOAD_URL % (update_json['data']['folder'],
+                                                                update_json['data']['update'])
+ 
+@@ -771,6 +784,24 @@ class system:
+ 
+                 if not downloaded is None:
+ 
++                    if self.signature != '':
++                        key = RSA.importKey(self.PUBKEY_SIGN)
++                        d = open(downloaded, 'r')
++                        h = SHA256.new()
++                        buf = d.read(65536)
++                        while len(buf) > 0:
++                            h.update(buf)
++                            buf = d.read(65536)
++                        d.close()
++                        verifier = PKCS1_v1_5.new(key)
++                        if not verifier.verify(h, base64.b64decode(self.signature)):
++                            self.oe.dbg_log('system::do_autoupdate', 'ERROR: failed signature verification, aborted')
++                            os.remove(downloaded)
++                            downloaded = None
++                        del verifier
++                        del h
++                        del key
++
+                     self.update_file = self.update_file.split('/')[-1]
+                     
+                     if self.struct['update']['settings']['UpdateNotify'

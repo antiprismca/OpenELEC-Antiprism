@@ -1,0 +1,11 @@
+--- plugin.program.gnupg-1.0.4/resources/lib/gnupg.py	2014-09-06 20:34:10.987443694 -0400
++++ plugin.program.gnupg-1.0.4.patch/resources/lib/gnupg.py	2014-09-06 20:34:57.523442809 -0400
+@@ -659,8 +659,6 @@
+             logger.warning('No encoding found via locale.getpreferredencoding '
+                            'or sys.stdin.encoding, defaulting to utf-8.')
+             self.encoding = 'utf-8'
+-        if gnupghome and not os.path.isdir(self.gnupghome):
+-            os.makedirs(self.gnupghome,0x1C0)
+         p = self._open_subprocess(["--version"])
+         result = self.result_map['verify'](self) # any result will do for this
+         self._collect_output(p, result, stdin=p.stdin)
