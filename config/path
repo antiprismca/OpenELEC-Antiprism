@@ -20,6 +20,10 @@ HOST_NAME=`$LOCAL_CC -dumpmachine`
 TARGET_NAME=$(echo $TARGET_SUBARCH | sed -e "s,-,,")-openelec-linux-gnu${TARGET_ABI}
 
 BUILD=$BUILD_BASE.$DISTRONAME-$PROJECT.$TARGET_ARCH-$OPENELEC_VERSION
+if [ -n "$BUILD_SUFFIX" ]; then
+  BUILD=$BUILD-$BUILD_SUFFIX
+fi
+
 TARGET_IMG=$ROOT/$TARGET
 TARGET_ADDONS="$TARGET_IMG/$ADDONS/$ADDON_PATH"
 ADDON_BUILD="$BUILD/$ADDONS/$1"
@@ -65,26 +69,46 @@ SED="sed -i"
   PKG_IS_ADDON="no"
 
   if [ -n "$1" ]; then
-    FOUND=0
-    for DIR in $ROOT/`find $PACKAGES -type d -name $(echo $1| awk -F : '{print $1}') ! -wholename \*\/source\/\* 2>/dev/null` ; do
-      # keep track of dirs with meta for debugging
-      if [ -z "$ALL_DIRS" ] ; then
-        ALL_DIRS="$DIR"
-      else
-        ALL_DIRS="$ALL_DIRS\\n$DIR"
-      fi
-      if [ -f "$DIR/package.mk" ] ; then
-        FOUND=$((FOUND+1))
-        # found first. set $PKG_DIR
+    _PKG_ROOT_NAME=$(echo $1 | cut -d: -f1)
+    _ALL_DIRS=""
+    _FOUND=0
+    PKG_DIR=""
+
+    # first check project folder for a package
+    for DIR in $(find $ROOT/projects/$PROJECT/packages -type d -name $_PKG_ROOT_NAME 2>/dev/null); do
+      if [ -r "$DIR/package.mk" ]; then
+        # found first, set $PKG_DIR
         PKG_DIR="$DIR"
-        if [ $FOUND -gt 1 ] ; then
-          # found more ? fail
+        # keep track of dirs with package.mk for detecting multiple folders
+        _ALL_DIRS="${_ALL_DIRS}${DIR}\\n"
+        _FOUND=$((_FOUND+1))
+        if [ $_FOUND -gt 1 ]; then
+          # _FOUND more ? fail
           echo "Error - multiple package folders:"
-          echo -e "$ALL_DIRS"
+          echo -e "$_ALL_DIRS"
           exit 1
         fi
       fi
     done
+
+    # then check packages folder if not found already
+    if [ $_FOUND -eq 0 ]; then
+      for DIR in $(find $ROOT/$PACKAGES -type d -name $_PKG_ROOT_NAME 2>/dev/null); do
+        if [ -r "$DIR/package.mk" ]; then
+          # found first, set $PKG_DIR
+          PKG_DIR="$DIR"
+          # keep track of dirs with package.mk for detecting multiple folders
+          _ALL_DIRS="${_ALL_DIRS}${DIR}\\n"
+          _FOUND=$((_FOUND+1))
+          if [ $_FOUND -gt 1 ]; then
+            # found more ? fail
+            echo "Error - multiple package folders:"
+            echo -e "$_ALL_DIRS"
+            exit 1
+          fi
+        fi
+      done
+    fi
   fi
 
   if [ -r $PKG_DIR/package.mk ]; then
@@ -109,6 +133,8 @@ SSL_CERTIFICATES="/etc/pki/tls"
 TOOLCHAIN_LANGUAGES=c
 [ "$TOOLCHAIN_CXX" = yes ] && TOOLCHAIN_LANGUAGES=${TOOLCHAIN_LANGUAGES},c++
 
+unset TARGET_CPP
+
 TARGET_CC=${TARGET_PREFIX}gcc
 TARGET_CXX=${TARGET_PREFIX}g++
 TARGET_LD=${TARGET_PREFIX}ld
@@ -125,6 +151,8 @@ TARGET_STRIP=${TARGET_PREFIX}strip
 TARGET_PKG_CONFIG_PATH=""
 TARGET_PKG_CONFIG_LIBDIR="$SYSROOT_PREFIX/usr/lib/pkgconfig:$SYSROOT_PREFIX/usr/share/pkgconfig"
 TARGET_PKG_CONFIG_SYSROOT_DIR="$SYSROOT_PREFIX"
+
+unset HOST_CPP
 
 HOST_AWK=gawk
 HOST_CC=$ROOT/$TOOLCHAIN/bin/host-gcc

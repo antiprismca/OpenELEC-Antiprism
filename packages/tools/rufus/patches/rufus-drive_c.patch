@@ -1,0 +1,20 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/drive.c	2015-03-31 20:59:58.908239013 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/drive.c	2015-03-31 21:01:32.028237244 -0400
+@@ -1,1 +1,1 @@
+-/*
++/*
+@@ -21,6 +21,7 @@
+ #include <crtdbg.h>
+ #endif
+ 
++#define FSCTL_ALLOW_EXTENDED_DASD_IO (((0x00000009) << 16) | ((0x00000000) << 14) | ((32) << 2) | (3))
+ #include <windows.h>
+ #include <stdio.h>
+ #include <string.h>
+@@ -1359,4 +1360,4 @@
+ 	}
+ 
+ 	return TRUE;
+-}
+\ No newline at end of file
++}

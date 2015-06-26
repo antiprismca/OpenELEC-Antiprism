@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="alsa-lib"
-PKG_VERSION="1.0.28"
+PKG_VERSION="1.0.29"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -58,8 +58,6 @@ post_configure_target() {
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin
 
-  mkdir -p $INSTALL/etc/modprobe.d
-    cp -PR $PKG_DIR/config/alsa-base.conf $INSTALL/etc/modprobe.d
   mkdir -p $INSTALL/usr/config
     cp -PR $PKG_DIR/config/modprobe.d $INSTALL/usr/config
 }

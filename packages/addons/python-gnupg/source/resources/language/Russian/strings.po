@@ -1,0 +1,258 @@
+# XBMC Media Center language file
+# Addon Name: GnuPG
+# Addon id: plugin.program.gnupg
+# Addon version: 1.0.6
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "GnuPG"
+msgstr "GnuPG"
+
+msgctxt "Addon Description"
+msgid "GnuPG XBMC Frontend"
+msgstr "Интерфейс пользователя GnuPG для XBMC"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Отладочный лог"
+
+msgctxt "#32002"
+msgid "Cannot determine home path, using /storage"
+msgstr "Не могу определить домашний директорий, пусть будет /storage"
+
+msgctxt "#32003"
+msgid "Create key..."
+msgstr "Создать ключ..."
+
+msgctxt "#32004"
+msgid "Import key..."
+msgstr "Импортировать ключ..."
+
+msgctxt "#32005"
+msgid "Decrypt..."
+msgstr "Расшифровать..."
+
+msgctxt "#32006"
+msgid "Keys:"
+msgstr "Ключи:"
+
+msgctxt "#32007"
+msgid "   [ key generation in progress ... ]"
+msgstr "   [ создание ключа в процессе ... ]"
+
+msgctxt "#32008"
+msgid "Fingerprint"
+msgstr "Фингерпринт"
+
+msgctxt "#32009"
+msgid "Encrypt"
+msgstr "Зашифровать"
+
+msgctxt "#32010"
+msgid "Encrypt and sign"
+msgstr "Зашифровать и подписать"
+
+msgctxt "#32011"
+msgid "Export key"
+msgstr "Экспортировать ключ"
+
+msgctxt "#32012"
+msgid "Export with private key if available"
+msgstr "Экспортировать вместе с приватным ключом, если он есть"
+
+msgctxt "#32013"
+msgid "Delete key"
+msgstr "Удалить ключ"
+
+msgctxt "#32014"
+msgid "Please wait, another key is being generated"
+msgstr "Пожалуйста подождите, идёт генерация другого ключа"
+
+msgctxt "#32015"
+msgid "This may take a while.\nCheck back in some minutes -\nthe new key will appear in the list"
+msgstr "Это займёт какое-то время.\nПроверьте через несколько минут -\nновый ключ добавится в список"
+
+msgctxt "#32016"
+msgid "Primary key type:"
+msgstr "Тип первичного ключа:"
+
+msgctxt "#32017"
+msgid "Primary key length:"
+msgstr "Длина первичного ключа:"
+
+msgctxt "#32018"
+msgid "Subkey type:"
+msgstr "Тип подключа:"
+
+msgctxt "#32019"
+msgid "Subkey length:"
+msgstr "Длина подключа:"
+
+msgctxt "#32020"
+msgid "Name in certificate:"
+msgstr "Имя в сертификате:"
+
+msgctxt "#32021"
+msgid "Email in certificate:"
+msgstr "Эл.адрес в сертификате:"
+
+msgctxt "#32022"
+msgid "Comment in certificate:"
+msgstr "Комментарий в сертификате:"
+
+msgctxt "#32023"
+msgid "Passphrase:"
+msgstr "Парольная фраза:"
+
+msgctxt "#32024"
+msgid "About to generate a key"
+msgstr "Всё готово для генерации ключа"
+
+msgctxt "#32025"
+msgid "Import keys from a file:"
+msgstr "Импорт ключей из файла:"
+
+msgctxt "#32026"
+msgid "Result"
+msgstr "Результат"
+
+msgctxt "#32027"
+msgid "Import successful"
+msgstr "Импорт успешен"
+
+msgctxt "#32028"
+msgid "Error importing keys"
+msgstr "Ошибка при импорте ключей"
+
+msgctxt "#32029"
+msgid "Please check the debug log"
+msgstr "Проверьте отладочный лог, пожалуйста"
+
+msgctxt "#32030"
+msgid "Choose a file to decrypt:"
+msgstr "Выберите файл для расшифровки:"
+
+msgctxt "#32031"
+msgid "Passphrase for private key:"
+msgstr "Парольная фраза приватного ключа:"
+
+msgctxt "#32032"
+msgid "Output target"
+msgstr "Сохранить в"
+
+msgctxt "#32033"
+msgid "Output to the same file?"
+msgstr "Сохранять в том же файле?"
+
+msgctxt "#32034"
+msgid "Choose a filename to save the result:"
+msgstr "Выберите имя файла для результата:"
+
+msgctxt "#32035"
+msgid "Signed by: "
+msgstr "Подписано: "
+
+msgctxt "#32036"
+msgid "\nKey ID: "
+msgstr "\nID ключа: "
+
+msgctxt "#32037"
+msgid "\nSignature ID: "
+msgstr "\nID подписи: "
+
+msgctxt "#32038"
+msgid " \n    Cannot verify signature"
+msgstr " \n    Проверка подписи неуспешна"
+
+msgctxt "#32039"
+msgid "Decryption is successful"
+msgstr "Расшифровка успешна"
+
+msgctxt "#32040"
+msgid "Error decrypting the file"
+msgstr "Ошибка при расшифровке файла"
+
+msgctxt "#32041"
+msgid "Choose a file to encrypt:"
+msgstr "Выберите файл для шифрования:"
+
+msgctxt "#32042"
+msgid "No private keys to sign with"
+msgstr "Отсутствуют приватный ключ для подписи"
+
+msgctxt "#32043"
+msgid "You need to generate a key first"
+msgstr "Вам нужно сначала создать ключ"
+
+msgctxt "#32044"
+msgid "Choose a private key to sign with:"
+msgstr "Выберите приватный ключ для создания подписи:"
+
+msgctxt "#32045"
+msgid "Encryption status:"
+msgstr "Статус шифрования:"
+
+msgctxt "#32046"
+msgid "Error encrypting the file"
+msgstr "Ошибка при создании файла"
+
+msgctxt "#32047"
+msgid "Error exporting keys"
+msgstr "Ошибка при экспорте ключей"
+
+msgctxt "#32048"
+msgid "Deleting key"
+msgstr "Удаление ключа"
+
+msgctxt "#32049"
+msgid "Delete key "
+msgstr "Удалить ключ "
+
+msgctxt "#32050"
+msgid " ?"
+msgstr " ?"
+
+msgctxt "#32051"
+msgid "Do you trust this key?"
+msgstr "Вы доверяете этому ключу?"
+
+msgctxt "#32052"
+msgid "('No' deletes it)"
+msgstr "(выбор 'Нет' удалит его)"
+
+msgctxt "#32053"
+msgid "Export successful"
+msgstr "Экспорт успешен"
+
+msgctxt "#32054"
+msgid "Keyserver"
+msgstr "Сервер ключей"
+
+msgctxt "#32055"
+msgid "Keyserver not configured, using pgp.mit.edu"
+msgstr "Сервер ключей не сконфигурирован, использую pgp.mit.edu"
+
+msgctxt "#32056"
+msgid "Search for keys..."
+msgstr "Поиск ключей..."
+
+msgctxt "#32057"
+msgid "Search query (key ID, email, etc):"
+msgstr "Запрос для поиска (ID ключа, эл.адрес, и т.п.):"
+
+msgctxt "#32058"
+msgid "Send to keyserver"
+msgstr "Послать на сервер ключей"
+
+msgctxt "#32059"
+msgid "No keys found"
+msgstr "Ключей не найдено"
+
+msgctxt "#32060"
+msgid "Select a key to import:"
+msgstr "Выберите ключ для импорта:"
+
+msgctxt "#32061"
+msgid "[Cancel]"
+msgstr "[Отмена]"
+

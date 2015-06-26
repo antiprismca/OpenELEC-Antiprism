@@ -1,0 +1,287 @@
+msgid ""
+msgstr "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: AntiPrism_dede\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"X-Generator: Poedit 1.7.1\n"
+
+# XBMC Media Center language file
+# Addon Name: GnuPG
+# Addon id: plugin.program.gnupg
+# Addon version: 1.0.6
+# Addon Provider: AntiPrism.ca
+msgctxt "Addon Summary"
+msgid "GnuPG"
+msgstr "GnuPG"
+
+msgctxt "Addon Description"
+msgid "GnuPG XBMC Frontend"
+msgstr "GnuPG XBMC/Kodi Oberfläche"
+
+msgctxt "#32000"
+msgid "General"
+msgstr "Allgemeines"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Debug Protokoll einschalten"
+
+msgctxt "#32002"
+msgid "Cannot determine home path, using /storage"
+msgstr "Home Pfad nicht bestimmbar, verwende /storage"
+
+msgctxt "#32003"
+msgid "Create key..."
+msgstr "Schlüssel erstellen..."
+
+msgctxt "#32004"
+msgid "Import key..."
+msgstr "Schlüssel importieren..."
+
+msgctxt "#32005"
+msgid "Decrypt..."
+msgstr "Entschlüsseln..."
+
+msgctxt "#32006"
+msgid "Keys:"
+msgstr "Keys:"
+
+msgctxt "#32007"
+msgid "   [ key generation in progress ... ]"
+msgstr "   [ Schlüssel wird erzeugt ...]"
+
+msgctxt "#32008"
+msgid "Fingerprint"
+msgstr "Fingerabdruck"
+
+msgctxt "#32009"
+msgid "Encrypt"
+msgstr "Verschlüsseln"
+
+msgctxt "#32010"
+msgid "Encrypt and sign"
+msgstr "Verschlüsseln und signieren"
+
+msgctxt "#32011"
+msgid "Export key"
+msgstr "Schlüssel exportieren"
+
+msgctxt "#32012"
+msgid "Export with private key if available"
+msgstr "Falls möglich mit Privatschlüssel exportieren"
+
+msgctxt "#32013"
+msgid "Delete key"
+msgstr "Schlüssel löschen"
+
+msgctxt "#32014"
+msgid "Please wait, another key is being generated"
+msgstr "Bitte warten, ein weiterer Schlüssel wird gerade generiert"
+
+msgctxt "#32015"
+msgid ""
+"This may take a while.\n"
+"Check back in some minutes -\n"
+"the new key will appear in the list"
+msgstr "Dies könnte eine Weile dauern.\n"
+"Schauen Sie in ein paar Minuten nochmal -\n"
+"der neue Schlüssel wird in der Liste erscheinen"
+
+msgctxt "#32016"
+msgid "Primary key type:"
+msgstr "Typ des Primärschlüssels:"
+
+msgctxt "#32017"
+msgid "Primary key length:"
+msgstr "Länge des Primärschlüssels:"
+
+msgctxt "#32018"
+msgid "Subkey type:"
+msgstr "Typ des Unterschlüssels:"
+
+msgctxt "#32019"
+msgid "Subkey length:"
+msgstr "Länge des Unterschlüssels:"
+
+msgctxt "#32020"
+msgid "Name in certificate:"
+msgstr "Name im Zertifikat:"
+
+msgctxt "#32021"
+msgid "Email in certificate:"
+msgstr "E-Mail im Zertifikat:"
+
+msgctxt "#32022"
+msgid "Comment in certificate:"
+msgstr "Kommentar im Zertifikat:"
+
+msgctxt "#32023"
+msgid "Passphrase:"
+msgstr "Passphrase:"
+
+msgctxt "#32024"
+msgid "About to generate a key"
+msgstr "Ein Schlüssel wird gleich erstellt"
+
+msgctxt "#32025"
+msgid "Import keys from a file:"
+msgstr "Importieren von Schlüsseln aus einer Datei:"
+
+msgctxt "#32026"
+msgid "Result"
+msgstr "Resultat"
+
+msgctxt "#32027"
+msgid "Import successful"
+msgstr "Import erfolgreich"
+
+msgctxt "#32028"
+msgid "Error importing keys"
+msgstr "Fehler beim Import der Schlüssel"
+
+msgctxt "#32029"
+msgid "Please check the debug log"
+msgstr "Bitte überprüfen Sie die Debug Logdatei"
+
+msgctxt "#32030"
+msgid "Choose a file to decrypt:"
+msgstr "Wählen Sie eine Datei zum Entschlüsseln:"
+
+msgctxt "#32031"
+msgid "Passphrase for private key:"
+msgstr "Passphrase für den Privatschlüssel:"
+
+msgctxt "#32032"
+msgid "Output target"
+msgstr "Ausgabeziel"
+
+msgctxt "#32033"
+msgid "Output to the same file?"
+msgstr "Ausgabe in derselben Datei?"
+
+msgctxt "#32034"
+msgid "Choose a filename to save the result:"
+msgstr "Wählen Sie einen Dateinamen aus, um die Resultate zu speichern:"
+
+msgctxt "#32035"
+msgid "Signed by: "
+msgstr "Signiert bei: "
+
+msgctxt "#32036"
+msgid ""
+"\n"
+"Key ID: "
+msgstr "\n"
+"Schlüssel ID: "
+
+msgctxt "#32037"
+msgid ""
+"\n"
+"Signature ID: "
+msgstr "\n"
+"Signatur ID: "
+
+msgctxt "#32038"
+msgid ""
+" \n"
+"    Cannot verify signature"
+msgstr " \n"
+"    Signatur kann nicht verifiziert werden"
+
+msgctxt "#32039"
+msgid "Decryption is successful"
+msgstr "Entschlüsselung war erfolgreich"
+
+msgctxt "#32040"
+msgid "Error decrypting the file"
+msgstr "Fehler beim Entschlüsseln der Datei"
+
+msgctxt "#32041"
+msgid "Choose a file to encrypt:"
+msgstr "Wählen Sie eine Datei zum Entschlüsseln:"
+
+msgctxt "#32042"
+msgid "No private keys to sign with"
+msgstr "Kein Privatschlüssel zum Signieren vorhanden"
+
+msgctxt "#32043"
+msgid "You need to generate a key first"
+msgstr "Sie benötigen zunächst einen Schlüssel"
+
+msgctxt "#32044"
+msgid "Choose a private key to sign with:"
+msgstr "Wählen Sie einen Privatschlüssel zum Signieren:"
+
+msgctxt "#32045"
+msgid "Encryption status:"
+msgstr "Status der Verschlüsselung:"
+
+msgctxt "#32046"
+msgid "Error encrypting the file"
+msgstr "Fehler beim Verschlüsseln der Datei"
+
+msgctxt "#32047"
+msgid "Error exporting keys"
+msgstr "Fehler beim Exportieren der Schlüssel"
+
+msgctxt "#32048"
+msgid "Deleting key"
+msgstr "Schlüssel wird gelöscht"
+
+msgctxt "#32049"
+msgid "Delete key "
+msgstr "Schlüssel löschen "
+
+msgctxt "#32050"
+msgid " ?"
+msgstr " ?"
+
+msgctxt "#32051"
+msgid "Do you trust this key?"
+msgstr "Vertrauen Sie diesem Schlüssel?"
+
+msgctxt "#32052"
+msgid "('No' deletes it)"
+msgstr "('Nein' löscht ihn)"
+
+msgctxt "#32053"
+msgid "Export successful"
+msgstr "Export erfolgreich"
+
+msgctxt "#32054"
+msgid "Keyserver"
+msgstr "Schlüsselserver"
+
+msgctxt "#32055"
+msgid "Keyserver not configured, using pgp.mit.edu"
+msgstr "Schlüsselserver nicht konfiguriert, verwende pgp.mit.edu"
+
+msgctxt "#32056"
+msgid "Search for keys..."
+msgstr "Suche nach Schlüsseln..."
+
+msgctxt "#32057"
+msgid "Search query (key ID, email, etc):"
+msgstr "Suchanfrage (Schlüssel ID, E-Mail, usw):"
+
+msgctxt "#32058"
+msgid "Send to keyserver"
+msgstr "Zum Schlüsselserver senden"
+
+msgctxt "#32059"
+msgid "No keys found"
+msgstr "Keine Schlüssel gefunden"
+
+msgctxt "#32060"
+msgid "Select a key to import:"
+msgstr "Wäheln Sie einen Schlüssel zum Importieren:"
+
+msgctxt "#32061"
+msgid "[Cancel]"
+msgstr "[Abbruch]"

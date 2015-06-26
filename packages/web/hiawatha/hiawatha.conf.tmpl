@@ -1,0 +1,33 @@
+# Hiawatha main configuration file
+#
+
+ConnectionsTotal = 1000
+ConnectionsPerIP = 25
+SystemLogfile = $HOME/.hiawatha/logs/system.log
+GarbageLogfile = $HOME/.hiawatha/logs/garbage.log
+
+Binding {
+        Port = 8080
+        Interface = 127.0.0.1
+}
+
+CGIhandler = /usr/bin/python:py
+CGIhandler = /usr/bin/ssi-cgi:shtml
+
+# DEFAULT WEBSITE
+#
+
+Hostname = 127.0.0.1
+WebsiteRoot = $HOME/.hiawatha/docroot
+StartFile = index.html
+AccessLogfile = $HOME/.hiawatha/logs/access.log
+ErrorLogfile = $HOME/.hiawatha/logs/error.log
+
+# DIRECTORY SETTINGS
+#
+
+Directory {
+        Path = $HOME/.hiawatha/docroot/cgi-bin
+        ExecuteCGI = yes
+}
+

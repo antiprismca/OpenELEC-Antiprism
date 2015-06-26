@@ -1,0 +1,27 @@
+--- OpenELEC-settings-0.5.7/src/resources/lib/modules/services.py-orig	2014-11-02 17:15:30.057387138 -0500
++++ OpenELEC-settings-0.5.7/src/resources/lib/modules/services.py	2014-11-02 17:15:53.201386698 -0500
+@@ -344,23 +344,7 @@
+                 self.struct['samba']['hidden'] = 'true'
+ 
+             #SSH
+-            if os.path.isfile(self.SSH_DAEMON):
+-                self.struct['ssh']['settings']['ssh_autostart']['value'] = \
+-                    self.oe.get_service_state('sshd')
+-                self.struct['ssh']['settings']['ssh_secure']['value'] = \
+-                    self.oe.get_service_option('sshd', 'SSHD_DISABLE_PW_AUTH',
+-                    self.D_SSH_DISABLE_PW_AUTH).replace('true','1').replace('false','0').replace('"', '')
+-
+-                # hide ssh settings if Kernel Parameter isset
+-                cmd_file = open(self.KERNEL_CMD, 'r')
+-                cmd_args = cmd_file.read()
+-                if 'ssh' in cmd_args:
+-                    self.struct['ssh']['settings']['ssh_autostart']['value'] = '1'
+-                    self.struct['ssh']['settings']['ssh_autostart'] \
+-                    ['hidden'] = 'true'
+-                cmd_file.close()
+-            else:
+-                self.struct['ssh']['hidden'] = 'true'
++            self.struct['ssh']['hidden'] = 'true'
+                                         
+             #AVAHI
+             if os.path.isfile(self.AVAHI_DAEMON):

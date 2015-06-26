@@ -80,6 +80,13 @@ makeinstall_target() {
   cp $PKG_DIR/scripts/* $INSTALL/usr/lib/openelec
 }
 
+post_makeinstall_target() {
+  if (test -d $INSTALL/usr/share/xbmc) && (test ! -e $INSTALL/usr/share/kodi); then
+    mv $INSTALL/usr/share/xbmc $INSTALL/usr/share/kodi
+    ln -s kodi $INSTALL/usr/share/xbmc
+  fi
+}
+
 post_install() {
   enable_service loop-devices.service
 }

@@ -1,0 +1,40 @@
+--- iaxclient/configure	2015-04-01 23:10:12.339352570 -0400
++++ iaxclient-patched/configure	2015-04-04 06:10:51.812363798 -0400
+@@ -1038,8 +1038,8 @@ datadir='${datarootdir}'
+ sysconfdir='${prefix}/etc'
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
+-includedir='${prefix}/include'
+-oldincludedir='/usr/include'
++includedir='${$SYSROOT_PREFIX}/include'
++oldincludedir='${SYSROOT_PREFIX}/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+ infodir='${datarootdir}/info'
+ htmldir='${docdir}'
+@@ -13257,7 +13257,6 @@ fi
+ 
+ { echo "$as_me:$LINENO: checking whether the $compiler linker ($LD) supports shared libraries" >&5
+ echo $ECHO_N "checking whether the $compiler linker ($LD) supports shared libraries... $ECHO_C" >&6; }
+-
+   export_symbols_cmds_CXX='$NM $libobjs $convenience | $global_symbol_pipe | $SED '\''s/.* //'\'' | sort | uniq > $export_symbols'
+   case $host_os in
+   aix4* | aix5*)
+@@ -23572,18 +23571,6 @@ cat >>confdefs.h <<\_ACEOF
+ _ACEOF
+ 
+       PKG_REQUIRES="$PKG_REQUIRES vidcap"
+-   else
+-      { { echo "$as_me:$LINENO: error:
+-         libvidcap is required to build this package!
+-         please see http://libvidcap.sourceforge.net/ for how to
+-         obtain a copy.
+-      " >&5
+-echo "$as_me: error:
+-         libvidcap is required to build this package!
+-         please see http://libvidcap.sourceforge.net/ for how to
+-         obtain a copy.
+-      " >&2;}
+-   { (exit 1); exit 1; }; }
+    fi
+ 
+    if test x$with_ffmpeg != xno; then

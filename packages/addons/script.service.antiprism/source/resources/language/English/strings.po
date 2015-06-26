@@ -1,0 +1,550 @@
+# XBMC Media Center language file
+# Addon Name: AntiPrism
+# Addon id: script.service.antiprism
+# Addon version: 1.2.24
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "AntiPrism"
+msgstr "AntiPrism"
+
+msgctxt "Addon Description"
+msgid "\nAntiPrism is about web privacy for everyone\n    "
+msgstr "\nAntiPrism is about web privacy for everyone\n    "
+
+msgctxt "#32001"
+msgid "Autostart"
+msgstr "Autostart"
+
+msgctxt "#32002"
+msgid "Profile container"
+msgstr "Profile container"
+
+msgctxt "#32003"
+msgid "Mount point"
+msgstr "Mount point"
+
+msgctxt "#32004"
+msgid "Password-protected screensaver"
+msgstr "Password-protected screensaver"
+
+msgctxt "#32005"
+msgid "Enable debug log"
+msgstr "Enable debug log"
+
+msgctxt "#32010"
+msgid "Welcome to AntiPrism!"
+msgstr "Welcome to AntiPrism!"
+
+msgctxt "#32011"
+msgid "We need to create an encrypted container for your new AntiPrism profile.\nPlease click OK and answer some questions."
+msgstr "We need to create an encrypted container for your new AntiPrism profile.\nPlease click OK and answer some questions."
+
+msgctxt "#32012"
+msgid "Enter your AntiPrism password:"
+msgstr "Enter your AntiPrism password:"
+
+msgctxt "#32013"
+msgid "Main Menu:"
+msgstr "Main Menu:"
+
+msgctxt "#32014"
+msgid "Enter password:"
+msgstr "Enter password:"
+
+msgctxt "#32015"
+msgid "Error:"
+msgstr "Error:"
+
+msgctxt "#32016"
+msgid "Enter a valid size in Gigabytes!"
+msgstr "Enter a valid size in Gigabytes!"
+
+msgctxt "#32017"
+msgid "Passwords do not match!"
+msgstr "Passwords do not match!"
+
+msgctxt "#32018"
+msgid "Failed to create the container!"
+msgstr "Failed to create the container!"
+                                                          
+msgctxt "#32019"
+msgid "Failed to initialize AntiPrism!"
+msgstr "Failed to initialize AntiPrism!"
+
+msgctxt "#32023"
+msgid "We need to create an encrypted container for your AntiPrism profile.\nPlease specify the required information:"
+msgstr "We need to create an encrypted container for your AntiPrism profile.\nPlease specify the required information:"
+
+msgctxt "#32024"
+msgid "The encrypted container has been created.\nClick OK to activate AntiPrism! Or, you can also"
+msgstr "The encrypted container has been created.\nClick OK to activate AntiPrism! Or, you can also"
+
+msgctxt "#32025"
+msgid "Result:"
+msgstr "Result:"
+
+msgctxt "#32026"
+msgid "Enter command:"
+msgstr "Enter command:"
+
+msgctxt "#32027"
+msgid "Creating container..."
+msgstr "Creating container..."
+
+msgctxt "#32028"
+msgid "Problems starting Tor"
+msgstr "Problems starting Tor"
+
+msgctxt "#32029"
+msgid "Problems starting I2P"
+msgstr "Problems starting I2P"
+
+msgctxt "#32030"
+msgid "Stopping AntiPrism..."
+msgstr "Stopping AntiPrism..."
+
+msgctxt "#32031"
+msgid "    AntiPrism is Active"
+msgstr "    AntiPrism is Active"
+
+msgctxt "#32032"
+msgid "Starting AntiPrism..."
+msgstr "Starting AntiPrism..."
+
+msgctxt "#32033"
+msgid "Changing password..."
+msgstr "Changing password..."
+
+msgctxt "#32034"
+msgid "This can take several minutes...please wait..."
+msgstr "This can take several minutes...please wait..."
+
+msgctxt "#32035"
+msgid "Checking filesystem..."
+msgstr "Checking filesystem..."
+
+msgctxt "#32036"
+msgid "Backing up filesystem..."
+msgstr "Backing up filesystem..."
+
+msgctxt "#32037"
+msgid "Problems with backup"
+msgstr "Problems with backup"
+
+msgctxt "#32098"
+msgid "Help"
+msgstr "Help"
+
+msgctxt "#32099"
+msgid "Cmd"
+msgstr "Cmd"
+
+msgctxt "#32100"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#32101"
+msgid "Cancel"
+msgstr "Cancel"
+
+msgctxt "#32102"
+msgid "Deactivate AntiPrism"
+msgstr "Deactivate AntiPrism"
+
+msgctxt "#32103"
+msgid "                                          Are you sure?"
+msgstr "                                          Are you sure?"
+
+msgctxt "#32104"
+msgid "Mount folder is not empty!"
+msgstr "Mount folder is not empty!"
+
+msgctxt "#32105"
+msgid "Delete all the files?"
+msgstr "Delete all the files?"
+
+msgctxt "#32106"
+msgid "TrueCrypt container appears damaged!"
+msgstr "TrueCrypt container appears damaged!"
+
+msgctxt "#32107"
+msgid "\nRe-create the container loosing the data?\n(You can try to scan it for errors first)"
+msgstr "\nRe-create the container loosing the data?\n(You can try to scan it for errors first)"
+
+msgctxt "#32108"
+msgid "Password is too short. Are you sure you want to use it?"
+msgstr "Password is too short. Are you sure you want to use it?"
+
+msgctxt "#32109"
+msgid "Not enough free disk space."
+msgstr "Not enough free disk space."
+
+msgctxt "#32110"
+msgid "Try to free up at least 50Mb"
+msgstr "Try to free up at least 50Mb"
+
+msgctxt "#32111"
+msgid "Container is too small."
+msgstr "Container is too small."
+
+msgctxt "#32112"
+msgid "Need at least 50Mb"
+msgstr "Need at least 50Mb"
+
+msgctxt "#32113"
+msgid "Passwords are not matching"
+msgstr "Passwords are not matching"
+
+msgctxt "#32114"
+msgid "Please try again."
+msgstr "Please try again."
+
+msgctxt "#32115"
+msgid "Preparing container"
+msgstr "Preparing container"
+
+msgctxt "#32116"
+msgid "Container size: "
+msgstr "Container size: "
+
+msgctxt "#32117"
+msgid "Click OK to continue"
+msgstr "Click OK to continue"
+
+msgctxt "#32118"
+msgid "Initializing container..."
+msgstr "Initializing container..."
+
+msgctxt "#32119"
+msgid "Some errors occured during the startup of AntiPrism."
+msgstr "Some errors occured during the startup of AntiPrism."
+
+msgctxt "#32120"
+msgid "Activate AntiPrism with either an existing or a new password"
+msgstr "Activate AntiPrism with either an existing or a new password"
+
+msgctxt "#32121"
+msgid "Changing password..."
+msgstr "Changing password..."
+
+msgctxt "#32122"
+msgid "Password has been changed.\nClick OK to activate AntiPrism!"
+msgstr "Password has been changed.\nClick OK to activate AntiPrism!"
+
+msgctxt "#32123"
+msgid "Container size in % of available disk space (1-100):"
+msgstr "Container size in % of available disk space (1-100):"
+
+msgctxt "#32124"
+msgid "New password (at least 20 characters):"
+msgstr "New password (at least 20 characters):"
+
+msgctxt "#32125"
+msgid "Retype password:"
+msgstr "Retype password:"
+
+msgctxt "#32126"
+msgid "Password is too short."
+msgstr "Password is too short."
+
+msgctxt "#32150"
+msgid "Access Control"
+msgstr "Access Control"
+
+msgctxt "#32151"
+msgid "Enable Firewall"
+msgstr "Enable Firewall"
+
+msgctxt "#32152"
+msgid "Enable I2P"
+msgstr "Enable I2P"
+
+msgctxt "#32153"
+msgid "Enable Tor"
+msgstr "Enable Tor"
+
+msgctxt "#32154"
+msgid "Enable Web Access"
+msgstr "Enable Web Access"
+
+msgctxt "#32155"
+msgid "Enable SSH"
+msgstr "Enable SSH"
+
+msgctxt "#32156"
+msgid "Allow access from any IP"
+msgstr "Allow access from any IP"
+
+msgctxt "#32157"
+msgid "Trusted IP"
+msgstr "Trusted IP"
+
+msgctxt "#32158"
+msgid "    Run as a Tor relay node"
+msgstr "    Run as a Tor relay node"
+
+msgctxt "#32159"
+msgid "Enable Privoxy (requires Tor)"
+msgstr "Enable Privoxy (requires Tor)"
+
+msgctxt "#32160"
+msgid "    Entry nodes"
+msgstr "    Entry nodes"
+
+msgctxt "#32161"
+msgid "    Exit nodes"
+msgstr "    Exit nodes"
+
+msgctxt "#32162"
+msgid "    Exclude nodes"
+msgstr "    Exclude nodes"
+
+msgctxt "#32163"
+msgid "    Exclude exit nodes"
+msgstr "    Exclude exit nodes"
+
+msgctxt "#32165"
+msgid "Scan container for errors when activating"
+msgstr "Scan container for errors when activating"
+
+msgctxt "#32166"
+msgid "Choose a backup file to restore from"
+msgstr "Choose a backup file to restore from"
+
+msgctxt "#32167"
+msgid "Restoring from backup..."
+msgstr "Restoring from backup..."
+
+msgctxt "#32168"
+msgid "Container is ready"
+msgstr "Container is ready"
+
+msgctxt "#32169"
+msgid "Check file system during activation"
+msgstr "Check file system during activation"
+
+msgctxt "#32170"
+msgid "Backup file system during activation"
+msgstr "Backup file system during activation"
+
+msgctxt "#32171"
+msgid "File system type"
+msgstr "File system type"
+
+msgctxt "#32172"
+msgid "Backup path"
+msgstr "Backup path"
+
+msgctxt "#32173"
+msgid "Use TrueCrypt"
+msgstr "Use TrueCrypt"
+
+msgctxt "#32174"
+msgid "Config"
+msgstr "Config"
+
+msgctxt "#32175"
+msgid "                        To deactivate AntiPrism, click Cancel."
+msgstr "                        To deactivate AntiPrism, click Cancel."
+
+msgctxt "#32176"
+msgid "    SOCKS port"
+msgstr "    SOCKS port"
+
+msgctxt "#32177"
+msgid "        Advertized port"
+msgstr "        Advertized port"
+
+msgctxt "#32178"
+msgid "        Listen port"
+msgstr "        Listen port"
+
+msgctxt "#32179"
+msgid "        Enable obfuscation"
+msgstr "        Enable obfuscation"
+
+msgctxt "#32180"
+msgid "            Enable obfs2"
+msgstr "            Enable obfs2"
+
+msgctxt "#32181"
+msgid "                obfs2 port"
+msgstr "                obfs2 port"
+
+msgctxt "#32182"
+msgid "            Enable obfs3"
+msgstr "            Enable obfs3"
+
+msgctxt "#32183"
+msgid "                obfs3 port"
+msgstr "                obfs3 port"
+
+msgctxt "#32184"
+msgid "SSH public key finger print"
+msgstr "SSH public key finger print"
+
+msgctxt "#32185"
+msgid "Configuration changed"
+msgstr "Configuration changed"
+
+msgctxt "#32186"
+msgid "AntiPrism must be re-activated to apply these configuration changes"
+msgstr "AntiPrism must be re-activated to apply these configuration changes"
+
+msgctxt "#32187"
+msgid "        Run as a bridge relay"
+msgstr "        Run as a bridge relay"
+
+msgctxt "#32188"
+msgid "    Use bridges"
+msgstr "    Use bridges"
+
+msgctxt "#32189"
+msgid "      Bridges (comma-separated)"
+msgstr "      Bridges (comma-separated)"
+
+msgctxt "#32190"
+msgid "  Bootstrap I2P via Tor (requires Privoxy)"
+msgstr "  Bootstrap I2P via Tor (requires Privoxy)"
+
+msgctxt "#32191"
+msgid "No anonymizers enabled"
+msgstr "No anonymizers enabled"
+
+msgctxt "#32192"
+msgid "Please enable Tor, Privoxy or I2P"
+msgstr "Please enable Tor, Privoxy or I2P"
+
+msgctxt "#32193"
+msgid "Run X terminal for command prompt (requires keyboard)"
+msgstr "Run X terminal for command prompt (requires keyboard)"
+
+msgctxt "#32194"
+msgid "\n        Your media center is anonymized with proxy settings."
+msgstr "\n        Your media center is anonymized with proxy settings."
+
+msgctxt "#32195"
+msgid "\n                      Your media center IS NOT anonymized."
+msgstr "\n                      Your media center IS NOT anonymized."
+
+msgctxt "#32196"
+msgid "Enable OpenVPN server"
+msgstr "Enable OpenVPN server"
+
+msgctxt "#32197"
+msgid "Privoxy error, please check the log"
+msgstr "Privoxy error, please check the log"
+
+msgctxt "#32198"
+msgid "OpenVPN error, please check the log"
+msgstr "OpenVPN error, please check the log"
+
+msgctxt "#32200"
+msgid "          Enter Password"
+msgstr "          Enter Password"
+
+msgctxt "#32201"
+msgid "          Change Password"
+msgstr "          Change Password"
+
+msgctxt "#32202"
+msgid "        Restore from backup"
+msgstr "        Restore from backup"
+
+msgctxt "#32203"
+msgid "          Anonymous Web"
+msgstr "          Anonymous Web"
+
+msgctxt "#32204"
+msgid "        Anonymous Torrents"
+msgstr "        Anonymous Torrents"
+
+msgctxt "#32205"
+msgid "          Trusted Keys"
+msgstr "          Trusted Keys"
+
+msgctxt "#32206"
+msgid "        Trusted Contacts"
+msgstr "        Trusted Contacts"
+
+msgctxt "#32207"
+msgid "Choose a password for SSH access (empty = disabled)"
+msgstr "Choose a password for SSH access (empty = disabled)"
+
+msgctxt "#32208"
+msgid "SSH and AntiPrism passwords should not be the same!"
+msgstr "SSH and AntiPrism passwords should not be the same!"
+
+msgctxt "#32209"
+msgid "            Enable Obfs4proxy"
+msgstr "            Enable Obfs4proxy"
+
+msgctxt "#32210"
+msgid "            Enable obfs4"
+msgstr "            Enable obfs4"
+
+msgctxt "#32211"
+msgid "                obfs4 port"
+msgstr "                obfs4 port"
+
+msgctxt "#32212"
+msgid "      Use Meek"
+msgstr "      Use Meek"
+
+msgctxt "#32213"
+msgid "      Use Obfsproxy"
+msgstr "      Use Obfsproxy"
+
+msgctxt "#32214"
+msgid "      Use Obfs4proxy"
+msgstr "      Use Obfs4proxy"
+
+msgctxt "#32215"
+msgid "Enable hidden website"
+msgstr "Enable hidden website"
+
+msgctxt "#32216"
+msgid "    Enable onion router transparent proxy"
+msgstr "    Enable onion router transparent proxy"
+
+msgctxt "#32217"
+msgid "      Route from the interface"
+msgstr "      Route from the interface"
+
+msgctxt "#32220"
+msgid "    Enable Bitcoin support"
+msgstr "    Enable Bitcoin support"
+
+msgctxt "#32221"
+msgid "Problems starting Bitcoind"
+msgstr "Problems starting Bitcoind"
+
+msgctxt "#32222"
+msgid "You need at least 64Gb free disk space to run Bitcoin"
+msgstr "You need at least 64Gb free disk space to run Bitcoin"
+
+msgctxt "#32223"
+msgid "  Use Jetty"
+msgstr "  Use Jetty"
+
+msgctxt "#32224"
+msgid "  Use Hiawatha"
+msgstr "  Use Hiawatha"
+
+msgctxt "#32225"
+msgid "Problems launching Hiawatha"
+msgstr "Problems launching Hiawatha"
+
+msgctxt "#32226"
+msgid "\n         Your media center is anonymized with onion router."
+msgstr "\n         Your media center is anonymized with onion router."
+
+msgctxt "#32227"
+msgid "This feature is not available in this build"
+msgstr "This feature is not available in this build"
+
+msgctxt "#32228"
+msgid "Keep anonymizers data in RAM (new identity with every startup)"
+msgstr "Keep anonymizers data in RAM (new identity with every startup)"
+

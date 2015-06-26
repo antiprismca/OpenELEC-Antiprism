@@ -23,8 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="MIT"
 PKG_SITE="http://www.gnu.org/software/ncurses/"
 PKG_URL="http://ftp.gnu.org/pub/gnu/ncurses/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_HOST=""
-PKG_DEPENDS_TARGET="toolchain ncurses:host"
+PKG_DEPENDS_TARGET="toolchain ncurses:host zlib"
 PKG_PRIORITY="optional"
 PKG_SECTION="devel"
 PKG_SHORTDESC="ncurses: The ncurses (new curses) library"
@@ -33,19 +32,24 @@ PKG_LONGDESC="The ncurses (new curses) library is a free software emulation of c
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-PKG_CONFIGURE_OPTS_HOST="--with-shared"
-PKG_CONFIGURE_OPTS_TARGET="--without-cxx \
+PKG_CONFIGURE_OPTS_HOST="--target=$TARGET_NAME --without-gpm"
+PKG_CONFIGURE_OPTS_TARGET="--without-ada \
+                           --without-cxx \
                            --without-cxx-binding \
-                           --without-ada \
+                           --disable-db-install \
+                           --without-manpages \
                            --without-progs \
-                           --with-shared \
+                           --without-tests \
+                           --with-curses-h \
+                           --without-shared \
                            --with-normal \
                            --without-debug \
                            --without-profile \
-                           --without-termlib \
+                           --with-termlib \
+                           --without-ticlib \
+                           --without-gpm \
                            --without-dbmalloc \
                            --without-dmalloc \
-                           --without-gpm \
                            --disable-rpath \
                            --disable-overwrite \
                            --disable-database \
@@ -53,7 +57,8 @@ PKG_CONFIGURE_OPTS_TARGET="--without-cxx \
                            --disable-big-core \
                            --enable-termcap \
                            --enable-getcap \
-                           --disable-getcap-cache \
+                           --enable-getcap-cache \
+                           --enable-symlinks \
                            --disable-bsdpad \
                            --without-rcs-ids \
                            --enable-ext-funcs \
@@ -71,7 +76,7 @@ PKG_CONFIGURE_OPTS_TARGET="--without-cxx \
                            --disable-echo \
                            --disable-warnings \
                            --disable-home-terminfo \
-                           --disable-assertions"
+                           --disable-assertions LIBS= "
 
 pre_configure_target() {
   # causes some segmentation fault's (dialog) when compiled with gcc's link time optimization.
@@ -85,27 +90,24 @@ make_host() {
 
 makeinstall_host() {
   cp progs/tic $ROOT/$TOOLCHAIN/bin
-  cp lib/*.so* $ROOT/$TOOLCHAIN/lib
+#  cp lib/*.so* $ROOT/$TOOLCHAIN/lib
   make -C include install
 }
 
 make_target() {
+  export LIBS=
   make -C include
   make -C ncurses
 }
 
-makeinstall_target() {
-  $MAKEINSTALL -C include
-  $MAKEINSTALL -C ncurses
-
+post_makeinstall_target() {
   cp misc/ncurses-config $ROOT/$TOOLCHAIN/bin
     chmod +x $ROOT/$TOOLCHAIN/bin/ncurses-config
     $SED "s:\(['=\" ]\)/usr:\\1$SYSROOT_PREFIX/usr:g" $ROOT/$TOOLCHAIN/bin/ncurses-config
 
   make DESTDIR=$INSTALL -C ncurses install
-}
-
-post_makeinstall_target() {
+  cp lib/*.a $SYSROOT_PREFIX/lib
+  
   mkdir -p $INSTALL/usr/share/terminfo/l
     TERMINFO=$INSTALL/usr/share/terminfo $ROOT/$TOOLCHAIN/bin/tic -xe linux \
       $ROOT/$PKG_BUILD/misc/terminfo.src

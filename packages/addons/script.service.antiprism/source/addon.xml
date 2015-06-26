@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.service.antiprism" name="AntiPrism" version="1.2.24" provider-name="AntiPrism.ca">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+	</requires>
+	<extension point="xbmc.python.script" library="default.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.service"
+		library="default.py" start="login">
+	</extension>
+	<extension point="xbmc.ui.screensaver" library="screensaver.py" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Set of anonymizing tools</summary>
+		<description lang="en">
+			AntiPrism is about browsing, emailing, chatting, talking, publishing safely and anonymously online.
+
+			Copyright (c) 2014-2015, AntiPrism.ca
+			All rights reserved.
+			For more privacy tools, visit http://www.antiprism.ca
+
+			Eenneagonal AntiPrism image compliments of copyright holder Robert Webb's Stella software http://www.software3d.com/Stella.php
+		</description>
+		<license>BSD</license>
+	</extension>
+</addon>

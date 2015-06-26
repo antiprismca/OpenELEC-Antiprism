@@ -43,8 +43,8 @@ DISK="$1"
 
 ### If DISK ends with a number, add "p1" instead of "1" for the first partition
 case ${DISK#${DISK%?}} in
-    ([0-9]) PART="${DISK}p1";;
-    (*)     PART="${DISK}1";;
+    ([0-9]) PART="${DISK}p1";PART2="${DISK}p2";;
+    (*)     PART="${DISK}1";PART2="${DISK}2";;
 esac
 
 clear
@@ -173,9 +173,13 @@ echo "#########################################################"
   dd if=/dev/zero of="$DISK" bs=4096 count=1024
   parted -s "$DISK" mklabel msdos
 
-# create a single partition
-  echo "creating a partition on $DISK..."
-  parted -s "$DISK" unit cyl mkpart primary fat32 -- 0 -0
+# create partition1
+  echo "creating partition1 on $DISK..."
+  parted -s "$DISK" -a min unit kB mkpart primary fat32 0 614400
+
+# create partition2
+  echo "creating partition2 on $DISK..."
+  parted -s "$DISK" -a min unit kB mkpart primary ext4 614401 100%
 
 # make partition active (bootable)
   echo "marking partition active..."
@@ -185,6 +189,10 @@ echo "#########################################################"
   echo "telling kernel we have a new partition table..."
   partprobe "$DISK"
 
+# clean the second partition
+  echo "initializing partition2..."
+  dd if=/dev/zero of="$PART2" bs=4096 count=1024
+  
 # create filesystem
   echo "creating filesystem on $PART..."
   mkfs.vfat "$PART" -n LIVESTORAGE
@@ -229,12 +237,12 @@ cat >$OE_TMP/syslinux.cfg << EOF
 DEFAULT menu.c32
 PROMPT 0
 MENU TITLE OpenELEC-Antiprism Live Stick
- 
+
 LABEL livestorage
   MENU LABEL ^Live Storage (use storage on live stick)
   KERNEL /KERNEL
-  APPEND boot=UUID=$UUID disk=FILE=/flash/STORAGE STORAGE_SIZE_IN_KB=$STORAGE_SIZE_IN_KB max_loop=10 xbmc quiet tty
- 
+  APPEND boot=UUID=$UUID disk=FLASH xbmc quiet tty
+
 LABEL storage
   MENU LABEL ^Storage (use your local storage - may be dangerous)
   KERNEL /KERNEL

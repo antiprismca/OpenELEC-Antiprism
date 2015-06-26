@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="ffmpeg"
-PKG_VERSION="2.3.3"
+PKG_VERSION="2.4.6"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
 PKG_SITE="http://ffmpeg.org"
 PKG_URL="https://www.ffmpeg.org/releases/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis gnutls"
+PKG_DEPENDS_TARGET="toolchain yasm:host zlib bzip2 libvorbis libressl"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="FFmpeg is a complete, cross-platform solution to record, convert and stream audio and video."
@@ -32,17 +32,17 @@ PKG_LONGDESC="FFmpeg is a complete, cross-platform solution to record, convert a
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
-if [ "$VAAPI" = yes ]; then
 # configure GPU drivers and dependencies:
   get_graphicdrivers
 
+if [ "$VAAPI_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
   FFMPEG_VAAPI="--enable-vaapi"
 else
   FFMPEG_VAAPI="--disable-vaapi"
 fi
 
-if [ "$VDPAU" = yes ]; then
+if [ "$VDPAU_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
   FFMPEG_VDPAU="--enable-vdpau"
 else
@@ -53,19 +53,6 @@ if [ "$DEBUG" = yes ]; then
   FFMPEG_DEBUG="--enable-debug --disable-stripping"
 else
   FFMPEG_DEBUG="--disable-debug --enable-stripping"
-fi
-
-if [ "$OPTIMIZATIONS" = size ]; then
-  FFMPEG_OPTIM="--disable-small"
-else
-  FFMPEG_OPTIM="--disable-small"
-fi
-
-if [ "$CRYSTALHD" = yes ]; then
-# disabled, we use XBMC's internal solution
-  FFMPEG_CRYSTALHD="--disable-crystalhd"
-else
-  FFMPEG_CRYSTALHD="--disable-crystalhd"
 fi
 
 case "$TARGET_ARCH" in
@@ -135,8 +122,8 @@ configure_target() {
               --extra-libs="" \
               --extra-version="" \
               --build-suffix="" \
-              --enable-static \
-              --disable-shared \
+              --disable-static \
+              --enable-shared \
               --enable-gpl \
               --disable-version3 \
               --disable-nonfree \
@@ -162,15 +149,15 @@ configure_target() {
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --enable-gnutls \
+              --disable-gnutls --enable-libressl \
               --disable-gray \
               --enable-swscale-alpha \
-              $FFMPEG_OPTIM \
+              --disable-small \
               --enable-dct \
               --enable-fft \
               --enable-mdct \
               --enable-rdft \
-              $FFMPEG_CRYSTALHD \
+              --disable-crystalhd \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
               --disable-dxva2 \
@@ -188,6 +175,7 @@ configure_target() {
               --enable-muxer=adts \
               --enable-muxer=asf \
               --enable-muxer=ipod \
+              --enable-muxer=mpegts \
               --enable-demuxers \
               --enable-parsers \
               --enable-bsfs \
@@ -225,11 +213,9 @@ configure_target() {
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --enable-yasm \
-              --disable-sram \
               --disable-symver
 }
 
 post_makeinstall_target() {
-  rm -rf $INSTALL/usr/bin
   rm -rf $INSTALL/usr/share/ffmpeg/examples
 }

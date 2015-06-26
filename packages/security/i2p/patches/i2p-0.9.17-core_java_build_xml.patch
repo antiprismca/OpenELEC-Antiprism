@@ -1,0 +1,11 @@
+--- i2p-0.9.17/core/java/build.xml	2015-01-04 17:18:11.063902496 -0500
++++ i2p-0.9.17.patch/core/java/build.xml	2015-01-04 17:22:49.859897197 -0500
+@@ -17,7 +17,7 @@
+     </target>
+ 
+     <!-- only used if not set by a higher build.xml -->
+-    <property name="javac.compilerargs" value="" />
++    <property name="javac.compilerargs" value="-encoding utf8" />
+     <property name="javac.classpath" value="" />
+     <property name="javac.version" value="1.6" />
+ 

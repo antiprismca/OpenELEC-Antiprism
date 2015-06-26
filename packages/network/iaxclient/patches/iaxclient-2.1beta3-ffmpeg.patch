@@ -1,0 +1,31 @@
+--- iaxclient/lib/codec_ffmpeg.h	2015-04-02 06:33:44.392024818 -0400
++++ iaxclient-patched/lib/codec_ffmpeg.h	2015-04-02 06:34:15.192026657 -0400
+@@ -15,6 +15,11 @@
+  * A video codec using the ffmpeg library.
+  */
+ 
++#ifdef USE_FFMPEG
++
+ struct iaxc_video_codec *codec_video_ffmpeg_new(int format, int w, int h, int framerate, int bitrate, int fragsize);
+ 
+ int codec_video_ffmpeg_check_codec(int format);
++
++#endif
++
+--- iaxclient/lib/codec_ffmpeg.c	2015-04-02 01:58:45.279608538 -0400
++++ iaxclient-patched/lib/codec_ffmpeg.c	2015-04-02 06:33:05.428024246 -0400
+@@ -18,6 +18,8 @@
+  * It should be converted to use the API provided in slice.[ch]
+  */
+ 
++#ifdef USE_FFMPEG
++
+ #include <stdlib.h>
+ 
+ #include "codec_ffmpeg.h"
+@@ -746,3 +748,5 @@ int codec_video_ffmpeg_check_codec(int f
+ 	return codec ? 1 : 0;
+ }
+ 
++#endif
++

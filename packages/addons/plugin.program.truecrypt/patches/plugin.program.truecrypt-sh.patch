@@ -1,19 +1,19 @@
---- plugin.program.truecrypt-3.1.1/resources/lib/tcitem.py	2014-11-22 22:32:58.958483317 -0500
-+++ plugin.program.truecrypt-3.1.1.patch/resources/lib/tcitem.py	2014-11-23 16:35:51.196430635 -0500
-@@ -56,9 +56,9 @@
+--- plugin.program.truecrypt-3.1.1/resources/lib/tcitem.py	2015-02-22 11:13:35.030172087 -0500
++++ plugin.program.truecrypt-3.1.1-patched/resources/lib/tcitem.py	2015-02-22 11:09:35.542178573 -0500
+@@ -56,9 +56,9 @@ class TCitem:
          if debug:
              print("Truecrypt executing shell script:\n" + cmd + ("\"" + escapedPassword  + "\"" if debugLogPassword else "\"*****\""));
          
 -        cmd += "\"" + escapedPassword + "\"";
-+        cmd += "\"" + "\""; # password
 -        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
-+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
 -        output, errors = p.communicate();
++        cmd += "\"" + "\""; # password
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
 +        output, errors = p.communicate(input = escapedPassword + "\n")
          
          if debug:
              print("Truecrypt shell's err out:\n" + str(errors));
-@@ -134,11 +134,11 @@
+@@ -134,11 +134,11 @@ class TCitem:
          if debug:
              print("Truecrypt executing shell script:\n" + cmd + ("\"" + escapedOldPass  + "\" " + "\"" + escapedNewPass + "\"" if debugLogPassword else "\"*****\" \"*****\""));
              
@@ -23,13 +23,13 @@
 +        cmd += "\"" + "\""; # new password
   
 -        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
-+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
 -        output, errors = p.communicate();
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
 +        output, errors = p.communicate(input = escapedOldPass + "\n" + escapedNewPass + "\n")
          
          if debug:
              print("Truecrypt shell's err out:\n" + str(errors));
-@@ -198,10 +198,10 @@
+@@ -198,10 +198,10 @@ class TCitem:
          if debug:
              print("Truecrypt executing shell script:\n" + cmd + (escapedPassword + "\" "  if debugLogPassword else "******\" ") + str(size));
  
@@ -37,14 +37,14 @@
 +        cmd = cmd + "\" " + str(size);
          
 -        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True);
-+        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True);
 -        output, errors = p.communicate();
++        p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True);
 +        output, errors = p.communicate(input = escapedPassword + "\n")
          if debug:
              print("Truecrypt shell's err out:\n" + str(errors));
              print("Truecrypt shell's std out:\n" + str(output));
---- plugin.program.truecrypt-3.1.1/bin/truecrypt.sh	2014-11-24 01:48:59.143799654 -0500
-+++ plugin.program.truecrypt-3.1.1/bin/truecrypt.sh	2014-11-24 01:53:22.479794647 -0500
+--- plugin.program.truecrypt-3.1.1/bin/truecrypt.sh	2013-07-02 20:54:40.000000000 -0400
++++ plugin.program.truecrypt-3.1.1-patched/bin/truecrypt.sh	2015-04-21 04:16:58.165357759 -0400
 @@ -1,7 +1,8 @@
  #!/bin/ash
  
@@ -67,7 +67,7 @@
  used_tc_aux_mnt=$(mount | awk '/truecrypt_aux_mnt/ {print $3}')
  
  # The function will return tc_aux_mnt created after truecrypt attempt to mount a device
-@@ -55,47 +51,28 @@
+@@ -55,47 +51,28 @@ gettcmnt() {
  	echo "$tc_aux_mnt"
  }
  
@@ -126,7 +126,7 @@
  	echo "Mounted truecrypt devices after truecrypt bin being executed:" >&2
  	echo $(mount | grep "truecrypt") >&2
  	
-@@ -109,28 +86,55 @@
+@@ -109,28 +86,69 @@ mountdrive() {
  	if [ "$?" == "0" ]; then
  		echo "Mounted successfuly directly by truecrypt." >&2
  		rv=0
@@ -152,6 +152,13 @@
 -			echo "Mounting was unsuccessful." >&2
 -			rv=1
 +		if [ "$ANTIPRISM" = "1" ]; then
++			mkdir -p "$drive/.hiawatha/logs" >&2                                                                                                  
++			mkdir -p "$drive/.hiawatha/data" >&2                                                                                                  
++			mkdir -p "$drive/.hiawatha/docroot/cgi-bin" >&2                                                                                                  
++			ln -s -f "$drive/.hiawatha/docroot/cgi-bin" "$drive/.hiawatha/cgi-bin" >&2                                                                       
++			[ -f "$drive/.hiawatha/hiawatha.conf" ] || sed -e "s|\$HOME|$drive|g" /etc/hiawatha/hiawatha.conf.tmpl > "$drive/.hiawatha/hiawatha.conf"
++			[ -f "$drive/.hiawatha/cgi-wrapper.conf" ] || sed -e "s|\$HOME|$drive|g" /etc/hiawatha/cgi-wrapper.conf.tmpl > "$drive/.hiawatha/cgi-wrapper.conf"
++			[ -f "$drive/.hiawatha/mimetype.conf" ] || cp /etc/hiawatha/mimetype.conf "$drive/.hiawatha/mimetype.conf" >&2
 +			mkdir -p "$drive/.keys" >&2
 +			if [ $? -eq 0 ]; then
 +				echo "$pass" | /usr/bin/ecc_key_gen "$drive/.keys/key_file.dat" >&2
@@ -194,7 +201,14 @@
 +	 			if test $? -ne 0; then exit 1; fi
 +			fi
 +			if [ -n "$ANTIPRISM_IPTABLES" ]; then
-+				echo -e "$ANTIPRISM_IPTABLES" | iptables-restore -v >&2
++				echo -e "$ANTIPRISM_IPTABLES" | while read line; do iptables $line; done
++			fi
++			if [ -f "$drive/i2p/i2ptunnel.config" ]; then
++				if [ "$ANTIPRISM_WEBSITE" = "1" ]; then
++					sed -i "s#tunnel\.3\.startOnLoad\=false#tunnel.3.startOnLoad=true#g" "$drive/i2p/i2ptunnel.config" >&2
++				else
++					sed -i "s#tunnel\.3\.startOnLoad\=true#tunnel.3.startOnLoad=false#g" "$drive/i2p/i2ptunnel.config" >&2
++				fi
 +			fi
  		fi
 +	else
@@ -203,7 +217,7 @@
  	fi
  	# Returning used tc_aux_mnt to the python script for easier unmount or other tasks.
  	echo -n "$tc_aux_mnt"
-@@ -142,6 +146,17 @@
+@@ -142,6 +160,17 @@ unmountdrive() {
  	tcfile=$1
  	drive=$2
  	
@@ -221,7 +235,7 @@
  	# check for links and their usage in case they are found
  	linkTest=$(readlink -f $drive) >&2
  	if [ "${linkTest}" != "" ]; then
-@@ -155,13 +170,13 @@
+@@ -155,13 +184,13 @@ unmountdrive() {
  	fi
  
  	if [ "$3" == "" ]; then
@@ -238,18 +252,18 @@
  	echo "Loop device used for mounting: $loop_dev" >&2
    
  	echo "Executing truecrypt" >&2
-@@ -185,6 +200,10 @@
+@@ -185,6 +214,10 @@ unmountdrive() {
  		echo "Unmount successfull directly by Truecrypt." >&2
  		rv=0
  	fi
 +
 +	if [ -n "$ANTIPRISM_IPTABLES" ]; then
-+		echo -e "$ANTIPRISM_IPTABLES" | iptables-restore -v
++		echo -e "$ANTIPRISM_IPTABLES" | while read line; do iptables $line; done
 +	fi
  	return $rv
  }
  
-@@ -192,7 +211,18 @@
+@@ -192,7 +225,18 @@ ismounted(){
  	tcfile=$1
  	drive=$2
    
@@ -269,7 +283,7 @@
  	linkTest=$(readlink -f $drive) >&2
  	if [ "${linkTest}" != "" ]; then
  		drive=${linkTest}
-@@ -217,6 +247,9 @@
+@@ -217,6 +261,9 @@ ismounted(){
  	elif [ "$rv1" == "1" ] && [ "$rv2" == "0" ]; then
  		echo "Mountpoint is being used by other file or process." >&2
  		return 2
@@ -279,7 +293,7 @@
  	else
  		echo "Truecrypt drive is not mounted." >&2
  		return 1
-@@ -229,41 +262,53 @@
+@@ -229,41 +276,53 @@ format() {
  	tc_aux_mnt=$3
  	filesys=$4
  	
@@ -349,7 +363,7 @@
  
  	if [ "$rv" != "0" ]; then
  		echo "Failed to format drive."
-@@ -277,58 +322,94 @@
+@@ -277,58 +336,94 @@ format() {
  mkcontainer() {
  	tcfile=${1}
  	drive=${2}
@@ -460,7 +474,7 @@
  		echo "Password change failed." >&2
  		return 1
  	else
-@@ -358,25 +439,59 @@
+@@ -358,25 +453,59 @@ createkeyfile(){
  	return $?	
  }
  
@@ -524,7 +538,7 @@
  		rv=$?
  		;;
  	dismount) unmountdrive "$2" "$3" "$4"
-@@ -385,14 +500,14 @@
+@@ -385,14 +514,14 @@ case "$1" in
  		rv=$?
  		echo "EV:$rv"
  		;;
@@ -541,7 +555,7 @@
  		rv=$?
  		echo "EV:$rv"
  		;;
-@@ -400,6 +515,9 @@
+@@ -400,6 +529,9 @@ case "$1" in
  		rv=$?
  		echo "EV:$rv"
  		;;

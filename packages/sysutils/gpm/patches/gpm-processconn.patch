@@ -1,0 +1,16 @@
+--- gpm/src/daemon/processconn.c	2015-04-12 11:36:28.026348449 -0400
++++ gpm-patched/src/daemon/processconn.c	2015-04-12 11:38:00.342350790 -0400
+@@ -31,6 +31,13 @@
+ #include "message.h"            /* messaging in gpm */
+ #include "daemon.h"             /* daemon internals */
+ 
++struct ucred
++{
++  pid_t pid;                    /* PID of sending process.  */
++  uid_t uid;                    /* UID of sending process.  */
++  gid_t gid;                    /* GID of sending process.  */
++};
++
+ int processConn(int fd)
+ {                               /* returns newfd or -1 */
+    Gpm_Cinfo *info;

@@ -1,0 +1,10 @@
+--- python-bitcoin/setup.py	2015-03-28 01:07:59.372599944 -0400
++++ python-bitcoin-patched/setup.py	2015-03-28 01:08:36.124600874 -0400
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python
+ 
+-from distutils.core import setup
++from setuptools import setup
+ 
+ setup(
+     name='python-bitcoinrpc',

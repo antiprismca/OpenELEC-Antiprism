@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<addon id="plugin.program.gnupg"
+       name="GnuPG"
+       version="1.0.6"
+       provider-name="www.antiprism.ca">
+  <extension point="xbmc.python.pluginsource" provides="executable" library="addon.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>GnuPG support for XBMC</summary>
+    <description>
+Python GUI interface for GnuPG under XBMC
+Copyright (c) 2014, AntiPrism.ca
+All rights reserved.
+For more privacy tools, visit http://www.antiprism.ca
+
+Portions of code are copyright (c) 2008-2013 by Vinay Sajip
+See resources/lib/LICENSE for details
+    </description>
+    <platform>all</platform>
+    <license>BSD</license>
+  </extension>
+</addon>

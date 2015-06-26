@@ -1,0 +1,19 @@
+--- openjdk-8-src-b129-06_feb_2014/jdk/src/share/bin/main.c	2015-04-18 22:21:10.076876070 -0400
++++ openjdk-8-src-b129-06_feb_2014.patch/jdk/src/share/bin/main.c	2015-04-18 22:22:30.136874547 -0400
+@@ -31,6 +31,8 @@
+  */
+ 
+ #include "defines.h"
++#include <sys/types.h>
++#include <unistd.h>
+ 
+ #ifdef _MSC_VER
+ #if _MSC_VER > 1400 && _MSC_VER < 1600
+@@ -96,6 +98,7 @@
+     char** margv;
+     const jboolean const_javaw = JNI_FALSE;
+ #endif /* JAVAW */
++    setgid(990);
+ #ifdef _WIN32
+     {
+         int i = 0;

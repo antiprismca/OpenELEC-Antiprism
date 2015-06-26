@@ -1,0 +1,262 @@
+# XBMC Media Center language file
+# Addon Name: GnuPG
+# Addon id: plugin.program.gnupg
+# Addon version: 1.0.6
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "GnuPG"
+msgstr "GnuPG"
+
+msgctxt "Addon Description"
+msgid "GnuPG XBMC Frontend"
+msgstr "GnuPG XBMC Frontend"
+
+msgctxt "#32000"
+msgid "General"
+msgstr "General"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Enable debug log"
+
+msgctxt "#32002"
+msgid "Cannot determine home path, using /storage"
+msgstr "Cannot determine home path, using /storage"
+
+msgctxt "#32003"
+msgid "Create key..."
+msgstr "Create key..."
+
+msgctxt "#32004"
+msgid "Import key..."
+msgstr "Import key..."
+
+msgctxt "#32005"
+msgid "Decrypt..."
+msgstr "Decrypt..."
+
+msgctxt "#32006"
+msgid "Keys:"
+msgstr "Keys:"
+
+msgctxt "#32007"
+msgid "   [ key generation in progress ... ]"
+msgstr "   [ key generation in progress ... ]"
+
+msgctxt "#32008"
+msgid "Fingerprint"
+msgstr "Fingerprint"
+
+msgctxt "#32009"
+msgid "Encrypt"
+msgstr "Encrypt"
+
+msgctxt "#32010"
+msgid "Encrypt and sign"
+msgstr "Encrypt and sign"
+
+msgctxt "#32011"
+msgid "Export key"
+msgstr "Export key"
+
+msgctxt "#32012"
+msgid "Export with private key if available"
+msgstr "Export with private key if available"
+
+msgctxt "#32013"
+msgid "Delete key"
+msgstr "Delete key"
+
+msgctxt "#32014"
+msgid "Please wait, another key is being generated"
+msgstr "Please wait, another key is being generated"
+
+msgctxt "#32015"
+msgid "This may take a while.\nCheck back in some minutes -\nthe new key will appear in the list"
+msgstr "This may take a while.\nCheck back in some minutes -\nthe new key will appear in the list"
+
+msgctxt "#32016"
+msgid "Primary key type:"
+msgstr "Primary key type:"
+
+msgctxt "#32017"
+msgid "Primary key length:"
+msgstr "Primary key length:"
+
+msgctxt "#32018"
+msgid "Subkey type:"
+msgstr "Subkey type:"
+
+msgctxt "#32019"
+msgid "Subkey length:"
+msgstr "Subkey length:"
+
+msgctxt "#32020"
+msgid "Name in certificate:"
+msgstr "Name in certificate:"
+
+msgctxt "#32021"
+msgid "Email in certificate:"
+msgstr "Email in certificate:"
+
+msgctxt "#32022"
+msgid "Comment in certificate:"
+msgstr "Comment in certificate:"
+
+msgctxt "#32023"
+msgid "Passphrase:"
+msgstr "Passphrase:"
+
+msgctxt "#32024"
+msgid "About to generate a key"
+msgstr "About to generate a key"
+
+msgctxt "#32025"
+msgid "Import keys from a file:"
+msgstr "Import keys from a file:"
+
+msgctxt "#32026"
+msgid "Result"
+msgstr "Result"
+
+msgctxt "#32027"
+msgid "Import successful"
+msgstr "Import successful"
+
+msgctxt "#32028"
+msgid "Error importing keys"
+msgstr "Error importing keys"
+
+msgctxt "#32029"
+msgid "Please check the debug log"
+msgstr "Please check the debug log"
+
+msgctxt "#32030"
+msgid "Choose a file to decrypt:"
+msgstr "Choose a file to decrypt:"
+
+msgctxt "#32031"
+msgid "Passphrase for private key:"
+msgstr "Passphrase for private key:"
+
+msgctxt "#32032"
+msgid "Output target"
+msgstr "Output target"
+
+msgctxt "#32033"
+msgid "Output to the same file?"
+msgstr "Output to the same file?"
+
+msgctxt "#32034"
+msgid "Choose a filename to save the result:"
+msgstr "Choose a filename to save the result:"
+
+msgctxt "#32035"
+msgid "Signed by: "
+msgstr "Signed by: "
+
+msgctxt "#32036"
+msgid "\nKey ID: "
+msgstr "\nKey ID: "
+
+msgctxt "#32037"
+msgid "\nSignature ID: "
+msgstr "\nSignature ID: "
+
+msgctxt "#32038"
+msgid " \n    Cannot verify signature"
+msgstr " \n    Cannot verify signature"
+
+msgctxt "#32039"
+msgid "Decryption is successful"
+msgstr "Decryption is successful"
+
+msgctxt "#32040"
+msgid "Error decrypting the file"
+msgstr "Error decrypting the file"
+
+msgctxt "#32041"
+msgid "Choose a file to encrypt:"
+msgstr "Choose a file to encrypt:"
+
+msgctxt "#32042"
+msgid "No private keys to sign with"
+msgstr "No private keys to sign with"
+
+msgctxt "#32043"
+msgid "You need to generate a key first"
+msgstr "You need to generate a key first"
+
+msgctxt "#32044"
+msgid "Choose a private key to sign with:"
+msgstr "Choose a private key to sign with:"
+
+msgctxt "#32045"
+msgid "Encryption status:"
+msgstr "Encryption status:"
+
+msgctxt "#32046"
+msgid "Error encrypting the file"
+msgstr "Error encrypting the file"
+
+msgctxt "#32047"
+msgid "Error exporting keys"
+msgstr "Error exporting keys"
+
+msgctxt "#32048"
+msgid "Deleting key"
+msgstr "Deleting key"
+
+msgctxt "#32049"
+msgid "Delete key "
+msgstr "Delete key "
+
+msgctxt "#32050"
+msgid " ?"
+msgstr " ?"
+
+msgctxt "#32051"
+msgid "Do you trust this key?"
+msgstr "Do you trust this key?"
+
+msgctxt "#32052"
+msgid "('No' deletes it)"
+msgstr "('No' deletes it)"
+
+msgctxt "#32053"
+msgid "Export successful"
+msgstr "Export successful"
+
+msgctxt "#32054"
+msgid "Keyserver"
+msgstr "Keyserver"
+
+msgctxt "#32055"
+msgid "Keyserver not configured, using pgp.mit.edu"
+msgstr "Keyserver not configured, using pgp.mit.edu"
+
+msgctxt "#32056"
+msgid "Search for keys..."
+msgstr "Search for keys..."
+
+msgctxt "#32057"
+msgid "Search query (key ID, email, etc):"
+msgstr "Search query (key ID, email, etc):"
+
+msgctxt "#32058"
+msgid "Send to keyserver"
+msgstr "Send to keyserver"
+
+msgctxt "#32059"
+msgid "No keys found"
+msgstr "No keys found"
+
+msgctxt "#32060"
+msgid "Select a key to import:"
+msgstr "Select a key to import:"
+
+msgctxt "#32061"
+msgid "[Cancel]"
+msgstr "[Cancel]"
+

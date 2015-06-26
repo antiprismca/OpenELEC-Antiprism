@@ -1,0 +1,8 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/libcdio/cdio/cdtext.h	2015-03-30 22:37:52.074335937 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/libcdio/cdio/cdtext.h	2015-03-30 22:38:45.526334922 -0400
+@@ -1,2 +1,5 @@
++#ifndef CDIO_CDTEXT_H_
++#define CDIO_CDTEXT_H_
+ /* Placeholder */
+ typedef struct cdtext_s cdtext_t;
++#endif /*CDIO_CDTEXT_H_*/

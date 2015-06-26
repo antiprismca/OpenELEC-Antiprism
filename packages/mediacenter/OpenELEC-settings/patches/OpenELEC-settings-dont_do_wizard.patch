@@ -1,0 +1,11 @@
+--- OpenELEC-settings-0.5.7/src/resources/lib/modules/services.py	2014-10-22 21:09:26.342092416 -0400
++++ OpenELEC-settings-0.5.7/src/resources/lib/modules/services.py	2014-10-22 21:20:00.770080356 -0400
+@@ -717,7 +717,7 @@
+             self.oe.dbg_log('services::exit', 'ERROR: (%s)' % repr(e),
+                             4)
+ 
+-    def do_wizard(self):
++    def dont_do_wizard(self):
+         try:
+ 
+             self.oe.dbg_log('services::do_wizard', 'enter_function', 0)

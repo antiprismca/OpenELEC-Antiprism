@@ -1,0 +1,11 @@
+--- hiawatha/src/serverconfig.c	2015-04-18 21:48:51.920395955 -0400
++++ hiawatha-patched/src/serverconfig.c	2015-04-18 22:34:02.728464548 -0400
+@@ -27,7 +27,7 @@
+ #include "libfs.h"
+ #include "memdbg.h"
+ 
+-#define ID_NOBODY             65534
++#define ID_NOBODY                 0
+ #define MAX_LENGTH_CONFIGLINE  1024
+ #define MAX_CACHE_SIZE         1024
+ #define MAX_UPLOAD_SIZE        2047

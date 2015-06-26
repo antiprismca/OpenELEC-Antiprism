@@ -1,0 +1,20 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/libcdio/cdio/iso9660.h	2015-03-30 22:51:30.998320367 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/libcdio/cdio/iso9660.h	2015-03-30 22:51:57.690319861 -0400
+@@ -694,7 +694,7 @@
+     correction in minutes.
+   */
+   void iso9660_set_dtime_with_timezone (const struct tm *p_tm,
+-                                        int timezone,
++                                        int timezone1,
+                                         /*out*/ iso9660_dtime_t *p_idr_date);
+ 
+   /*!
+@@ -707,7 +707,7 @@
+     Set "long" time in format used in ISO 9660 primary volume descriptor
+     from a Unix time structure. */
+   void iso9660_set_ltime_with_timezone (const struct tm *_tm,
+-                                        int timezone,
++                                        int timezone1,
+                                         /*out*/ iso9660_ltime_t *p_pvd_date);
+ 
+   /*!

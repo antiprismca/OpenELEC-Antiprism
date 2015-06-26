@@ -1,0 +1,179 @@
+[allow-general]
+/ r,
+/** mrwklix,
+
+[allow-general-common]
+/ r,
+/** mrwkl,
+/** Px -> common,
+
+[deny-all]
+%include = flash-mount-point,i2p-all-files,tor-files,exchange-files,links-files,gnupg-files,openvpn-files,ssh-files,v4l2grab-files
+
+[flash-mount-point]
+audit deny /flash/* wkl,
+
+[i2p-all-but-site-files]
+audit deny /**/i2p/{Seedless.config,SeedlessVersion,Seedlessdb,blocklist.txt,clients.config,eventlog.txt,hosts.txt,hostsdb.blockfile}  mrwkl,
+audit deny /**/i2p/{i2psnark.config,i2ptunnel.config,quickseeds.txt,router.info,router.keys,router.keys.dat,router.ping,systray.config,webapps.config,wrapper.log,prngseed.rnd}  mrwkl,
+audit deny /**/i2p/{addressbook,docs,i2ptunnel-keyBackup,keyBackup,logs,netDb,peerProfiles,rrd,i2psnark.config.d}/  mrwkl,
+audit deny /**/i2p/{addressbook,docs,i2ptunnel-keyBackup,keyBackup,logs,netDb,peerProfiles,rrd,i2psnark.config.d}/**  mrwkl,
+
+[i2pbote-profile-files]
+audit deny /**/i2p/i2pbote/ mrwkl,
+audit deny /**/i2p/i2pbote/** mrwkl,
+
+[i2p-site-files]
+audit deny /**/i2p/eepsite/  mrwkl,
+audit deny /**/i2p/eepsite/**  mrwkl,
+
+[i2p-router-config-file]
+audit deny /**/i2p/router.config wkl,
+
+[i2p-all-files]
+%include=i2p-all-but-site-files,i2pbote-profile-files,i2p-router-config-file,i2p-site-files
+
+[tor-torrc-file]
+audit deny /**/.torrc mrwkl,
+
+[tor-all-but-site-files]
+audit deny /**/.tor/{cached-status,keys,stats}/** mrwkl,
+audit deny /**/.tor/**/{private_key,client_keys} mrwkl,
+audit deny /**/.tor/{cached-certs,cached-consensus,cached-microdesc-consensus,cached-descriptors,cached-descriptors.new,cached-microdescs,cached-microdescs.new,cached-routers,cached-routers.new,state,bw_accounting,control_auth_cookie,lock,fingerprint,hashed-fingerprint,approved-routers,v3-status-votes,unverified-consensus,unverified-microdesc-consensus,unparseable-desc,router-stability} mrwkl,
+%include=tor-torrc-file
+
+[tor-site-files]
+audit deny /**/.tor/**/hostname mrwkl,
+
+[allow-read-tor-site-files]
+audit deny /**/.tor/**/hostname kw,
+
+[tor-files]
+%include=tor-all-but-site-files,tor-site-files
+
+[allow-read-keyfile]
+audit deny /**/.keys/key_file.dat wk,
+
+[exchange-files]
+audit deny /**/.keys/key_file.dat mrwkl,
+audit deny /tmp/addressbook.*.tmp mrwkl,
+
+[links-files]
+audit deny /**/.links/ mrwkl,
+audit deny /**/.links/** mrwkl,
+
+[gnupg-files]
+audit deny /**/.gnupg/ mrwkl,
+audit deny /**/.gnupg/** mrwkl,
+
+[openvpn-files]
+audit deny /**/.openvpn/ mrwkl,
+audit deny /**/.openvpn/** mrwkl,
+
+[ssh-files]
+audit deny /storage/.cache/ssh/password mrwkl,
+audit deny /**/.ssh/ssh_*_key mrwkl,
+audit deny /**/.ssh/ssh_*_key.pub wkl,
+
+[v4l2grab-files]
+audit deny /dev/video{0,1,2,3,4,5,6,7,8,9} mrwkl,
+audit deny /usr/bin/v4l2grab mrwklx,
+
+[chroot-caps]
+capability sys_admin,
+capability sys_chroot,
+
+[setgid-caps]
+capability setgid,
+capability net_bind_service,
+capability fsetid,
+
+[i2p-extra-caps]
+capability net_admin,
+capability block_suspend,
+
+[kodi-caps]
+capability block_suspend,
+capability chown,
+capability dac_override,
+capability ipc_lock,
+capability kill,
+capability mknod,
+capability net_admin,
+capability net_bind_service,
+capability net_raw,
+capability setuid,
+capability setgid,
+capability setpcap,
+capability sys_boot,
+capability sys_module,
+capability sys_nice,
+capability sys_ptrace,
+capability sys_rawio,
+capability sys_resource,
+capability sys_time,
+capability sys_tty_config,
+capability sys_admin,
+
+[truecrypt-caps]
+capability block_suspend,
+capability chown,
+capability dac_override,
+capability ipc_lock,
+capability kill,
+capability mknod,
+capability net_admin,
+capability net_bind_service,
+capability net_raw,
+capability sys_boot,
+capability sys_module,
+capability sys_nice,
+capability sys_ptrace,
+capability sys_rawio,
+capability sys_resource,
+capability sys_time,
+capability sys_tty_config,
+capability sys_admin,
+
+[sshd-caps]
+capability block_suspend,
+capability chown,
+capability dac_override,
+capability ipc_lock,
+capability kill,
+capability mknod,
+capability net_admin,
+capability net_bind_service,
+capability net_raw,
+capability sys_boot,
+capability sys_module,
+capability sys_nice,
+capability sys_ptrace,
+capability sys_rawio,
+capability sys_resource,
+capability sys_time,
+capability sys_tty_config,
+capability sys_admin,
+capability sys_chroot,
+capability setgid,
+capability setuid,
+
+[gnupg-caps]
+capability ipc_lock,
+capability chown,
+capability dac_override,
+capability dac_read_search,
+
+[openvpn-caps]
+capability mknod,
+capability net_admin,
+capability net_bind_service,
+capability net_raw,
+
+[sshd_sh-caps]
+capability sys_ptrace,
+capability chown,
+
+[unconfined_sh-caps]
+capability chown,
+

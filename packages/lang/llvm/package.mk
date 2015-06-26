@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="llvm"
-PKG_VERSION="3.5.0"
+PKG_VERSION="3.5.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -108,14 +108,8 @@ pre_configure_host() {
 }
 
 pre_configure_target() {
-  # llvm fails to build with LTO support
-    strip_lto
-
-  # llvm 3.3+ fails to build with -Os
-  # see https://bugs.gentoo.org/show_bug.cgi?id=489708
-  # please test without this on llvm upgrade
-    export CFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
-    export CXXFLAGS=`echo $CFLAGS | sed -e "s|-Os|-O2|"`
+  export CFLAGS="$CFLAGS -fPIC"
+  export CXXFLAGS="$CXXFLAGS -fPIC"
 }
 
 makeinstall_host() {

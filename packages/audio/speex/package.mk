@@ -35,13 +35,10 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 # package specific configure options
-PKG_CONFIGURE_OPTS_TARGET="--disable-shared --enable-static \
+PKG_CONFIGURE_OPTS_TARGET="--disable-static --enable-shared \
                            --with-ogg=$SYSROOT_PREFIX/usr \
                            --enable-fixed-point \
                            --disable-oggtest \
                            --disable-float-api \
                            --disable-vbr"
 
-post_makeinstall_target() {
-  rm -rf $INSTALL/usr/bin
-}

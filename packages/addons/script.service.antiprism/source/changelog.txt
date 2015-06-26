@@ -1,0 +1,145 @@
+
+Current Version : 1.2.24
+
+Anonymizers data in RAM added
+Updated manual
+
+
+Version : 1.2.23
+
+Added onion router support
+Added Hiawatha web server for hidden website
+Added alternative WebViewer addon support for RPi
+
+Version : 1.2.22
+
+Added Obfs4proxy and Meek obfuscation
+Added hidden/eepsite site support
+
+Version : 1.2.21
+
+Added German language
+No logging by default
+
+Version : 1.2.20
+
+TrueCrypt-related fixes
+
+Version : 1.2.19
+
+Fixed problem with not supported Links languages
+
+Version : 1.2.18
+
+Fixed failure of first time opening the gnupg and i2p plugins from antiprism
+Replaced icons in the manual
+
+Version : 1.2.17
+
+UI fix related to screen saver
+Logs rotation
+
+Version : 1.2.16
+
+Added Russian manual
+Fixed small bugs
+
+Version : 1.2.15
+
+Close UI on launching another plugin - bugfix
+Open Help with anonymized browser
+New manual
+Some small cosmetics
+
+Version : 1.2.14
+
+Some fixes
+Updated the manual
+
+Version : 1.2.13
+
+Added p2p-openvpn server
+
+Version : 1.2.12
+
+Mostly cosmetic changes
+
+Version : 1.2.11
+
+Display info about torrification of XBMC
+Made X terminal for the command prompt optional via General config
+
+Version : 1.2.10
+
+Torrified gpg keyserver exchange
+Removed "no firewall" option
+Re-implemented firewall handling
+Added rxvt-unicode for command prompt
+
+Version : 1.2.9
+
+Added starting pages for Links
+Small fixes
+
+Version : 1.2.8
+
+Added I2P plugin
+Added Links web browser
+
+Version : 1.2.7
+
+Added boostrapping of I2P via Tor
+
+Version : 1.2.6
+
+Added GnuPG plugin
+Addressed lots of Obfsproxy-related issues
+Removed VFAT support
+
+Version : 1.2.5
+
+Added Obfsproxy support
+Some GUI preparations for web-of-trust
+
+Version : 1.2.4
+
+Version : 1.2.3
+
+Added default cryptsetup with ext4 for the container (replacing TrueCrypt with NTFS)
+Added backup / restore
+Fixed some bugs
+
+Version : 1.2.2
+
+Added optional container fsck
+
+Version : 1.2.1
+
+Configured Privoxy 
+Removed all passwords from the command line of truecrypt and replaced with stdin
+Disabled shell history
+Made the AntiPrism screensaver as a default in XBMC
+Lots of small UI fixes
+
+Version : 1.2.0
+
+Added I2P-Bote email agent
+Added support for NTFS, changing the container's password and repairing damaged containers
+Added password-protected screensaver
+Minor UI improvements
+
+Version : 1.0.4
+
+Fixed the missing .tor profile directory
+
+Version : 1.0.3
+
+Added Privoxy, fixed a number of problems
+
+Version : 1.0.2
+
+Initial public beta release
+
+Version : 1.0.1
+
+First attempt

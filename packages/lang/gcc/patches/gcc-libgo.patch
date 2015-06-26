@@ -1,0 +1,12 @@
+--- gcc/libgo/Makefile.in	2015-01-22 23:17:40.085735283 -0500
++++ gcc-patched/libgo/Makefile.in	2015-01-23 00:08:02.601653193 -0500
+@@ -2120,7 +2120,8 @@ runtime_pprof_check_GOCFLAGS = -static-l
+ # How to build a .gox file from a .lo file.
+ BUILDGOX = \
+ 	f=`echo $< | sed -e 's/.lo$$/.o/'`; \
+-	$(OBJCOPY) -j .go_export $$f $@.tmp && mv -f $@.tmp $@
++	ff=`dirname $$f`/.libs/`basename $$f`; \
++	$(OBJCOPY) -j .go_export $$ff $@.tmp && mv -f $@.tmp $@
+ 
+ TEST_PACKAGES = \
+ 	bufio/check \

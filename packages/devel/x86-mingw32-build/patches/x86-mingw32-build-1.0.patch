@@ -1,0 +1,83 @@
+--- x86-mingw32-build-1.0/x86-mingw32-build.sh.batch	2015-03-29 18:50:47.271425566 -0400
++++ x86-mingw32-build-1.0.patch/x86-mingw32-build.sh.batch	2015-03-29 18:50:57.279425377 -0400
+@@ -25,7 +25,7 @@
+ # USA.
+ 
+ BUILD_METHOD=unattended
+-. $script.mirrors
++# . $script.mirrors
+ 
+ select_newest()
+ {
+--- x86-mingw32-build-1.0/x86-mingw32-build.sh.conf	2015-03-29 18:23:31.279456668 -0400
++++ x86-mingw32-build-1.0.patch/x86-mingw32-build.sh.conf	2015-03-29 19:10:43.359402827 -0400
+@@ -27,7 +27,7 @@
+ #    operation; it may be overridden on a per-invocation basis, by
+ #    invoking the script with the `--unattended' option.
+ #
+-     assume BUILD_METHOD                  interactive
++     assume BUILD_METHOD                  unattended
+ #
+ # 2) The preferred host, from which to download source packages.
+ #    Note that this will not resolve to an acceptable host, without
+@@ -35,16 +35,16 @@
+ #    the `x86-mingw32-build.sh.hosts' file for the `mirror' field
+ #    in the following URL, to establish a default download host.
+ #
+-     assume DOWNLOAD_HOST     http://mirror.dl.sourceforge.net/mingw
++     assume DOWNLOAD_HOST     http://sourceforge.net/projects/mingw/files
+ #
+ # 3) Directories to use for temporary working space, package storage,
+ #    and ultimate compiler installation.  You should adjust these to
+ #    match your own host configuration; note that you MUST have WRITE
+ #    permission for each directory specified.
+ #
+-     assume WORKING_DIR                   $HOME/tmp/mingw-3.4.5
+-     assume PACKAGE_DIR                   $HOME/packages/mingw-3.4.5
+-     assume INSTALL_DIR                   $HOME/mingw32
++     assume WORKING_DIR                   @HOME@/obj
++     assume PACKAGE_DIR                   @SOURCES@
++     assume INSTALL_DIR                   @TOOLCHAIN@/mingw32
+ #
+ # 4) Package versions, from which the compiler will be built.
+ #
+@@ -92,11 +92,11 @@
+ #    the corresponding package is available in the PACKAGE_DIR, or
+ #    if it is selected for download.
+ #
+-     option GCC_LANGUAGE_OPTIONS          ada
+-     option GCC_LANGUAGE_OPTIONS          c++
+-     option GCC_LANGUAGE_OPTIONS          f77
+-     option GCC_LANGUAGE_OPTIONS          java
+-     option GCC_LANGUAGE_OPTIONS          objc
++#     option GCC_LANGUAGE_OPTIONS          ada
++#     option GCC_LANGUAGE_OPTIONS          c++
++#     option GCC_LANGUAGE_OPTIONS          f77
++#     option GCC_LANGUAGE_OPTIONS          java
++#     option GCC_LANGUAGE_OPTIONS          objc
+ #
+ # 8) User preferences for configuration options.  These have been
+ #    preconfigured to match the setup of the prebuilt compiler suite,
+@@ -128,7 +128,7 @@
+      option GCC_BASE_OPTIONS            --enable-threads=win32
+      option GCC_BASE_OPTIONS            --disable-win32-registry
+ #
+-     option GCC_JAVA_BASE_OPTIONS       --enable-libgcj
++     option GCC_JAVA_BASE_OPTIONS       --disable-libgcj
+      option GCC_JAVA_BASE_OPTIONS       --disable-libgcj-debug
+      option GCC_JAVA_BASE_OPTIONS       --disable-java-awt
+      option GCC_JAVA_BASE_OPTIONS       --enable-java-gc=boehm
+@@ -138,11 +138,13 @@
+ #
+      option CFLAGS_FOR_BINUTILS          -O2
+      option CFLAGS_FOR_BINUTILS          -fno-exceptions
++     option CFLAGS_FOR_BINUTILS          -Wno-error=unused-but-set-variable
+ #
+      option LDFLAGS_FOR_BINUTILS         -s
+ #
+      option CFLAGS_FOR_GCC               -O2
+      option CFLAGS_FOR_GCC               -fomit-frame-pointer
++     option CFLAGS_FOR_GCC               -Wno-error=unused-but-set-variable
+ #
+      option LDFLAGS_FOR_GCC              -s
+ #

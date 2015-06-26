@@ -1,0 +1,20 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/rufus.rc	2015-04-04 18:37:32.945356661 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/rufus.rc	2015-04-04 18:38:32.457355531 -0400
+@@ -587,7 +587,7 @@
+     "IDR_FD_KERNEL_SYS       RCDATA                  ""../res/freedos/KERNEL.SYS""\r\n"
+     "IDR_FD_DISPLAY_EXE      RCDATA                  ""../res/freedos/DISPLAY.EXE""\r\n"
+     "IDR_FD_KEYB_EXE         RCDATA                  ""../res/freedos/KEYB.EXE""\r\n"
+-    "IDR_FD_MODE_COM         RCDATA                  ""../res/freedos/MODE.COM""\r\n"
++    "IDR_FD_MODE_COM         RCDATA                  ""../res/freedos/mode.com""\r\n"
+     "IDR_FD_KB1_SYS          RCDATA                  ""../res/freedos/KEYBOARD.SYS""\r\n"
+     "IDR_FD_KB2_SYS          RCDATA                  ""../res/freedos/KEYBRD2.SYS""\r\n"
+     "IDR_FD_KB3_SYS          RCDATA                  ""../res/freedos/KEYBRD3.SYS""\r\n"
+@@ -742,7 +742,7 @@
+ IDR_FD_KERNEL_SYS       RCDATA                  "../res/freedos/KERNEL.SYS"
+ IDR_FD_DISPLAY_EXE      RCDATA                  "../res/freedos/DISPLAY.EXE"
+ IDR_FD_KEYB_EXE         RCDATA                  "../res/freedos/KEYB.EXE"
+-IDR_FD_MODE_COM         RCDATA                  "../res/freedos/MODE.COM"
++IDR_FD_MODE_COM         RCDATA                  "../res/freedos/mode.com"
+ IDR_FD_KB1_SYS          RCDATA                  "../res/freedos/KEYBOARD.SYS"
+ IDR_FD_KB2_SYS          RCDATA                  "../res/freedos/KEYBRD2.SYS"
+ IDR_FD_KB3_SYS          RCDATA                  "../res/freedos/KEYBRD3.SYS"

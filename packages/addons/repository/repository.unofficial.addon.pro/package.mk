@@ -19,8 +19,8 @@
 ################################################################################
 
 PKG_NAME="repository.unofficial.addon.pro"
-PKG_VERSION="4.1.2"
-PKG_REV="2"
+PKG_VERSION="4.3"
+PKG_REV="4"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://unofficial.addon.pro"
@@ -42,6 +42,8 @@ make_target() {
   $SED -e "s|@ADDON_VERSION@|$ADDON_VERSION|g" \
      -e "s|@PROJECT@|$PROJECT|g" \
      -e "s|@ARCH@|$TARGET_ARCH|g" \
+     -e "s|@PKG_VERSION@|$PKG_VERSION|g" \
+     -e "s|@PKG_REV@|$PKG_REV|g"\
   -i addon.xml
 }
 

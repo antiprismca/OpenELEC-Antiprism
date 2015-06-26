@@ -37,7 +37,7 @@ check if your system meets the requirements, install needed compilers and tools.
         
 **Verification of sources**
 
-The OpenELEC-Antiprism project uses the source code of many other open-source projects that gets downloaded from Internet during
+The OpenELEC-Antiprism project uses the source code of many other open-source projects that get downloaded from Internet during
 the build process. You should run the following shell script to verify that this source code hasn't been falsified:
 
         ./verify_md5.sh

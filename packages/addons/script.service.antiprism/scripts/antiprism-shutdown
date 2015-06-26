@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for p in privoxy tor java openvpn
+for p in privoxy tor java openvpn hiawatha
 do
   echo -e -n "\nStopping $p..."
   while pidof $p >/dev/null ; do killall $p 2>/dev/null; sleep 1; done
@@ -15,6 +15,7 @@ mount | grep cryptsetup-antiprism | while read CRYPTSETUP; do
   cryptsetup luksClose `echo "$CRYPTSETUP" | cut -f 1 -d " "` 2>/dev/null 
  fi
 done
+mv -f /etc/resolv.conf.bkp /etc/resolv.conf
 echo -e "\nDone."
 exit 0
 

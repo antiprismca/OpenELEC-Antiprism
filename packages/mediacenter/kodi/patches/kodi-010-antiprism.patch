@@ -1,0 +1,46 @@
+--- xbmc/system/settings/settings.xml	2014-09-19 23:11:47.465311574 -0400
++++ xbmc-patched/system/settings/settings.xml	2014-10-15 00:06:08.274943905 -0400
+@@ -210,6 +210,7 @@
+         </setting>
+         <setting id="filelists.showhidden" type="boolean" label="21330" help="36127">
+           <level>1</level>
++          <visible>false</visible>
+           <default>false</default>
+           <control type="toggle" />
+         </setting>
+@@ -219,7 +220,7 @@
+       <group id="1">
+         <setting id="screensaver.mode" type="addon" label="356" help="36130">
+           <level>0</level>
+-          <default>screensaver.xbmc.builtin.dim</default>
++          <default>script.service.antiprism</default>
+           <constraints>
+             <addontype>xbmc.ui.screensaver</addontype>
+             <allowempty>true</allowempty>
+@@ -2634,7 +2635,7 @@
+       <group id="1">
+         <setting id="network.usehttpproxy" type="boolean" label="708" help="36380">
+           <level>2</level>
+-          <default>false</default>
++          <default>true</default>
+           <control type="toggle" />
+         </setting>
+         <setting id="network.httpproxytype" type="integer" parent="network.usehttpproxy" label="1180" help="36381">
+@@ -2656,7 +2657,7 @@
+         </setting>
+         <setting id="network.httpproxyserver" type="string" parent="network.usehttpproxy" label="706" help="36382">
+           <level>2</level>
+-          <default></default>
++          <default>127.0.0.1</default>
+           <constraints>
+             <allowempty>true</allowempty>
+           </constraints>
+@@ -2667,7 +2668,7 @@
+         </setting>
+         <setting id="network.httpproxyport" type="integer" parent="network.usehttpproxy" label="730" help="36383">
+           <level>2</level>
+-          <default>8080</default>
++          <default>8118</default>
+           <constraints>
+             <minimum>1</minimum>
+             <step>1</step>

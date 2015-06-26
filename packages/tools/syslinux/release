@@ -34,12 +34,13 @@ mkdir -p $RELEASE_DIR/3rdparty/syslinux/win64
   cp -PR $BUILD/syslinux-*/bios/win64/syslinux64.exe $RELEASE_DIR/3rdparty/syslinux/win64
   
 mkdir -p $RELEASE_DIR/3rdparty/syslinux/Linux
-  cp -PR $ROOT/$TOOLCHAIN/bin/syslinux $RELEASE_DIR/3rdparty/syslinux/Linux
+  cp -PR $BUILD/syslinux-*/bios/linux/syslinux $RELEASE_DIR/3rdparty/syslinux/Linux
   
 mkdir -p $RELEASE_DIR/3rdparty/syslinux/com32
   cp -PR $BUILD/syslinux-*/bios/com32/menu/menu.c32 $RELEASE_DIR/3rdparty/syslinux/com32
   cp -PR $BUILD/syslinux-*/bios/com32/menu/vesamenu.c32 $RELEASE_DIR/3rdparty/syslinux/com32
   cp -PR $BUILD/syslinux-*/bios/com32/libutil/libutil.c32 $RELEASE_DIR/3rdparty/syslinux/com32
+  cp -PR $BUILD/syslinux-*/bios/com32/elflink/ldlinux/ldlinux.c32 $RELEASE_DIR/3rdparty/syslinux/com32
 
 mkdir -p $RELEASE_DIR/3rdparty/syslinux/mbr
   cp -PR $ROOT/$TOOLCHAIN/share/syslinux/mbr.bin $RELEASE_DIR/3rdparty/syslinux/mbr

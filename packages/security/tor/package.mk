@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="tor"
-PKG_VERSION="0.2.4.23"
+PKG_VERSION="0.2.5.10"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.torproject.org"
 PKG_URL="https://www.torproject.org/dist/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="openssl zlib miniupnpc Libevent"
+PKG_DEPENDS_TARGET="libressl zlib miniupnpc Libevent"
 PKG_PRIORITY="optional"
 PKG_SECTION="security"
 PKG_SHORTDESC="The Tor Project"
@@ -36,3 +36,7 @@ PKG_CONFIGURE_OPTS_TARGET="\
               --enable-upnp \
               --enable-libevent"
 
+post_install() {
+  add_user tor x 990 990 "Tor Server" "/storage" "/bin/sh"
+  add_group tor 990
+}

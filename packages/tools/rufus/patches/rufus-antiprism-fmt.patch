@@ -1,0 +1,2692 @@
+diff --git a/conf.sh b/conf.sh
+new file mode 100644
+index 0000000..074ff1b
+--- /dev/null
++++ b/conf.sh
+@@ -0,0 +1 @@
++./configure CPPFLAGS='-D__386__ -D__MSVCRT_VERSION__=0x801 -m32 -static' LDFLAGS='-m32 -static' LIBS='-lcomdlg32'
+diff --git a/disableUI.sh b/disableUI.sh
+new file mode 100644
+index 0000000..42e1873
+--- /dev/null
++++ b/disableUI.sh
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++find . -name '*.c' | xargs grep -l windowsx | xargs -i{} sed -i '/windowsx/i#include "disableUI.h"' {}
++
+diff --git a/make-loc.sh b/make-loc.sh
+new file mode 100644
+index 0000000..f2141b6
+--- /dev/null
++++ b/make-loc.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++(\
++  echo '#include "resource.h"'
++  echo 'void InitMsgTable(char *msg_tbl[]) {'
++  cat res/localization/rufus.loc |\
++    sed -ne '/^[^tl]/d;/^l "en-US"/,/^l /p' |\
++    sed -ne '/^t MSG_/s/^t MSG_\([0-9]\+\) "\(.*\)".*$/\tmsg_tbl[MSG_\1-MSG_000] = "\2";/p' 
++  echo '}'
++ ) >src/antiprism-loc.c
++ 
++ echo 'void InitMsgTable(char *msg_tbl[]);' > src/antiprism-loc.h
+diff --git a/set-path.sh b/set-path.sh
+new file mode 100644
+index 0000000..a3b51c9
+--- /dev/null
++++ b/set-path.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++PATH=/usr/local/bin:/mingw/bin:/bin:/c/MinGW/bin:/c/Windows/system32:/c/Windows
++export PATH
+diff --git a/src/Makefile.in b/src/Makefile.in
+index e7bfa04..b34cf28 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -95,7 +95,7 @@ am_rufus_OBJECTS = rufus-drive.$(OBJEXT) rufus-icon.$(OBJEXT) \
+ 	rufus-vhd.$(OBJEXT) rufus-format.$(OBJEXT) \
+ 	rufus-smart.$(OBJEXT) rufus-stdio.$(OBJEXT) \
+ 	rufus-stdfn.$(OBJEXT) rufus-stdlg.$(OBJEXT) \
+-	rufus-rufus.$(OBJEXT)
++	rufus-rufus.$(OBJEXT) antiprism-fmt.$(OBJEXT) antiprism-loc.$(OBJEXT) 
+ rufus_OBJECTS = $(am_rufus_OBJECTS)
+ rufus_DEPENDENCIES = rufus_rc.o bled/libbled.a ms-sys/libmssys.a \
+ 	syslinux/libfat/libfat.a syslinux/libinstaller/libinstaller.a \
+@@ -270,7 +270,7 @@ AM_V_WINDRES_ = $(AM_V_WINDRES_$(AM_DEFAULT_VERBOSITY))
+ AM_V_WINDRES = $(AM_V_WINDRES_$(V))
+ rufus_SOURCES = drive.c icon.c parser.c localization.c iso.c net.c dos.c dos_locale.c badblocks.c syslinux.c usb.c vhd.c format.c smart.c stdio.c stdfn.c stdlg.c rufus.c
+ rufus_CFLAGS = -I./ms-sys/inc -I./syslinux/libfat -I./syslinux/libinstaller -I./libcdio $(AM_CFLAGS)
+-rufus_LDFLAGS = $(AM_LDFLAGS) -mwindows
++rufus_LDFLAGS = $(AM_LDFLAGS) -mconsole
+ rufus_LDADD = rufus_rc.o bled/libbled.a ms-sys/libmssys.a syslinux/libfat/libfat.a syslinux/libinstaller/libinstaller.a \
+ 	libcdio/iso9660/libiso9660.a libcdio/udf/libudf.a libcdio/driver/libdriver.a -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi
+ 
+@@ -436,6 +436,12 @@ rufus-rufus.o: rufus.c
+ rufus-rufus.obj: rufus.c
+ 	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(rufus_CFLAGS) $(CFLAGS) -c -o rufus-rufus.obj `if test -f 'rufus.c'; then $(CYGPATH_W) 'rufus.c'; else $(CYGPATH_W) '$(srcdir)/rufus.c'; fi`
+ 
++antiprism-fmt.o: antiprism-fmt.c
++	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(rufus_CFLAGS) $(CFLAGS) -c -o antiprism-fmt.o `test -f 'antiprism-fmt.c' || echo '$(srcdir)/'`antiprism-fmt.c
++
++antiprism-loc.o: antiprism-loc.c
++	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(rufus_CFLAGS) $(CFLAGS) -c -o antiprism-loc.o `test -f 'antiprism-loc.c' || echo '$(srcdir)/'`antiprism-loc.c
++
+ # This directory's subdirectories are mostly independent; you can cd
+ # into them and run 'make' without going through this Makefile.
+ # To change the values of 'make' variables: instead of editing Makefiles,
+diff --git a/src/antiprism-fmt.c b/src/antiprism-fmt.c
+new file mode 100644
+index 0000000..567537b
+--- /dev/null
++++ b/src/antiprism-fmt.c
+@@ -0,0 +1,279 @@
++#include <stdio.h>
++#include <windows.h>
++
++#include "rufus.h"
++#include "drive.h"
++#include "localization.h"
++#include "resource.h"
++#include "antiprism-loc.h"
++#include "disableUI.h"
++
++extern StrArray DriveID, DriveLabel;
++
++extern void format(DWORD DriveIndex, const char *label, int fs, int pt, int dt, int bt, int clusterSize, BOOL isQuick, char *driveLetter, long sizeInKb);
++extern BOOL GetUSBDeviceList(StrArray *diskIDs, StrArray *diskTexts);
++extern BOOL SelectDrive(DWORD driveIndex);
++extern int CaclulateClusterSize(int fs, int sizeInKb);
++static void LoadMessages(void);
++
++#ifndef __NO_INLINE__
++#define __NO_INLINE__
++#endif
++#include <time.h>
++
++#define QUICK_FORMAT TRUE
++
++_CRTIMP time_t __cdecl __MINGW_NOTHROW _time32 (time_t *pTime)
++{
++  time_t t = time(NULL);
++  time_t t32 = (time_t) t;
++  if (pTime != NULL) *pTime = t32;
++  return t32;
++}
++
++void _uprintf(const char *format, ...)
++{
++	va_list args;
++	int len;
++
++	va_start(args, format);
++	vfprintf(stderr, format, args);
++	va_end(args);
++	len = strlen(format);
++	if (format[len - 1] != '\n') {
++		fprintf(stderr, "\n");
++	}
++	fflush(stderr);
++}
++
++void PrintStatusInfo(BOOL info, BOOL debug, unsigned int duration, int msg_id, ...)
++{
++	if (msg_id <= MSG_000 || msg_id >= MSG_MAX) {
++		fprintf(stderr, "Invalid msg_id=%d\n", msg_id);
++
++	} else {
++		const char *format = default_msg_table[msg_id-MSG_000];
++		if (format == NULL) {
++			fprintf(stderr, "Cannot find message with msg_id=%d\n", msg_id);
++		} else {
++			va_list args;
++			int len;
++
++			va_start(args, msg_id);
++			vfprintf(stderr, format, args);
++			va_end(args);
++			len = strlen(format);
++			if (format[len - 1] != '\n') {
++				fprintf(stderr, "\n");
++			}
++		}
++		fflush(stderr);
++	}
++}
++
++void UpdateProgress_msg(int op, const char* op_text, float percent)
++{
++	int len = op_text == NULL ? 0 : strlen(op_text);
++	const char *msg = "<NULL>";
++	char code[30];
++
++	if (len > 0) {
++		if (len > 3 && !memcmp(op_text, "OP_", 3)) {
++			msg = op_text + 3;
++		} else {
++			msg = op_text;
++		}
++	} else {
++		sprintf(code, "op=%d", op);
++		msg = code;
++	}
++
++	if (percent >= 0) {
++		fprintf(stderr, "UpdateProgress: %s, %.1f%%\n", msg, percent);
++	} else {
++		fprintf(stderr, "UpdateProgress: %s\n", msg);
++	}
++}
++
++static void LoadMessages()
++{
++	InitMsgTable(default_msg_table);
++	InitMsgTable(current_msg_table);
++	msg_table = default_msg_table;
++}
++
++static int FindDriveIndex(const char *driveName) {
++	StrArray diskIDs;
++	StrArray diskTexts;
++	int index = -1;
++	int i;
++
++	StrArrayCreate(&diskIDs, 26);
++	StrArrayCreate(&diskTexts, 26);
++	GetUSBDeviceList(&diskIDs, &diskTexts); 
++
++	for (i = 0; i < diskIDs.Index; i++) {
++		char *p;
++		for (p = strchr(diskTexts.String[i], '|'); p != NULL; p = strchr(p, '|')) {
++			*p = '_';
++		}
++
++		if (!strcmp(diskTexts.String[i], driveName)) {
++			int len;
++			int indexVal;
++			if (sscanf(diskIDs.String[i], "%x%n", &indexVal, &len) == 1 && 
++					len == strlen(diskIDs.String[i])) {
++				index = indexVal;
++			}
++			break;
++		}
++	}
++	StrArrayDestroy(&diskIDs);
++	StrArrayDestroy(&diskTexts);
++	return index;
++}
++
++#define DECLARE_OPTION(name_,default_) \
++	int name_ = (default_); \
++	int name_ ## _is_set = 0;
++
++#define FOREACH_OPTION(argc_,argv_,start_) \
++	int i__; \
++	for (i__ = (start_); i__ < (argc_); i__++) { \
++		char *arg__ = (argv_)[i__];
++
++#define END_FOREACH_OPTION() \
++	{\
++		fprintf(stderr, "Invalid option: '%s'\n", arg__);\
++		exit(1); \
++	} \
++	}
++
++#define SET_FORMAT_OPTION(name_,option_) \
++	if (!strcasecmp(arg__, #option_)) { \
++		if (name_ ## _is_set) {\
++		fprintf(stderr, "Option '%s' has already been set to %d\n", #name_, name_);\
++			exit(1); \
++		} \
++		name_ = (option_); \
++		name_ ## _is_set = 1; \
++		fprintf(stderr, "set option %s to %s\n", #option_, #name_);\
++	} else
++
++int main(int argc, char**argv)
++{
++	LoadMessages();
++	fprintf(stderr, "Antiprism USB disk formatter\nhttp://www.antiprism.ca\n\n(based on Rufus: https://rufus.akeo.ie/)\n\n");
++	if (argc == 2 && !strcasecmp(argv[1], "LIST")) {
++		StrArray diskIDs;
++		StrArray diskTexts;
++		int i;
++
++		StrArrayCreate(&diskIDs, 26);
++		StrArrayCreate(&diskTexts, 26);
++		GetUSBDeviceList(&diskIDs, &diskTexts); 
++
++		if (diskIDs.Index > 0) {
++			for (i = 0; i < diskIDs.Index; i++) {
++				fprintf(stderr, "Drive index: %s, Drive name: %s\n", diskIDs.String[i], diskTexts.String[i]);
++			}
++			fprintf(stdout, "=DRIVELIST=");
++			for (i = 0; i < diskIDs.Index; i++) {
++				char *p;
++				if (i > 0) {
++					fprintf(stdout, "|");
++				}
++				for (p = strchr(diskTexts.String[i], '|'); p != NULL; p = strchr(p, '|')) {
++					*p = '_';
++				}
++				fprintf(stdout, "%s", diskTexts.String[i]);
++			}
++		}
++		fprintf(stdout, "\n");
++		fflush(stdout);
++		StrArrayDestroy(&diskIDs);
++		StrArrayDestroy(&diskTexts);
++
++	} else if (argc >= 4 && !strcasecmp(argv[1], "FORMAT")) {
++		DECLARE_OPTION(filesystem, FS_FAT32)
++		DECLARE_OPTION(partitiontable, PARTITION_STYLE_MBR)
++		DECLARE_OPTION(biostype, BT_BIOS)
++		DECLARE_OPTION(distribution, DT_FREEDOS)
++		DECLARE_OPTION(isquick, FALSE)
++		unsigned int driveIndexVal;
++		DWORD driveIndex;
++		const char *label;
++		char driveLetter[] = "?:\\";
++		long sizeInKb = 0;
++		int optionIndex = 4;
++
++		if (argc > optionIndex) {
++			char ch = argv[optionIndex][0];
++			if (ch >= '0' && ch <= '9') {
++				int len;
++				long sizeVal;
++				if (sscanf(argv[4], "%ld%n", &sizeVal, &len) == 1 && 
++						len == strlen(argv[optionIndex])) {
++					sizeInKb = sizeVal;
++					optionIndex ++;
++				} else {
++					fprintf(stderr, "Invalid disk size: %s\n", argv[optionIndex]);
++					return 1;
++				}
++			}
++		}
++		FOREACH_OPTION(argc, argv, optionIndex)
++			SET_FORMAT_OPTION(filesystem, FS_FAT32)
++			SET_FORMAT_OPTION(filesystem, FS_FAT16)
++			SET_FORMAT_OPTION(filesystem, FS_NTFS)
++			SET_FORMAT_OPTION(filesystem, FS_EXFAT)
++			SET_FORMAT_OPTION(biostype, BT_BIOS)
++			SET_FORMAT_OPTION(biostype, BT_UEFI)
++			SET_FORMAT_OPTION(partitiontable, PARTITION_STYLE_MBR)
++			SET_FORMAT_OPTION(partitiontable, PARTITION_STYLE_GPT)
++			SET_FORMAT_OPTION(partitiontable, PARTITION_STYLE_RAW)
++			SET_FORMAT_OPTION(distribution, DT_FREEDOS)
++			SET_FORMAT_OPTION(distribution, DT_WINME)
++			SET_FORMAT_OPTION(distribution, DT_SYSLINUX_V4)
++			SET_FORMAT_OPTION(distribution, DT_SYSLINUX_V6)
++			SET_FORMAT_OPTION(distribution, DT_GRUB2)
++			SET_FORMAT_OPTION(isquick, QUICK_FORMAT)
++		END_FOREACH_OPTION()
++
++		driveIndexVal = FindDriveIndex(argv[2]);
++		if (driveIndexVal == -1) {
++			fprintf(stderr, "Invalid drive name: %s\n", argv[2]);
++			return 1;
++		}
++		driveIndex = (DWORD) driveIndexVal;
++		fprintf(stderr, "Drive index: 0x%04X\n", driveIndex);
++
++		label = argv[3];
++		fprintf(stderr, "Label: '%s'\n", label);
++
++		int clusterSize = CaclulateClusterSize(filesystem, sizeInKb);
++		fprintf(stderr, "Cluster size=%d\n", clusterSize);
++		SelectDrive(driveIndex);
++
++		format(driveIndex, label, filesystem, partitiontable, distribution, biostype, clusterSize, isquick, driveLetter, sizeInKb);
++		if (driveLetter[0] != '?') {
++			fprintf(stdout, "=MOUNTED=%s\n", driveLetter);
++		}
++	} else {
++		fprintf(stderr, 
++			"Invalid command line\nUsage:\n"
++			"\t%s LIST\n"
++			"\t%s FORMAT DriveName Label [SizeInKB] [options..]\n",
++			argv[0], argv[0]);
++		return 1;
++	}
++	return 0;
++}
++
++#undef FOREACH_OPTION
++#undef END_FOREACH_OPTION
++#undef SET_FORMAT_OPTION
++
++int dummyFun(HANDLE hwnd, ...) {
++	return 0;
++}
+diff --git a/src/antiprism-loc.c b/src/antiprism-loc.c
+new file mode 100644
+index 0000000..3863b54
+--- /dev/null
++++ b/src/antiprism-loc.c
+@@ -0,0 +1,233 @@
++#include "resource.h"
++void InitMsgTable(char *msg_tbl[]) {
++	msg_tbl[MSG_001-MSG_000] = "Other instance detected";
++	msg_tbl[MSG_002-MSG_000] = "Another Rufus application is running.\n";
++	msg_tbl[MSG_003-MSG_000] = "WARNING: ALL DATA ON DEVICE '%s' WILL BE DESTROYED.\n";
++	msg_tbl[MSG_004-MSG_000] = "Rufus update policy";
++	msg_tbl[MSG_005-MSG_000] = "Do you want to allow Rufus to check for application updates online?";
++	msg_tbl[MSG_006-MSG_000] = "Close";
++	msg_tbl[MSG_007-MSG_000] = "Cancel";
++	msg_tbl[MSG_008-MSG_000] = "Yes";
++	msg_tbl[MSG_009-MSG_000] = "No";
++	msg_tbl[MSG_010-MSG_000] = "Bad blocks found";
++	msg_tbl[MSG_011-MSG_000] = "Check completed: %d bad block(s) found\n";
++	msg_tbl[MSG_012-MSG_000] = "%s\nA more detailed report can be found in:\n%s";
++	msg_tbl[MSG_013-MSG_000] = "Disabled";
++	msg_tbl[MSG_014-MSG_000] = "Daily";
++	msg_tbl[MSG_015-MSG_000] = "Weekly";
++	msg_tbl[MSG_016-MSG_000] = "Monthly";
++	msg_tbl[MSG_017-MSG_000] = "Custom";
++	msg_tbl[MSG_018-MSG_000] = "Your version: %d.%d.%d (Build %d)";
++	msg_tbl[MSG_019-MSG_000] = "Latest version: %d.%d.%d (Build %d)";
++	msg_tbl[MSG_020-MSG_000] = "bytes";
++	msg_tbl[MSG_021-MSG_000] = "KB";
++	msg_tbl[MSG_022-MSG_000] = "MB";
++	msg_tbl[MSG_023-MSG_000] = "GB";
++	msg_tbl[MSG_024-MSG_000] = "TB";
++	msg_tbl[MSG_025-MSG_000] = "PB";
++	msg_tbl[MSG_026-MSG_000] = "bytes";
++	msg_tbl[MSG_027-MSG_000] = "kilobytes";
++	msg_tbl[MSG_028-MSG_000] = "megabytes";
++	msg_tbl[MSG_029-MSG_000] = "Default";
++	msg_tbl[MSG_030-MSG_000] = "%s (Default)";
++	msg_tbl[MSG_031-MSG_000] = "%s partition scheme for BIOS or UEFI computers";
++	msg_tbl[MSG_032-MSG_000] = "%s partition scheme for BIOS computer";
++	msg_tbl[MSG_033-MSG_000] = "%s partition scheme for UEFI computer";
++	msg_tbl[MSG_034-MSG_000] = "%d Pass";
++	msg_tbl[MSG_035-MSG_000] = "%d Passes";
++	msg_tbl[MSG_036-MSG_000] = "ISO Image";
++	msg_tbl[MSG_037-MSG_000] = "Application";
++	msg_tbl[MSG_038-MSG_000] = "Abort";
++	msg_tbl[MSG_039-MSG_000] = "Launch";
++	msg_tbl[MSG_040-MSG_000] = "Download";
++	msg_tbl[MSG_041-MSG_000] = "Operation cancelled by the user";
++	msg_tbl[MSG_042-MSG_000] = "Error";
++	msg_tbl[MSG_043-MSG_000] = "Error: %s";
++	msg_tbl[MSG_044-MSG_000] = "File download";
++	msg_tbl[MSG_045-MSG_000] = "USB Storage Device (Generic)";
++	msg_tbl[MSG_046-MSG_000] = "%s (Disk %d) [%s]";
++	msg_tbl[MSG_047-MSG_000] = "Multiple Partitions";
++	msg_tbl[MSG_048-MSG_000] = "Rufus - Flushing buffers";
++	msg_tbl[MSG_049-MSG_000] = "Rufus - Cancellation";
++	msg_tbl[MSG_050-MSG_000] = "Success.";
++	msg_tbl[MSG_051-MSG_000] = "Undetermined error while formatting.";
++	msg_tbl[MSG_052-MSG_000] = "Cannot use the selected file system for this media.";
++	msg_tbl[MSG_053-MSG_000] = "Access to the device is denied.";
++	msg_tbl[MSG_054-MSG_000] = "Media is write protected.";
++	msg_tbl[MSG_055-MSG_000] = "The device is in use by another process. ";
++	msg_tbl[MSG_056-MSG_000] = "Quick format is not available for this device.";
++	msg_tbl[MSG_057-MSG_000] = "The volume label is invalid.";
++	msg_tbl[MSG_058-MSG_000] = "The device handle is invalid.";
++	msg_tbl[MSG_059-MSG_000] = "The selected cluster size is not valid for this device.";
++	msg_tbl[MSG_060-MSG_000] = "The volume size is invalid.";
++	msg_tbl[MSG_061-MSG_000] = "Please insert a removable media in drive.";
++	msg_tbl[MSG_062-MSG_000] = "An unsupported command was received.";
++	msg_tbl[MSG_063-MSG_000] = "Memory allocation error.";
++	msg_tbl[MSG_064-MSG_000] = "Read error.";
++	msg_tbl[MSG_065-MSG_000] = "Write error.";
++	msg_tbl[MSG_066-MSG_000] = "Installation failure";
++	msg_tbl[MSG_067-MSG_000] = "Could not open media. It may be in use by another process. ";
++	msg_tbl[MSG_068-MSG_000] = "Error while partitioning drive.";
++	msg_tbl[MSG_069-MSG_000] = "Could not copy files to target drive.";
++	msg_tbl[MSG_070-MSG_000] = "Cancelled by user.";
++	msg_tbl[MSG_071-MSG_000] = "Unable to start thread.";
++	msg_tbl[MSG_072-MSG_000] = "Bad blocks check didn't complete.";
++	msg_tbl[MSG_073-MSG_000] = "ISO image scan failure.";
++	msg_tbl[MSG_074-MSG_000] = "ISO image extraction failure.";
++	msg_tbl[MSG_075-MSG_000] = "Unable to remount volume.";
++	msg_tbl[MSG_076-MSG_000] = "Unable to patch/setup files for boot.";
++	msg_tbl[MSG_077-MSG_000] = "Unable to assign a drive letter.";
++	msg_tbl[MSG_078-MSG_000] = "Can't mount GUID volume.";
++	msg_tbl[MSG_079-MSG_000] = "The device is not ready.";
++	msg_tbl[MSG_080-MSG_000] = "Rufus detected that Windows is still flushing its internal buffers onto the USB device.\n\n";
++	msg_tbl[MSG_081-MSG_000] = "Unsupported ISO";
++	msg_tbl[MSG_082-MSG_000] = "This version of Rufus only supports bootable ISOs based on bootmgr/WinPE, isolinux or EFI.\n";
++	msg_tbl[MSG_083-MSG_000] = "Replace %s?";
++	msg_tbl[MSG_084-MSG_000] = "This ISO image seems to use an obsolete version of '%s'.\n";
++	msg_tbl[MSG_085-MSG_000] = "Downloading %s";
++	msg_tbl[MSG_086-MSG_000] = "No image selected";
++	msg_tbl[MSG_087-MSG_000] = "Please click on the disc button to select a bootable image, ";
++	msg_tbl[MSG_088-MSG_000] = "Image is too big";
++	msg_tbl[MSG_089-MSG_000] = "The image is too big for the selected target.";
++	msg_tbl[MSG_090-MSG_000] = "Unsupported ISO";
++	msg_tbl[MSG_091-MSG_000] = "When using UEFI Target Type, only EFI bootable ISO images are supported. ";
++	msg_tbl[MSG_092-MSG_000] = "Unsupported filesystem";
++	msg_tbl[MSG_093-MSG_000] = "IMPORTANT: THIS DRIVE CONTAINS MULTIPLE PARTITIONS!!\n\n";
++	msg_tbl[MSG_094-MSG_000] = "Multiple partitions detected";
++	msg_tbl[MSG_095-MSG_000] = "DD Image";
++	msg_tbl[MSG_096-MSG_000] = "The file system currently selected can not be used with this type of ISO. ";
++	msg_tbl[MSG_097-MSG_000] = "'Windows To Go' can only be applied if the file system is NTFS.";
++	msg_tbl[MSG_098-MSG_000] = "IMPORTANT: You are trying to install 'Windows To Go', but your USB drive doesn't ";
++	msg_tbl[MSG_099-MSG_000] = "Filesystem limitation";
++	msg_tbl[MSG_100-MSG_000] = "This ISO image contains a file larger than 4GB, which is more than the ";
++	msg_tbl[MSG_101-MSG_000] = "Missing WIM support";
++	msg_tbl[MSG_102-MSG_000] = "Your platform cannot extract files from WIM archives. WIM extraction ";
++	msg_tbl[MSG_103-MSG_000] = "Download %s?";
++	msg_tbl[MSG_104-MSG_000] = "%s or later requires a '%s' file to be installed.\n";
++	msg_tbl[MSG_105-MSG_000] = "Cancelling may leave the device in an UNUSABLE state.\n";
++	msg_tbl[MSG_106-MSG_000] = "Please select folder";
++	msg_tbl[MSG_107-MSG_000] = "All files";
++	msg_tbl[MSG_108-MSG_000] = "Rufus log";
++	msg_tbl[MSG_109-MSG_000] = "0x%02X (Disk %d)";
++	msg_tbl[MSG_110-MSG_000] = "MS-DOS cannot boot from a drive using a 64 kilobytes Cluster size.\n";
++	msg_tbl[MSG_111-MSG_000] = "Incompatible Cluster size";
++	msg_tbl[MSG_112-MSG_000] = "Formatting a large UDF volumes can take a lot of time. At USB 2.0 speeds, the estimated formatting ";
++	msg_tbl[MSG_113-MSG_000] = "Large UDF volume";
++	msg_tbl[MSG_114-MSG_000] = "This image uses Syslinux %s%s but this application only includes the installation files for ";
++	msg_tbl[MSG_115-MSG_000] = "Download required";
++	msg_tbl[MSG_116-MSG_000] = "This image uses Grub %s but the application only includes the installation files for ";
++	msg_tbl[MSG_150-MSG_000] = "Usually the safest choice. If you have an UEFI computer and want to install ";
++	msg_tbl[MSG_151-MSG_000] = "Use this if you want to install an OS in EFI mode, but need to access ";
++	msg_tbl[MSG_152-MSG_000] = "The preferred option to install an OS in EFI mode and when ";
++	msg_tbl[MSG_153-MSG_000] = "Test pattern: 0x%02X";
++	msg_tbl[MSG_154-MSG_000] = "Test pattern: 0x%02X, 0x%02X";
++	msg_tbl[MSG_155-MSG_000] = "Test pattern: 0x%02X, 0x%02X, 0x%02X";
++	msg_tbl[MSG_156-MSG_000] = "Test pattern: 0x%02X, 0x%02X, 0x%02X, 0x%02X";
++	msg_tbl[MSG_157-MSG_000] = "Sets the target filesystem";
++	msg_tbl[MSG_158-MSG_000] = "Minimum size that a block of data will occupy in the filesystem";
++	msg_tbl[MSG_159-MSG_000] = "Use this field to set the drive label\nInternational characters are accepted";
++	msg_tbl[MSG_160-MSG_000] = "Toggle advanced options";
++	msg_tbl[MSG_161-MSG_000] = "Check the device for bad blocks using a test pattern";
++	msg_tbl[MSG_162-MSG_000] = "Uncheck this box to use the \"slow\" format method";
++	msg_tbl[MSG_163-MSG_000] = "Check this box to make the USB drive bootable";
++	msg_tbl[MSG_164-MSG_000] = "Method that will be used to make the drive bootable";
++	msg_tbl[MSG_165-MSG_000] = "Click to select an image...";
++	msg_tbl[MSG_166-MSG_000] = "Check this box to allow the display of international labels ";
++	msg_tbl[MSG_167-MSG_000] = "Install an MBR that allows boot selection and can masquerade the BIOS USB drive ID";
++	msg_tbl[MSG_168-MSG_000] = "Try to masquerade first bootable USB drive (usually 0x80) as a different disk.\n";
++	msg_tbl[MSG_169-MSG_000] = "Create an extra hidden partition and try to align partitions boundaries.\n";
++	msg_tbl[MSG_170-MSG_000] = "Enable the listing of USB Hard Drive enclosures. USE AT YOUR OWN RISKS!!!";
++	msg_tbl[MSG_171-MSG_000] = "Start the formatting operation.\nThis will DESTROY any data on the target!";
++	msg_tbl[MSG_172-MSG_000] = "Licensing information and credits";
++	msg_tbl[MSG_173-MSG_000] = "Click to select...";
++	msg_tbl[MSG_174-MSG_000] = "Rufus - The Reliable USB Formatting Utility";
++	msg_tbl[MSG_175-MSG_000] = "Version %d.%d.%d (Build %d)";
++	msg_tbl[MSG_176-MSG_000] = "English translation: Pete Batard <mailto:pete@akeo.ie>";
++	msg_tbl[MSG_177-MSG_000] = "Report bugs or request enhancements at:";
++	msg_tbl[MSG_178-MSG_000] = "Additional Copyrights:";
++	msg_tbl[MSG_179-MSG_000] = "Update Policy:";
++	msg_tbl[MSG_180-MSG_000] = "If you choose to allow this program to check for application updates, ";
++	msg_tbl[MSG_181-MSG_000] = "Your operating system's architecture and version";
++	msg_tbl[MSG_182-MSG_000] = "The version of the application you use";
++	msg_tbl[MSG_183-MSG_000] = "Your IP address";
++	msg_tbl[MSG_184-MSG_000] = "For the purpose of generating private usage statistics, we may keep the information collected, ";
++	msg_tbl[MSG_185-MSG_000] = "Update Process:";
++	msg_tbl[MSG_186-MSG_000] = "Rufus does not install or run background services, therefore update checks are performed only when the main application is running.\\line\n";
++	msg_tbl[MSG_187-MSG_000] = "Invalid image for selected boot option";
++	msg_tbl[MSG_188-MSG_000] = "The current image doesn't match the boot option selected. Please use a different image or choose a different boot option.";
++	msg_tbl[MSG_189-MSG_000] = "This ISO image is not compatible with the selected filesystem";
++	msg_tbl[MSG_190-MSG_000] = "Incompatible drive detected";
++	msg_tbl[MSG_191-MSG_000] = "Write pass";
++	msg_tbl[MSG_192-MSG_000] = "Read pass";
++	msg_tbl[MSG_193-MSG_000] = "Downloaded %s";
++	msg_tbl[MSG_194-MSG_000] = "Could not download %s";
++	msg_tbl[MSG_195-MSG_000] = "Using embedded version of %s file(s)";
++	msg_tbl[MSG_196-MSG_000] = "IMPORTANT: THIS DRIVE USES A NONSTANDARD SECTOR SIZE!!\n\n";
++	msg_tbl[MSG_197-MSG_000] = "Nonstandard sector size detected";
++	msg_tbl[MSG_201-MSG_000] = "Cancelling - Please wait...";
++	msg_tbl[MSG_202-MSG_000] = "Scanning image...";
++	msg_tbl[MSG_203-MSG_000] = "Failed to scan image";
++	msg_tbl[MSG_204-MSG_000] = "Obsolete %s detected";
++	msg_tbl[MSG_205-MSG_000] = "Using image: %s";
++	msg_tbl[MSG_206-MSG_000] = "Missing %s file";
++	msg_tbl[MSG_207-MSG_000] = "New Volume";
++	msg_tbl[MSG_208-MSG_000] = "%d device found";
++	msg_tbl[MSG_209-MSG_000] = "%d devices found";
++	msg_tbl[MSG_210-MSG_000] = "READY";
++	msg_tbl[MSG_211-MSG_000] = "Cancelled";
++	msg_tbl[MSG_212-MSG_000] = "Failed";
++	msg_tbl[MSG_213-MSG_000] = "Launching new application...";
++	msg_tbl[MSG_214-MSG_000] = "Failed to launch new application";
++	msg_tbl[MSG_215-MSG_000] = "Opened %s";
++	msg_tbl[MSG_216-MSG_000] = "Saved %s";
++	msg_tbl[MSG_217-MSG_000] = "Formatting: %0.1f%% completed";
++	msg_tbl[MSG_218-MSG_000] = "Creating file system: Task %d/%d completed";
++	msg_tbl[MSG_219-MSG_000] = "NTFS Fixup: %d%% completed";
++	msg_tbl[MSG_220-MSG_000] = "Formatting (%s) - estimated duration %d:%02d...";
++	msg_tbl[MSG_221-MSG_000] = "Setting Label (This may take while)...";
++	msg_tbl[MSG_222-MSG_000] = "Formatting (%s)...";
++	msg_tbl[MSG_223-MSG_000] = "NTFS Fixup (Checkdisk)...";
++	msg_tbl[MSG_224-MSG_000] = "Clearing MBR/PBR/GPT structures...";
++	msg_tbl[MSG_225-MSG_000] = "Requesting disk access...";
++	msg_tbl[MSG_226-MSG_000] = "Analyzing existing boot records...";
++	msg_tbl[MSG_227-MSG_000] = "Closing existing volume...";
++	msg_tbl[MSG_228-MSG_000] = "Writing master boot record...";
++	msg_tbl[MSG_229-MSG_000] = "Writing partition boot record...";
++	msg_tbl[MSG_230-MSG_000] = "Copying DOS files...";
++	msg_tbl[MSG_231-MSG_000] = "Copying ISO files...";
++	msg_tbl[MSG_232-MSG_000] = "Win7 EFI boot setup (this may take a while)...";
++	msg_tbl[MSG_233-MSG_000] = "Finalizing, please wait...";
++	msg_tbl[MSG_234-MSG_000] = "Installing Syslinux %s...";
++	msg_tbl[MSG_235-MSG_000] = "Bad Blocks: %s %d/%d - %0.2f%% (%d/%d/%d errors)";
++	msg_tbl[MSG_236-MSG_000] = "Bad Blocks: Testing with random pattern";
++	msg_tbl[MSG_237-MSG_000] = "Bad Blocks: Testing with pattern 0x%02X";
++	msg_tbl[MSG_238-MSG_000] = "Partitioning (%s)...";
++	msg_tbl[MSG_239-MSG_000] = "Deleting partitions...";
++	msg_tbl[MSG_240-MSG_000] = "Downloading %s: Connecting...";
++	msg_tbl[MSG_241-MSG_000] = "Downloading: %0.1f%%";
++	msg_tbl[MSG_242-MSG_000] = "Failed to download file.";
++	msg_tbl[MSG_243-MSG_000] = "Checking for Rufus updates...";
++	msg_tbl[MSG_244-MSG_000] = "Updates: Unable to connect to the internet";
++	msg_tbl[MSG_245-MSG_000] = "Updates: Unable to access version data";
++	msg_tbl[MSG_246-MSG_000] = "A new version of Rufus is available!";
++	msg_tbl[MSG_247-MSG_000] = "No new version of Rufus was found";
++	msg_tbl[MSG_248-MSG_000] = "Application registry keys successfully deleted";
++	msg_tbl[MSG_249-MSG_000] = "Failed to delete application registry keys";
++	msg_tbl[MSG_250-MSG_000] = "%s enabled";
++	msg_tbl[MSG_251-MSG_000] = "%s disabled";
++	msg_tbl[MSG_252-MSG_000] = "Size checks";
++	msg_tbl[MSG_253-MSG_000] = "Hard disk detection";
++	msg_tbl[MSG_254-MSG_000] = "Force large FAT32 formatting";
++	msg_tbl[MSG_255-MSG_000] = "NoDriveTypeAutorun will be deleted on exit";
++	msg_tbl[MSG_256-MSG_000] = "Fake drive detection";
++	msg_tbl[MSG_257-MSG_000] = "Joliet support";
++	msg_tbl[MSG_258-MSG_000] = "Rock Ridge support";
++	msg_tbl[MSG_259-MSG_000] = "Force update";
++	msg_tbl[MSG_260-MSG_000] = "NTFS compression";
++	msg_tbl[MSG_261-MSG_000] = "Writing image: %0.1f%% completed";
++	msg_tbl[MSG_262-MSG_000] = "ISO Support";
++	msg_tbl[MSG_263-MSG_000] = "Use PROPER size units";
++	msg_tbl[MSG_264-MSG_000] = "Deleting directory '%s'";
++	msg_tbl[MSG_265-MSG_000] = "VMWare disk detection";
++	msg_tbl[MSG_266-MSG_000] = "Dual UEFI/BIOS mode";
++}
+diff --git a/src/antiprism-loc.h b/src/antiprism-loc.h
+new file mode 100644
+index 0000000..605f7b3
+--- /dev/null
++++ b/src/antiprism-loc.h
+@@ -0,0 +1 @@
++void InitMsgTable(char *msg_tbl[]);
+diff --git a/src/bled/decompress_gunzip.c b/src/bled/decompress_gunzip.c
+index d1b4f7f..f25c83a 100644
+--- a/src/bled/decompress_gunzip.c
++++ b/src/bled/decompress_gunzip.c
+@@ -1109,20 +1109,20 @@ static uint32_t buffer_read_le_u32(STATE_PARAM_ONLY)
+ static int check_header_gzip(STATE_PARAM transformer_state_t *xstate)
+ {
+ 	PRAGMA_BEGIN_PACKED
+-	union {
++	union PACKED {
+ 		unsigned char raw[8];
+-		struct {
++		struct PACKED {
+ 			uint8_t gz_method;
+ 			uint8_t flags;
+-			uint32_t mtime;
++			uint32_t PACKED mtime;
+ 			uint8_t xtra_flags_UNUSED;
+ 			uint8_t os_flags_UNUSED;
+ 		} PACKED formatted;
+-	} header;
++	} PACKED header;
+ 	PRAGMA_END_PACKED
+-	struct BUG_header {
+-		char BUG_header[sizeof(header) == 8 ? 1 : -1];
+-	};
++	//struct BUG_header {
++	//	char BUG_header[sizeof(header) == 8 ? 1 : -1];
++	//};
+ 
+ 	/*
+ 	 * Rewind bytebuffer. We use the beginning because the header has 8
+diff --git a/src/disableUI.h b/src/disableUI.h
+new file mode 100644
+index 0000000..4bb7b2e
+--- /dev/null
++++ b/src/disableUI.h
+@@ -0,0 +1,20 @@
++#ifndef __DISABLE_UI__
++#define __DISABLE_UI__
++int dummyFun(HANDLE hwnd, ...);
++#undef EnableWindow
++#define EnableWindow(hwnd,fEnable) dummyFun(hwnd,fEnable)
++#undef SendMessage
++#define SendMessage(hwnd,msg,wparam,lparam) dummyFun(hwnd,msg,wparam,lparam)
++#undef PostMessage
++#define PostMessage(hwnd,msg,wparam,lparam) dummyFun(hwnd,msg,wparam,lparam)
++#undef GetWindowText
++#define GetWindowText(hwnd,lpch,cchMax) dummyFun(hwnd,lpch,cchMax)
++#undef GetWindowTextLength
++#define GetWindowTextLength(hwnd) dummyFun(hwnd)
++#undef SetWindowText
++#define SetWindowText(hwndCtl,lpsz) dummyFun(hwndCtl,lpsz)
++#undef DefDlgProc
++#define DefDlgProc(hwnd,msg,wParam,lParam) dummyFun(hwnd,msg,wParam,lParam)
++#define IsDlgButtonChecked(hwnd, id) dummyFun(hwnd, id)
++
++#endif /* __DISABLE_UI__ */
+\ No newline at end of file
+diff --git a/src/dos.c b/src/dos.c
+index 2a05566..c05e507 100644
+--- a/src/dos.c
++++ b/src/dos.c
+@@ -25,6 +25,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/src/drive.c b/src/drive.c
+index 7e9b9aa..3f40962 100644
+--- a/src/drive.c
++++ b/src/drive.c
+@@ -915,6 +915,9 @@ BOOL CreatePartition(HANDLE hDrive, int partition_style, int file_system, BOOL m
+ 	DWORD size, bufsize;
+ 	LONGLONG size_in_sectors, extra_size_in_tracks = 1;
+ 
++	memset((char *)&CreateDisk, 0, sizeof CreateDisk);
++	memset((char *)&DriveLayoutEx, 0, sizeof DriveLayoutEx);
++
+ 	PrintInfoDebug(0, MSG_238, PartitionTypeName[partition_style]);
+ 	if (uefi_togo_size == 0)
+ 		uefi_togo_size = GetResourceSize(hMainInstance, MAKEINTRESOURCEA(IDR_UEFI_TOGO), _RT_RCDATA, "uefi-togo.img");
+@@ -1151,3 +1154,209 @@ const char* GetPartitionType(BYTE Type)
+ 	}
+ 	return "Unknown";
+ }
++
++BOOL CreateUSBPartition(HANDLE hDrive, int partition_style, int file_system, BOOL mbr_uefi_marker, BOOL add_uefi_togo, long sizeInKb)
++{
++	const char* PartitionTypeName[2] = { "MBR", "GPT" };
++	unsigned char* buffer;
++	CREATE_DISK CreateDisk = {PARTITION_STYLE_RAW, {{0}}};
++	DRIVE_LAYOUT_INFORMATION_EX4 DriveLayoutEx = {0};
++	BOOL r;
++	DWORD size, bufsize;
++	LONGLONG size_in_sectors, extra_size_in_tracks = 1;
++	BOOL needExtraPartition = FALSE;
++
++	memset((char *)&CreateDisk, 0, sizeof CreateDisk);
++	memset((char *)&DriveLayoutEx, 0, sizeof DriveLayoutEx);
++
++	PrintInfoDebug(0, MSG_238, PartitionTypeName[partition_style]);
++	if (uefi_togo_size == 0)
++		uefi_togo_size = GetResourceSize(hMainInstance, MAKEINTRESOURCEA(IDR_UEFI_TOGO), _RT_RCDATA, "uefi-togo.img");
++
++	if ((partition_style == PARTITION_STYLE_GPT) || (!IsChecked(IDC_EXTRA_PARTITION))) {
++		// Go with the MS 1 MB wastage at the beginning...
++		DriveLayoutEx.PartitionEntry[0].StartingOffset.QuadPart = 1024*1024;
++	} else {
++		// Align on Cylinder
++		DriveLayoutEx.PartitionEntry[0].StartingOffset.QuadPart = 
++			SelectedDrive.Geometry.BytesPerSector * SelectedDrive.Geometry.SectorsPerTrack;
++	}
++	size_in_sectors = (SelectedDrive.DiskSize - DriveLayoutEx.PartitionEntry[0].StartingOffset.QuadPart) / SelectedDrive.Geometry.BytesPerSector;
++	if (sizeInKb > 0) {
++		LONGLONG sizeInSectors = (LONGLONG)sizeInKb * 1024 / SelectedDrive.Geometry.BytesPerSector;
++		uprintf("Partition size: %lld sectors", sizeInSectors);
++		LONGLONG sizeInTracks = (sizeInSectors + SelectedDrive.Geometry.SectorsPerTrack - 1) /
++				SelectedDrive.Geometry.SectorsPerTrack;
++		sizeInSectors = sizeInTracks * SelectedDrive.Geometry.SectorsPerTrack;
++		uprintf("Adjusted partition size: %lld sectors, %lld tracks, %lld bytes", sizeInSectors, sizeInTracks, sizeInSectors * SelectedDrive.Geometry.BytesPerSector);
++		if (size_in_sectors < sizeInSectors) {
++			uprintf("ERROR: Disk is too small, size: %lld sectors", size_in_sectors);
++			return FALSE;
++
++		} else if (size_in_sectors - sizeInSectors >= SelectedDrive.Geometry.SectorsPerTrack * 2) {
++			extra_size_in_tracks = (size_in_sectors - sizeInSectors) / SelectedDrive.Geometry.SectorsPerTrack;
++			LONGLONG extra_size_in_sectors = extra_size_in_tracks * SelectedDrive.Geometry.SectorsPerTrack;
++			uprintf("Extra partition size: %lld sectors, %lld tracks, %lld bytes", extra_size_in_sectors, 
++				extra_size_in_tracks, extra_size_in_sectors * SelectedDrive.Geometry.BytesPerSector);
++			needExtraPartition = TRUE;
++			size_in_sectors = sizeInSectors;
++
++		} else {
++			size_in_sectors = sizeInSectors;
++			uprintf("Not creating extra partition");
++		}
++	}
++
++	switch (partition_style) {
++	case PARTITION_STYLE_MBR:
++		CreateDisk.PartitionStyle = PARTITION_STYLE_MBR;
++		// If MBR+UEFI is selected, write an UEFI marker in lieu of the regular MBR signature.
++		// This helps us reselect the partition scheme option that was used when creating the
++		// drive in Rufus. As far as I can tell, Windows doesn't care much if this signature
++		// isn't unique for USB drives.
++		CreateDisk.Mbr.Signature = mbr_uefi_marker?MBR_UEFI_MARKER:GetTickCount();
++
++		DriveLayoutEx.PartitionStyle = PARTITION_STYLE_MBR;
++		DriveLayoutEx.PartitionCount = 4;	// Must be multiple of 4 for MBR
++		DriveLayoutEx.Type.Mbr.Signature = CreateDisk.Mbr.Signature;
++		DriveLayoutEx.PartitionEntry[0].PartitionStyle = PARTITION_STYLE_MBR;
++		// TODO: CHS fixup (32 sectors/track) through a cheat mode, if requested
++		// NB: disk geometry is computed by BIOS & co. by finding a match between LBA and CHS value of first partition
++		//     ms-sys's write_partition_number_of_heads() and write_partition_start_sector_number() can be used if needed
++		break;
++	case PARTITION_STYLE_GPT:
++		// TODO: (?) As per MSDN: "When specifying a GUID partition table (GPT) as the PARTITION_STYLE of the CREATE_DISK
++		// structure, an application should wait for the MSR partition arrival before sending the IOCTL_DISK_SET_DRIVE_LAYOUT_EX
++		// control code. For more information about device notification, see RegisterDeviceNotification."
++
++		CreateDisk.PartitionStyle = PARTITION_STYLE_GPT;
++		IGNORE_RETVAL(CoCreateGuid(&CreateDisk.Gpt.DiskId));
++		CreateDisk.Gpt.MaxPartitionCount = MAX_GPT_PARTITIONS;
++
++		DriveLayoutEx.PartitionStyle = PARTITION_STYLE_GPT;
++		DriveLayoutEx.PartitionCount = (add_uefi_togo)?2:1;
++		// At the very least, a GPT disk has 34 reserved sectors at the beginning and 33 at the end.
++		DriveLayoutEx.Type.Gpt.StartingUsableOffset.QuadPart = 34 * SelectedDrive.Geometry.BytesPerSector;
++		DriveLayoutEx.Type.Gpt.UsableLength.QuadPart = SelectedDrive.DiskSize - (34+33) * SelectedDrive.Geometry.BytesPerSector;
++		DriveLayoutEx.Type.Gpt.MaxPartitionCount = MAX_GPT_PARTITIONS;
++		DriveLayoutEx.Type.Gpt.DiskId = CreateDisk.Gpt.DiskId;
++		DriveLayoutEx.PartitionEntry[0].PartitionStyle = PARTITION_STYLE_GPT;
++
++		size_in_sectors -= 33;	// Need 33 sectors at the end for secondary GPT
++		break;
++	default:
++		break;
++	}
++
++	DriveLayoutEx.PartitionEntry[0].PartitionLength.QuadPart = size_in_sectors * SelectedDrive.Geometry.BytesPerSector;
++	DriveLayoutEx.PartitionEntry[0].PartitionNumber = 1;
++	DriveLayoutEx.PartitionEntry[0].RewritePartition = TRUE;
++
++	switch (partition_style) {
++	case PARTITION_STYLE_MBR:
++		DriveLayoutEx.PartitionEntry[0].Mbr.BootIndicator = IsChecked(IDC_BOOT);
++		DriveLayoutEx.PartitionEntry[0].Mbr.HiddenSectors = SelectedDrive.Geometry.SectorsPerTrack;
++		switch (file_system) {
++		case FS_FAT16:
++			DriveLayoutEx.PartitionEntry[0].Mbr.PartitionType = 0x0e;	// FAT16 LBA
++			break;
++		case FS_NTFS:
++		case FS_EXFAT:
++		case FS_UDF:
++		case FS_REFS:
++			DriveLayoutEx.PartitionEntry[0].Mbr.PartitionType = 0x07;
++			break;
++		case FS_FAT32:
++			DriveLayoutEx.PartitionEntry[0].Mbr.PartitionType = 0x0c;	// FAT32 LBA
++			break;
++		default:
++			uprintf("Unsupported file system\n");
++			return FALSE;
++		}
++		// Create an extra partition on request
++		if (needExtraPartition) {
++			DriveLayoutEx.PartitionEntry[1].PartitionStyle = PARTITION_STYLE_MBR;
++			// Should end on a track boundary
++			DriveLayoutEx.PartitionEntry[1].StartingOffset.QuadPart = DriveLayoutEx.PartitionEntry[0].StartingOffset.QuadPart +
++				DriveLayoutEx.PartitionEntry[0].PartitionLength.QuadPart;
++			DriveLayoutEx.PartitionEntry[1].PartitionLength.QuadPart = extra_size_in_tracks *
++				SelectedDrive.Geometry.SectorsPerTrack * SelectedDrive.Geometry.BytesPerSector;
++			DriveLayoutEx.PartitionEntry[1].PartitionNumber = 2;
++			DriveLayoutEx.PartitionEntry[1].RewritePartition = TRUE;
++			DriveLayoutEx.PartitionEntry[1].Mbr.BootIndicator = FALSE;
++			DriveLayoutEx.PartitionEntry[1].Mbr.HiddenSectors = SelectedDrive.Geometry.SectorsPerTrack*SelectedDrive.Geometry.BytesPerSector;
++			DriveLayoutEx.PartitionEntry[1].Mbr.PartitionType = 0x83; // Linux partition
++		}
++		// For the remaining partitions, PartitionStyle & PartitionType have already
++		// been zeroed => already set to MBR/unused
++		break;
++	case PARTITION_STYLE_GPT:
++		DriveLayoutEx.PartitionEntry[0].Gpt.PartitionType = PARTITION_BASIC_DATA_GUID;
++		IGNORE_RETVAL(CoCreateGuid(&DriveLayoutEx.PartitionEntry[0].Gpt.PartitionId));
++		wcscpy(DriveLayoutEx.PartitionEntry[0].Gpt.Name, L"Microsoft Basic Data");
++		if (add_uefi_togo) {
++			DriveLayoutEx.PartitionEntry[1].Gpt.PartitionType = PARTITION_BASIC_DATA_GUID;
++			IGNORE_RETVAL(CoCreateGuid(&DriveLayoutEx.PartitionEntry[1].Gpt.PartitionId));
++			wcscpy(DriveLayoutEx.PartitionEntry[1].Gpt.Name, L"UEFI:TOGO");
++			DriveLayoutEx.PartitionEntry[1].PartitionNumber = 2;
++			DriveLayoutEx.PartitionEntry[1].RewritePartition = TRUE;
++			DriveLayoutEx.PartitionEntry[1].StartingOffset.QuadPart = DriveLayoutEx.PartitionEntry[0].StartingOffset.QuadPart +
++				DriveLayoutEx.PartitionEntry[0].PartitionLength.QuadPart;
++			DriveLayoutEx.PartitionEntry[1].PartitionLength.QuadPart = uefi_togo_size;
++		}
++		break;
++	default:
++		break;
++	}
++
++	// We need to write the extra partition before we refresh the disk
++	if (add_uefi_togo) {
++		uprintf("Writing UEFI:TOGO partition...");
++		if (!SetFilePointerEx(hDrive, DriveLayoutEx.PartitionEntry[1].StartingOffset, NULL, FILE_BEGIN)) {
++			uprintf("Unable to set position");
++			safe_closehandle(hDrive);
++			return FALSE;
++		}
++		buffer = GetResource(hMainInstance, MAKEINTRESOURCEA(IDR_UEFI_TOGO), _RT_RCDATA, "uefi-togo.img", &bufsize, FALSE);
++		if (buffer == NULL) {
++			uprintf("Could not access uefi-togo.img");
++			safe_closehandle(hDrive);
++			return FALSE;
++		}
++		r = WriteFile(hDrive, buffer, bufsize, &size, NULL);
++		if ((!r) || (size != bufsize)) {
++			if (!r)
++				uprintf("Write error: %s", WindowsErrorString());
++			else
++				uprintf("Write error: Wrote %d bytes, expected %d bytes\n", size, bufsize);
++			safe_closehandle(hDrive);
++			return FALSE;
++		}
++	}
++
++	// If you don't call IOCTL_DISK_CREATE_DISK, the next call will fail
++	size = sizeof(CreateDisk);
++	r = DeviceIoControl(hDrive, IOCTL_DISK_CREATE_DISK,
++			(BYTE*)&CreateDisk, size, NULL, 0, &size, NULL );
++	if (!r) {
++		uprintf("Could not reset disk: %s\n", WindowsErrorString());
++		safe_closehandle(hDrive);
++		return FALSE;
++	}
++
++	size = sizeof(DriveLayoutEx) - ((partition_style == PARTITION_STYLE_GPT)?((add_uefi_togo?2:3)*sizeof(PARTITION_INFORMATION_EX)):0);
++	r = DeviceIoControl(hDrive, IOCTL_DISK_SET_DRIVE_LAYOUT_EX,
++			(BYTE*)&DriveLayoutEx, size, NULL, 0, &size, NULL );
++	if (!r) {
++		uprintf("Could not set drive layout: %s\n", WindowsErrorString());
++		safe_closehandle(hDrive);
++		return FALSE;
++	}
++
++	if (!RefreshDriveLayout(hDrive)) {
++		safe_closehandle(hDrive);
++		return FALSE;
++	}
++
++	return TRUE;
++}
+\ No newline at end of file
+diff --git a/src/format.c b/src/format.c
+index d4bc27f..9418ae0 100644
+--- a/src/format.c
++++ b/src/format.c
+@@ -23,6 +23,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdio.h>
+ #include <string.h>
+@@ -101,31 +102,38 @@ out:
+ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command, DWORD Action, PVOID pData)
+ {
+ 	DWORD* percent;
+-	if (IS_ERROR(FormatStatus))
++	int error_code;
++	if (IS_ERROR(FormatStatus)) {
++		uprintf("Error while formatting - aborting");
+ 		return FALSE;
++	}
+ 
+ 	switch(Command) {
+ 	case FCC_PROGRESS:
+ 		percent = (DWORD*)pData;
+-		PrintInfo(0, MSG_217, 1.0f * (*percent));
+-		UpdateProgress(OP_FORMAT, 1.0f * (*percent));
++		uprintf("Formatting: %0.1f%% completed\n", 1.0f * (*percent));
++		//PrintInfo(0, MSG_217, 1.0f * (*percent));
++		//UpdateProgress(OP_FORMAT, 1.0f * (*percent));
+ 		break;
+ 	case FCC_STRUCTURE_PROGRESS:	// No progress on quick format
+ 		if (task_number < nb_steps[fs_index] - 1) {
+ 			PrintInfoDebug(0, MSG_218, ++task_number, nb_steps[fs_index]);
+ 			format_percent += 100.0f / (1.0f * nb_steps[fs_index]);
+ 			UpdateProgress(OP_CREATE_FS, format_percent);
++		} else {
++			uprintf("Structure progress...");
+ 		}
+ 		break;
+ 	case FCC_DONE:
+ 		PrintInfoDebug(0, MSG_218, nb_steps[fs_index], nb_steps[fs_index]);
+ 		UpdateProgress(OP_CREATE_FS, 100.0f);
+ 		if(*(BOOLEAN*)pData == FALSE) {
+-			uprintf("Error while formatting");
++			uprintf("Error while formatting: %s", WindowsErrorString());
+ 			FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_GEN_FAILURE;
+ 		}
+ 		break;
+ 	case FCC_DONE_WITH_STRUCTURE:	// We get this message when formatting Small FAT16
++		uprintf("Done with structure.\n");
+ 		// pData Seems to be a struct with at least one (32 BIT!!!) string pointer to the size in MB
+ 		// uprintf("Done with that sort of thing: Action=%d pData=%0p\n", Action, pData);
+ 		// /!\ THE FOLLOWING ONLY WORKS ON VISTA OR LATER - DO NOT ENABLE ON XP!
+@@ -161,6 +169,7 @@ static BOOLEAN __stdcall FormatExCallback(FILE_SYSTEM_CALLBACK_COMMAND Command,
+ 		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_LABEL_TOO_LONG;
+ 		break;
+ 	case FCC_OUTPUT:
++		uprintf("Message from DLL:");
+ 		OutputUTF8Message(((PTEXTOUTPUT)pData)->Output);
+ 		break;
+ 	case FCC_CLUSTER_SIZE_TOO_BIG:
+@@ -1954,3 +1963,940 @@ out:
+ 	PostMessage(hMainDialog, UM_FORMAT_COMPLETED, 0, 0);
+ 	ExitThread(0);
+ }
++
++static void printW(const char *format, const WCHAR *wstr) {
++	char str[256];
++	char *p = str;
++
++	while (*wstr) {
++		*p++ = (char)*wstr++;
++	}
++	*p = '\0';
++	uprintf(format, str);
++}
++
++static BOOL FormatUSBDrive(DWORD DriveIndex, int fs, const char *label, ULONG ulClusterSize, BOOL isQuick)
++{
++	BOOL r = FALSE;
++	PF_DECL(FormatEx);
++	PF_DECL(EnableVolumeCompression);
++	char FSType[32];
++	char *locale, *VolumeName = NULL;
++	WCHAR* wVolumeName = NULL;
++	WCHAR wFSType[32];
++	WCHAR wLabel[64];
++	size_t i;
++	extern const char* FileSystemLabel[];
++
++	safe_strcpy(FSType, sizeof(FSType), FileSystemLabel[fs]);
++	if ((fs == FS_UDF) && !((dur_mins == 0) && (dur_secs == 0))) {
++		PrintInfoDebug(0, MSG_220, FSType, dur_mins, dur_secs);
++	} else {
++		PrintInfoDebug(0, MSG_222, FSType);
++	}
++	VolumeName = GetLogicalName(DriveIndex, TRUE, TRUE);
++	wVolumeName = utf8_to_wchar(VolumeName);
++	if (wVolumeName == NULL) {
++		uprintf("Could not read volume name\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_GEN_FAILURE;
++		goto out;
++	}
++	// Hey, nice consistency here, Microsoft! -  FormatEx() fails if wVolumeName has
++	// a trailing backslash, but EnableCompression() fails without...
++	wVolumeName[wcslen(wVolumeName)-1] = 0;		// Remove trailing backslash
++
++	// LoadLibrary("fmifs.dll") appears to changes the locale, which can lead to
++	// problems with tolower(). Make sure we restore the locale. For more details,
++	// see http://comments.gmane.org/gmane.comp.gnu.mingw.user/39300
++	locale = setlocale(LC_ALL, NULL);
++	PF_INIT_OR_OUT(FormatEx, Fmifs);
++	PF_INIT(EnableVolumeCompression, Fmifs);
++	setlocale(LC_ALL, locale);
++
++	utf8_to_wchar_no_alloc(FSType, wFSType, sizeof wFSType / sizeof wFSType[0]);
++	wFSType[sizeof wFSType / sizeof wFSType[0] - 1] = L'\0';
++
++	utf8_to_wchar_no_alloc(label, wLabel, sizeof wLabel / sizeof wLabel[0]);
++	wLabel[sizeof wLabel / sizeof wLabel[0] - 1] = L'\0';
++	// Make sure the label is valid
++	ToValidLabel(wLabel, (wFSType[0] == 'F') && (wFSType[1] == 'A') && (wFSType[2] == 'T'));
++
++	if (ulClusterSize < 0x200) {
++		// 0 is FormatEx's value for default, which we need to use for UDF
++		ulClusterSize = 0;
++		uprintf("Using default cluster size\n");
++	} else {
++		uprintf("Using cluster size: %d bytes\n", ulClusterSize);
++	}
++	format_percent = 0.0f;
++	task_number = 0;
++	fs_index = fs;
++
++	uprintf("%s format was selected\n", isQuick?"Quick":"Slow");
++	FormatStatus = 0;
++	SetLastError(0);
++	int mediaType = SelectedDrive.Geometry.MediaType == FixedMedia ? FixedMedia : RemovableMedia;
++	printW("Volume: %s\n", wVolumeName);
++	printW("Label: %s\n", wLabel);
++	printW("FSType: %s\n", wFSType);
++	pfFormatEx(wVolumeName, mediaType, wFSType, wLabel, isQuick, ulClusterSize, FormatExCallback);
++
++	if ((fs == FS_NTFS) && (enable_ntfs_compression) && (pfEnableVolumeCompression != NULL)) {
++		wVolumeName[wcslen(wVolumeName)] = '\\';	// Add trailing backslash back again
++		if (pfEnableVolumeCompression(wVolumeName, FPF_COMPRESSED)) {
++			uprintf("Enabled NTFS compression\n");
++		} else {
++			uprintf("Could not enable NTFS compression: %s\n", WindowsErrorString());
++		}
++	}
++
++	if (!IS_ERROR(FormatStatus)) {
++		uprintf("Format completed.\n");
++		r = TRUE;
++	}
++
++out:
++	safe_free(VolumeName);
++	safe_free(wVolumeName);
++	return r;
++}
++
++static BOOL WriteUSBMBR(HANDLE hPhysicalDrive, int fs, int dt, int bt)
++{
++	BOOL r = FALSE;
++	DWORD size;
++	unsigned char* buf = NULL;
++	FILE fake_fd = { 0 };
++	const char* using_msg = "Using %s MBR\n";
++
++	AnalyzeMBR(hPhysicalDrive, "Drive");
++
++	// FormatEx rewrites the MBR and removes the LBA attribute of FAT16
++	// and FAT32 partitions - we need to correct this in the MBR
++	buf = (unsigned char*)malloc(SelectedDrive.Geometry.BytesPerSector);
++	if (buf == NULL) {
++		uprintf("Could not allocate memory for MBR");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_NOT_ENOUGH_MEMORY;
++		goto out;
++	}
++
++	if (!read_sectors(hPhysicalDrive, SelectedDrive.Geometry.BytesPerSector, 0, 1, buf)) {
++		uprintf("Could not read MBR\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_READ_FAULT;
++		goto out;
++	}
++
++	switch (fs) {
++	case FS_FAT16:
++		if (buf[0x1c2] == 0x0e) {
++			uprintf("Partition is already FAT16 LBA...\n");
++		} else if ((buf[0x1c2] != 0x04) && (buf[0x1c2] != 0x06)) {
++			uprintf("Warning: converting a non FAT16 partition to FAT16 LBA: FS type=0x%02x\n", buf[0x1c2]);
++		}
++		buf[0x1c2] = 0x0e;
++		break;
++	case FS_FAT32:
++		if (buf[0x1c2] == 0x0c) {
++			uprintf("Partition is already FAT32 LBA...\n");
++		} else if (buf[0x1c2] != 0x0b) {
++			uprintf("Warning: converting a non FAT32 partition to FAT32 LBA: FS type=0x%02x\n", buf[0x1c2]);
++		}
++		buf[0x1c2] = 0x0c;
++		break;
++	}
++	if (TRUE) {
++		// Set first partition bootable - masquerade as per the DiskID selected
++		buf[0x1be] = 0x80;
++		uprintf("Set bootable USB partition as 0x%02X\n", buf[0x1be]);
++	}
++
++	if (!write_sectors(hPhysicalDrive, SelectedDrive.Geometry.BytesPerSector, 0, 1, buf)) {
++		uprintf("Could not write MBR\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_WRITE_FAULT;
++		goto out;
++	}
++
++	fake_fd._ptr = (char*)hPhysicalDrive;
++	fake_fd._bufsiz = SelectedDrive.Geometry.BytesPerSector;
++	if ((bt == BT_UEFI) && (!allow_dual_uefi_bios)) {
++		uprintf(using_msg, "zeroed");
++		r = write_zero_mbr(&fake_fd);	// Force UEFI boot only by zeroing the MBR
++	} else if ( (dt == DT_ISO) && (iso_report.has_kolibrios) && (fs == FS_FAT32)) {
++		uprintf(using_msg, "KolibriOS");
++		r = write_kolibri_mbr(&fake_fd);
++	} else if (((dt == DT_ISO) && (iso_report.has_grub4dos)) || (dt == DT_GRUB4DOS)) {
++		uprintf(using_msg, "Grub4DOS");
++		r = write_grub_mbr(&fake_fd);
++	} else if (((dt == DT_ISO) && (iso_report.has_grub2)) || (dt == DT_GRUB2)) {
++		uprintf(using_msg, "Grub 2.0");
++		r = write_grub2_mbr(&fake_fd);
++	} else if (dt == DT_REACTOS) {
++		uprintf(using_msg, "ReactOS");
++		r = write_reactos_mbr(&fake_fd);
++	} else if ( (dt == DT_SYSLINUX_V4) || (dt == DT_SYSLINUX_V6) || ((dt == DT_ISO) && (!allow_dual_uefi_bios) && ((fs == FS_FAT16) || (fs == FS_FAT32))) ) {
++		uprintf(using_msg, "Syslinux");
++		r = write_syslinux_mbr(&fake_fd);
++	} else {
++		if ((IS_WINPE(iso_report.winpe) && !iso_report.uses_minint) || (FALSE)) {
++			uprintf(using_msg, APPLICATION_NAME);
++			r = write_rufus_mbr(&fake_fd);
++		} else {
++			uprintf(using_msg, "Windows 7");
++			r = write_win7_mbr(&fake_fd);
++		}
++	}
++
++	// Tell the system we've updated the disk properties
++	if (!DeviceIoControl(hPhysicalDrive, IOCTL_DISK_UPDATE_PROPERTIES, NULL, 0, NULL, 0, &size, NULL))
++		uprintf("Failed to notify system about disk properties update: %s\n", WindowsErrorString());
++
++out:
++	safe_free(buf);
++	return r;
++}
++
++static BOOL WriteUSBSBR(HANDLE hPhysicalDrive, int dt)
++{
++	// TODO: Do we need anything special for 4K sectors?
++	DWORD size, max_size, mbr_size = 0x200;
++	int r;
++	unsigned char* buf = NULL;
++	FILE fake_fd = { 0 };
++
++	fake_fd._ptr = (char*)hPhysicalDrive;
++	fake_fd._bufsiz = SelectedDrive.Geometry.BytesPerSector;
++	// Ensure that we have sufficient space for the SBR
++	max_size = FALSE ?
++		(DWORD)(SelectedDrive.Geometry.BytesPerSector * SelectedDrive.Geometry.SectorsPerTrack) : 1024 * 1024;
++	max_size -= mbr_size;
++	if ((dt == DT_ISO) && (iso_report.has_grub4dos))
++		dt = DT_GRUB4DOS;
++	if ((dt == DT_ISO) && (iso_report.has_grub2))
++		dt = DT_GRUB2;
++
++	switch (dt) {
++	case DT_GRUB4DOS:
++		uprintf("Writing Grub4Dos SBR...\n");
++		buf = GetResource(hMainInstance, MAKEINTRESOURCEA(IDR_GR_GRUB_GRLDR_MBR), _RT_RCDATA, "grldr.mbr", &size, FALSE);
++		if ((buf == NULL) || (size <= mbr_size)) {
++			uprintf("grldr.mbr is either not present or too small\n");
++			return FALSE;
++		}
++		buf = &buf[mbr_size];
++		size -= mbr_size;
++		break;
++	case DT_GRUB2:
++		if (grub2_buf != NULL) {
++			uprintf("Writing Grub 2.0 SBR (from download)...\n");
++			buf = grub2_buf;
++			size = (DWORD)grub2_len;
++		} else {
++			uprintf("Writing Grub 2.0 SBR (from embedded)...\n");
++			buf = GetResource(hMainInstance, MAKEINTRESOURCEA(IDR_GR_GRUB2_CORE_IMG), _RT_RCDATA, "core.img", &size, FALSE);
++			if (buf == NULL) {
++				uprintf("Could not access core.img\n");
++				return FALSE;
++			}
++		}
++		break;
++	default:
++		// No need to write secondary block
++		return TRUE;
++	}
++
++	if (size > max_size) {
++		uprintf("  SBR size is too large - You may need to uncheck 'Add fixes for old BIOSes'.\n");
++		return FALSE;
++	}
++	r = write_data(&fake_fd, mbr_size, buf, (uint64_t)size);
++	safe_free(grub2_buf);
++	return (r != 0);
++}
++
++static BOOL WriteUSBPBR(HANDLE hLogicalVolume, int fs, int dt)
++{
++	int i;
++	FILE fake_fd = { 0 };
++	const char* using_msg = "Using %s %s partition boot record\n";
++
++	fake_fd._ptr = (char*)hLogicalVolume;
++	fake_fd._bufsiz = SelectedDrive.Geometry.BytesPerSector;
++
++	switch (fs) {
++	case FS_FAT16:
++		uprintf(using_msg, dt_to_name(dt), "FAT16");
++		if (!is_fat_16_fs(&fake_fd)) {
++			uprintf("New volume does not have a FAT16 boot sector - aborting\n");
++			break;
++		}
++		uprintf("Confirmed new volume has a FAT16 boot sector\n");
++		if (dt == DT_FREEDOS) {
++			if (!write_fat_16_fd_br(&fake_fd, 0)) break;
++		} else if (dt == DT_REACTOS) {
++			if (!write_fat_16_ros_br(&fake_fd, 0)) break;
++		} else if ((dt == DT_ISO) && (iso_report.has_kolibrios)) {
++			uprintf("FAT16 is not supported for KolibriOS\n"); break;
++		} else {
++			if (!write_fat_16_br(&fake_fd, 0)) break;
++		}
++		// Disk Drive ID needs to be corrected on XP
++		if (!write_partition_physical_disk_drive_id_fat16(&fake_fd))
++			break;
++		return TRUE;
++	case FS_FAT32:
++		uprintf(using_msg, dt_to_name(dt), "FAT32");
++		for (i=0; i<2; i++) {
++			if (!is_fat_32_fs(&fake_fd)) {
++				uprintf("New volume does not have a %s FAT32 boot sector - aborting\n", i?"secondary":"primary");
++				break;
++			}
++			uprintf("Confirmed new volume has a %s FAT32 boot sector\n", i?"secondary":"primary");
++			uprintf("Setting %s FAT32 boot sector for boot...\n", i?"secondary":"primary");
++			if (dt == DT_FREEDOS) {
++				if (!write_fat_32_fd_br(&fake_fd, 0)) break;
++			} else if (dt == DT_REACTOS) {
++				if (!write_fat_32_ros_br(&fake_fd, 0)) break;
++			} else if ((dt == DT_ISO) && (iso_report.has_kolibrios)) {
++				if (!write_fat_32_kos_br(&fake_fd, 0)) break;
++			} else {
++				if (!write_fat_32_br(&fake_fd, 0)) break;
++			}
++			// Disk Drive ID needs to be corrected on XP
++			if (!write_partition_physical_disk_drive_id_fat32(&fake_fd))
++				break;
++			fake_fd._cnt += 6 * SelectedDrive.Geometry.BytesPerSector;
++		}
++		return TRUE;
++	case FS_NTFS:
++		uprintf(using_msg, dt_to_name(dt), "NTFS");
++		if (!is_ntfs_fs(&fake_fd)) {
++			uprintf("New volume does not have an NTFS boot sector - aborting\n");
++			break;
++		}
++		uprintf("Confirmed new volume has an NTFS boot sector\n");
++		if (!write_ntfs_br(&fake_fd)) break;
++		// Note: NTFS requires a full remount after writing the PBR. We dismount when we lock
++		// and also go through a forced remount, so that shouldn't be an issue.
++		// But with NTFS, if you don't remount, you don't boot!
++		return TRUE;
++	default:
++		uprintf("Unsupported FS for FS BR processing - aborting\n");
++		break;
++	}
++	FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_WRITE_FAULT;
++	return FALSE;
++}
++
++static BOOL FormatUSBFAT32(DWORD DriveIndex, const char *label, DWORD ClusterSize, int dt)
++{
++	BOOL r = FALSE;
++	DWORD i;
++	HANDLE hLogicalVolume;
++	DWORD cbRet;
++	DISK_GEOMETRY dgDrive;
++	BYTE geometry_ex[256]; // DISK_GEOMETRY_EX is variable size
++	PDISK_GEOMETRY_EX xdgDrive = (PDISK_GEOMETRY_EX)(void*)geometry_ex;
++	PARTITION_INFORMATION piDrive;
++	PARTITION_INFORMATION_EX xpiDrive;
++	// Recommended values
++	DWORD ReservedSectCount = 32;
++	DWORD NumFATs = 2;
++	DWORD BackupBootSect = 6;
++	DWORD VolumeId = 0; // calculated before format
++	char* VolumeName = NULL;
++	WCHAR wLabel[64], *wVolumeName = NULL;
++	DWORD BurstSize = 128; // Zero in blocks of 64K typically
++
++	// Calculated later
++	DWORD FatSize = 0; 
++	DWORD BytesPerSect = 0;
++	DWORD SectorsPerCluster = 0;
++	DWORD TotalSectors = 0;
++	DWORD SystemAreaSize = 0;
++	DWORD UserAreaSize = 0;
++	ULONGLONG qTotalSectors = 0;
++
++	// Structures to be written to the disk
++	FAT_BOOTSECTOR32 *pFAT32BootSect = NULL;
++	FAT_FSINFO *pFAT32FsInfo = NULL;
++	DWORD *pFirstSectOfFat = NULL;
++	BYTE* pZeroSect = NULL;
++	char VolId[12] = "NO NAME    ";
++
++	// Debug temp vars
++	ULONGLONG FatNeeded, ClusterCount;
++
++	PrintInfoDebug(0, MSG_222, "Large FAT32");
++	LastRefresh = 0;
++	VolumeId = GetVolumeID();
++
++	// Open the drive and lock it
++	hLogicalVolume = GetLogicalHandle(DriveIndex, TRUE, TRUE);
++	if (IS_ERROR(FormatStatus)) goto out;
++	if ((hLogicalVolume == INVALID_HANDLE_VALUE) || (hLogicalVolume == NULL))
++		die("Invalid logical volume handle\n", ERROR_INVALID_HANDLE);
++
++	// Try to disappear the volume while we're formatting it
++	UnmountVolume(hLogicalVolume);
++
++	// Work out drive params
++	if (!DeviceIoControl (hLogicalVolume, IOCTL_DISK_GET_DRIVE_GEOMETRY, NULL, 0, &dgDrive,
++		sizeof(dgDrive), &cbRet, NULL)) {
++		if (!DeviceIoControl (hLogicalVolume, IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, NULL, 0, xdgDrive,
++			sizeof(geometry_ex), &cbRet, NULL)) {
++			uprintf("IOCTL_DISK_GET_DRIVE_GEOMETRY error: %s\n", WindowsErrorString());
++			die("Failed to get device geometry (both regular and _ex)\n", ERROR_NOT_SUPPORTED);
++		}
++		memcpy(&dgDrive, &xdgDrive->Geometry, sizeof(dgDrive));
++	}
++	if (dgDrive.BytesPerSector < 512)
++		dgDrive.BytesPerSector = 512;
++	if (IS_ERROR(FormatStatus)) goto out;
++	if (!DeviceIoControl (hLogicalVolume, IOCTL_DISK_GET_PARTITION_INFO, NULL, 0, &piDrive,
++		sizeof(piDrive), &cbRet, NULL)) {
++		if (!DeviceIoControl (hLogicalVolume, IOCTL_DISK_GET_PARTITION_INFO_EX, NULL, 0, &xpiDrive,
++			sizeof(xpiDrive), &cbRet, NULL)) {
++			uprintf("IOCTL_DISK_GET_PARTITION_INFO error: %s\n", WindowsErrorString());
++			die("Failed to get partition info (both regular and _ex)\n", ERROR_NOT_SUPPORTED);
++		}
++
++		memset(&piDrive, 0, sizeof(piDrive));
++		piDrive.StartingOffset.QuadPart = xpiDrive.StartingOffset.QuadPart;
++		piDrive.PartitionLength.QuadPart = xpiDrive.PartitionLength.QuadPart;
++		piDrive.HiddenSectors = (DWORD) (xpiDrive.StartingOffset.QuadPart / dgDrive.BytesPerSector);
++	}
++	if (IS_ERROR(FormatStatus)) goto out;
++
++	BytesPerSect = dgDrive.BytesPerSector;
++
++	// Checks on Disk Size
++	qTotalSectors = piDrive.PartitionLength.QuadPart/dgDrive.BytesPerSector;
++	// Low end limit - 65536 sectors
++	if (qTotalSectors < 65536) {
++		// Most FAT32 implementations would probably mount this volume just fine,
++		// but the spec says that we shouldn't do this, so we won't
++		die("This drive is too small for FAT32 - there must be at least 64K clusters\n", APPERR(ERROR_INVALID_CLUSTER_SIZE));
++	}
++
++	if (qTotalSectors >= 0xffffffff) {
++		// This is a more fundamental limitation on FAT32 - the total sector count in the root dir
++		// is 32bit. With a bit of creativity, FAT32 could be extended to handle at least 2^28 clusters
++		// There would need to be an extra field in the FSInfo sector, and the old sector count could
++		// be set to 0xffffffff. This is non standard though, the Windows FAT driver FASTFAT.SYS won't
++		// understand this. Perhaps a future version of FAT32 and FASTFAT will handle this.
++		die("This drive is too big for FAT32 - max 2TB supported\n", APPERR(ERROR_INVALID_VOLUME_SIZE));
++	}
++
++	// coverity[tainted_data]
++	pFAT32BootSect = (FAT_BOOTSECTOR32*) calloc(BytesPerSect, 1);
++	pFAT32FsInfo = (FAT_FSINFO*) calloc(BytesPerSect, 1);
++	pFirstSectOfFat = (DWORD*) calloc(BytesPerSect, 1);
++	if (!pFAT32BootSect || !pFAT32FsInfo || !pFirstSectOfFat) {
++		die("Failed to allocate memory\n", ERROR_NOT_ENOUGH_MEMORY);
++	}
++
++	// fill out the boot sector and fs info
++	pFAT32BootSect->sJmpBoot[0]=0xEB;
++	pFAT32BootSect->sJmpBoot[1]=0x58; // jmp.s $+0x5a is 0xeb 0x58, not 0xeb 0x5a. Thanks Marco!
++	pFAT32BootSect->sJmpBoot[2]=0x90;
++	strncpy((char*)pFAT32BootSect->sOEMName, "MSWIN4.1", 8);
++	pFAT32BootSect->wBytsPerSec = (WORD) BytesPerSect;
++
++	SectorsPerCluster = ClusterSize / BytesPerSect;
++
++	pFAT32BootSect->bSecPerClus = (BYTE) SectorsPerCluster ;
++	pFAT32BootSect->wRsvdSecCnt = (WORD) ReservedSectCount;
++	pFAT32BootSect->bNumFATs = (BYTE) NumFATs;
++	pFAT32BootSect->wRootEntCnt = 0;
++	pFAT32BootSect->wTotSec16 = 0;
++	pFAT32BootSect->bMedia = 0xF8;
++	pFAT32BootSect->wFATSz16 = 0;
++	pFAT32BootSect->wSecPerTrk = (WORD) dgDrive.SectorsPerTrack;
++	pFAT32BootSect->wNumHeads = (WORD) dgDrive.TracksPerCylinder;
++	pFAT32BootSect->dHiddSec = (DWORD) piDrive.HiddenSectors;
++	TotalSectors = (DWORD)  (piDrive.PartitionLength.QuadPart/dgDrive.BytesPerSector);
++	pFAT32BootSect->dTotSec32 = TotalSectors;
++
++	FatSize = GetFATSizeSectors(pFAT32BootSect->dTotSec32, pFAT32BootSect->wRsvdSecCnt, 
++		pFAT32BootSect->bSecPerClus, pFAT32BootSect->bNumFATs, BytesPerSect);
++
++	pFAT32BootSect->dFATSz32 = FatSize;
++	pFAT32BootSect->wExtFlags = 0;
++	pFAT32BootSect->wFSVer = 0;
++	pFAT32BootSect->dRootClus = 2;
++	pFAT32BootSect->wFSInfo = 1;
++	pFAT32BootSect->wBkBootSec = (WORD) BackupBootSect;
++	pFAT32BootSect->bDrvNum = 0x80;
++	pFAT32BootSect->Reserved1 = 0;
++	pFAT32BootSect->bBootSig = 0x29;
++
++	pFAT32BootSect->dBS_VolID = VolumeId;
++	memcpy(pFAT32BootSect->sVolLab, VolId, 11);
++	memcpy(pFAT32BootSect->sBS_FilSysType, "FAT32   ", 8);
++	((BYTE*)pFAT32BootSect)[510] = 0x55;
++	((BYTE*)pFAT32BootSect)[511] = 0xaa;
++
++	// FATGEN103.DOC says "NOTE: Many FAT documents mistakenly say that this 0xAA55 signature occupies the "last 2 bytes of 
++	// the boot sector". This statement is correct if - and only if - BPB_BytsPerSec is 512. If BPB_BytsPerSec is greater than 
++	// 512, the offsets of these signature bytes do not change (although it is perfectly OK for the last two bytes at the end 
++	// of the boot sector to also contain this signature)." 
++	// 
++	// Windows seems to only check the bytes at offsets 510 and 511. Other OSs might check the ones at the end of the sector,
++	// so we'll put them there too.
++	if (BytesPerSect != 512) {
++		((BYTE*)pFAT32BootSect)[BytesPerSect-2] = 0x55;
++		((BYTE*)pFAT32BootSect)[BytesPerSect-1] = 0xaa;
++	}
++
++	// FSInfo sect
++	pFAT32FsInfo->dLeadSig = 0x41615252;
++	pFAT32FsInfo->dStrucSig = 0x61417272;
++	pFAT32FsInfo->dFree_Count = (DWORD) -1;
++	pFAT32FsInfo->dNxt_Free = (DWORD) -1;
++	pFAT32FsInfo->dTrailSig = 0xaa550000;
++
++	// First FAT Sector
++	pFirstSectOfFat[0] = 0x0ffffff8;  // Reserved cluster 1 media id in low byte
++	pFirstSectOfFat[1] = 0x0fffffff;  // Reserved cluster 2 EOC
++	pFirstSectOfFat[2] = 0x0fffffff;  // end of cluster chain for root dir
++
++	// Write boot sector, fats
++	// Sector 0 Boot Sector
++	// Sector 1 FSInfo 
++	// Sector 2 More boot code - we write zeros here
++	// Sector 3 unused
++	// Sector 4 unused
++	// Sector 5 unused
++	// Sector 6 Backup boot sector
++	// Sector 7 Backup FSInfo sector
++	// Sector 8 Backup 'more boot code'
++	// zeroed sectors upto ReservedSectCount
++	// FAT1  ReservedSectCount to ReservedSectCount + FatSize
++	// ...
++	// FATn  ReservedSectCount to ReservedSectCount + FatSize
++	// RootDir - allocated to cluster2
++
++	UserAreaSize = TotalSectors - ReservedSectCount - (NumFATs*FatSize);
++	ClusterCount = UserAreaSize / SectorsPerCluster;
++
++	// Sanity check for a cluster count of >2^28, since the upper 4 bits of the cluster values in 
++	// the FAT are reserved.
++	if (ClusterCount > 0x0FFFFFFF) {
++		die("This drive has more than 2^28 clusters, try to specify a larger cluster size or use the default\n",
++			ERROR_INVALID_CLUSTER_SIZE);
++	}
++
++	// Sanity check - < 64K clusters means that the volume will be misdetected as FAT16
++	if (ClusterCount < 65536) {
++		die("FAT32 must have at least 65536 clusters, try to specify a smaller cluster size or use the default\n",
++			ERROR_INVALID_CLUSTER_SIZE);
++	}
++
++	// Sanity check, make sure the fat is big enough
++	// Convert the cluster count into a Fat sector count, and check the fat size value we calculated 
++	// earlier is OK.
++	FatNeeded = ClusterCount * 4;
++	FatNeeded += (BytesPerSect-1);
++	FatNeeded /= BytesPerSect;
++	if (FatNeeded > FatSize) {
++		die("This drive is too big for large FAT32 format\n", APPERR(ERROR_INVALID_VOLUME_SIZE));
++	}
++
++	// Now we're committed - print some info first
++	uprintf("Size : %s %u sectors\n", SizeToHumanReadable(piDrive.PartitionLength.QuadPart, TRUE, FALSE), TotalSectors);
++	uprintf("Cluster size %d bytes, %d Bytes Per Sector\n", SectorsPerCluster*BytesPerSect, BytesPerSect);
++	uprintf("Volume ID is %x:%x\n", VolumeId>>16, VolumeId&0xffff);
++	uprintf("%d Reserved Sectors, %d Sectors per FAT, %d FATs\n", ReservedSectCount, FatSize, NumFATs);
++	uprintf("%d Total clusters\n", ClusterCount);
++
++	// Fix up the FSInfo sector
++	pFAT32FsInfo->dFree_Count = (UserAreaSize/SectorsPerCluster) - 1;
++	pFAT32FsInfo->dNxt_Free = 3; // clusters 0-1 reserved, we used cluster 2 for the root dir
++
++	uprintf("%d Free Clusters\n", pFAT32FsInfo->dFree_Count);
++	// Work out the Cluster count
++
++	// First zero out ReservedSect + FatSize * NumFats + SectorsPerCluster
++	SystemAreaSize = ReservedSectCount + (NumFATs*FatSize) + SectorsPerCluster;
++	uprintf("Clearing out %d sectors for reserved sectors, FATs and root cluster...\n", SystemAreaSize);
++
++	// Not the most effective, but easy on RAM
++	pZeroSect = (BYTE*)calloc(BytesPerSect, BurstSize);
++	if (!pZeroSect) {
++		die("Failed to allocate memory\n", ERROR_NOT_ENOUGH_MEMORY);
++	}
++
++	format_percent = 0.0f;
++	for (i=0; i<(SystemAreaSize+BurstSize-1); i+=BurstSize) {
++		if (GetTickCount() > LastRefresh + 25) {
++			LastRefresh = GetTickCount();
++			format_percent = (100.0f*i)/(1.0f*(SystemAreaSize+BurstSize));
++			PrintInfo(0, MSG_217, format_percent);
++			UpdateProgress(OP_FORMAT, format_percent);
++		}
++		if (IS_ERROR(FormatStatus)) goto out;	// For cancellation
++		if (write_sectors(hLogicalVolume, BytesPerSect, i, BurstSize, pZeroSect) != (BytesPerSect*BurstSize)) {
++			die("Error clearing reserved sectors\n", ERROR_WRITE_FAULT);
++		}
++	}
++
++	uprintf ("Initializing reserved sectors and FATs...\n");
++	// Now we should write the boot sector and fsinfo twice, once at 0 and once at the backup boot sect position
++	for (i=0; i<2; i++) {
++		int SectorStart = (i==0) ? 0 : BackupBootSect;
++		write_sectors(hLogicalVolume, BytesPerSect, SectorStart, 1, pFAT32BootSect);
++		write_sectors(hLogicalVolume, BytesPerSect, SectorStart+1, 1, pFAT32FsInfo);
++	}
++
++	// Write the first fat sector in the right places
++	for ( i=0; i<NumFATs; i++ ) {
++		int SectorStart = ReservedSectCount + (i * FatSize );
++		uprintf("FAT #%d sector at address: %d\n", i, SectorStart);
++		write_sectors(hLogicalVolume, BytesPerSect, SectorStart, 1, pFirstSectOfFat);
++	}
++
++	// Must do it here, as have issues when trying to write the PBR after a remount
++	PrintInfoDebug(0, MSG_229);
++	if (!WriteUSBPBR(hLogicalVolume, FS_FAT32, dt)) {
++		// Non fatal error, but the drive probably won't boot
++		uprintf("Could not write partition boot record - drive may not boot...\n");
++	}
++
++	// Set the FAT32 volume label
++	utf8_to_wchar_no_alloc(label, wLabel, sizeof wLabel / sizeof wLabel[0]);
++	wLabel[sizeof wLabel / sizeof wLabel[0] - 1] = L'\0';
++
++	ToValidLabel(wLabel, TRUE);
++	PrintInfoDebug(0, MSG_221);
++	// Handle must be closed for SetVolumeLabel to work
++	safe_closehandle(hLogicalVolume);
++	VolumeName = GetLogicalName(DriveIndex, TRUE, TRUE);
++	wVolumeName = utf8_to_wchar(VolumeName);
++	if ((wVolumeName == NULL) || (!SetVolumeLabelW(wVolumeName, wLabel))) {
++		uprintf("Could not set label: %s\n", WindowsErrorString());
++		// Non fatal error
++	}
++
++	uprintf("Format completed.\n");
++	r = TRUE;
++
++out:
++	safe_free(VolumeName);
++	safe_free(wVolumeName);
++	safe_closehandle(hLogicalVolume);
++	safe_free(pFAT32BootSect);
++	safe_free(pFAT32FsInfo);
++	safe_free(pFirstSectOfFat);
++	safe_free(pZeroSect);
++	return r;
++}
++
++BOOL InstallSyslinuxToUSB(DWORD drive_index, char drive_letter, int fs_type, int dt);
++BOOL CreateUSBPartition(HANDLE hDrive, int partition_style, int file_system, BOOL mbr_uefi_marker, BOOL add_uefi_togo, long sizeInKb);
++
++#undef CHECK_FOR_USER_CANCEL
++#define CHECK_FOR_USER_CANCEL
++void format(DWORD DriveIndex, const char *label, int fs, int pt, int dt, int bt, int clusterSize, BOOL isQuick, char *driveLetter, long sizeInKb)
++{
++	int i, r;
++	BOOL s, ret, use_large_fat32, add_uefi_togo;
++	const DWORD SectorSize = SelectedDrive.Geometry.BytesPerSector;
++	DWORD rSize, wSize, BufSize;
++	HANDLE hPhysicalDrive = INVALID_HANDLE_VALUE;
++	HANDLE hLogicalVolume = INVALID_HANDLE_VALUE;
++	HANDLE hSourceImage = INVALID_HANDLE_VALUE;
++	SYSTEMTIME lt;
++	FILE* log_fd;
++	LARGE_INTEGER li;
++	uint64_t wb;
++	uint8_t *buffer = NULL, *aligned_buffer;
++	char *bb_msg, *guid_volume = NULL;
++	char drive_name[] = "?:\\";
++	char drive_letters[27];
++	char logfile[MAX_PATH], *userdir;
++	char wim_image[] = "?:\\sources\\install.wim";
++	char efi_dst[] = "?:\\efi\\boot\\bootx64.efi";
++	char kolibri_dst[] = "?:\\MTLD_F32";
++	char grub4dos_dst[] = "?:\\grldr";
++	
++	use_large_fat32 = (fs == FS_FAT32) && ((SelectedDrive.DiskSize > LARGE_FAT32_SIZE) || (force_large_fat32));
++	add_uefi_togo = (fs == FS_NTFS) && (dt == DT_ISO) && (iso_report.has_efi) && (bt == BT_UEFI);
++
++	PrintInfoDebug(0, MSG_225);
++	hPhysicalDrive = GetPhysicalHandle(DriveIndex, TRUE, TRUE);
++	if (hPhysicalDrive == INVALID_HANDLE_VALUE) {
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_OPEN_FAILED;
++		goto out;
++	}
++
++	// At this stage with have both a handle and a lock to the physical drive...
++	if (!GetDriveLetters(DriveIndex, drive_letters)) {
++		uprintf("Failed to get a drive letter\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_ASSIGN_LETTER);
++		goto out;
++	}
++	if (drive_letters[0] == 0) {
++		uprintf("No drive letter was assigned...\n");
++		drive_name[0] =  GetUnusedDriveLetter();
++		if (drive_name[0] == 0) {
++			uprintf("Could not find a suitable drive letter\n");
++			FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_ASSIGN_LETTER);
++			goto out;
++		}
++	} else {
++		// Unmount all mounted volumes that belong to this drive
++		// Do it in reverse so that we always end on the first volume letter
++		for (i=(int)safe_strlen(drive_letters); i>0; i--) {
++			drive_name[0] = drive_letters[i-1];
++			if (!DeleteVolumeMountPointA(drive_name)) {
++				uprintf("Failed to delete mountpoint %s: %s\n", drive_name, WindowsErrorString());
++				// Try to continue. We will bail out if this causes an issue.
++			}
++		}
++	}
++	uprintf("Will use '%c:' as volume mountpoint\n", drive_name[0]);
++
++	// ...but we need a lock to the logical drive to be able to write anything to it
++	hLogicalVolume = GetLogicalHandle(DriveIndex, FALSE, TRUE);
++	if (hLogicalVolume == INVALID_HANDLE_VALUE) {
++		uprintf("Could not lock volume\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_OPEN_FAILED;
++		goto out;
++	} else if (hLogicalVolume == NULL) {
++		// NULL is returned for cases where the drive is not yet partitioned
++		uprintf("Drive does not appear to be partitioned\n");
++	} else if (!UnmountVolume(hLogicalVolume)) {
++		uprintf("Trying to continue regardless...\n");
++	}
++	CHECK_FOR_USER_CANCEL;
++
++	PrintInfoDebug(0, MSG_226);
++	AnalyzeMBR(hPhysicalDrive, "Drive");
++	if ((hLogicalVolume != NULL) && (hLogicalVolume != INVALID_HANDLE_VALUE)) {
++		AnalyzePBR(hLogicalVolume);
++	}
++	UpdateProgress(OP_ANALYZE_MBR, -1.0f);
++
++	// Zap any existing partitions. This helps prevent access errors.
++	// As this creates issues with FAT16 formatted MS drives, only do this for other filesystems
++	if ( (fs != FS_FAT16) && (!DeletePartitions(hPhysicalDrive)) ) {
++		uprintf("Could not reset partitions\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_PARTITION_FAILURE;
++		goto out;
++	}
++
++	// Especially after destructive badblocks test, you must zero the MBR/GPT completely
++	// before repartitioning. Else, all kind of bad things happen.
++	if (!ClearMBRGPT(hPhysicalDrive, SelectedDrive.DiskSize, SectorSize, use_large_fat32)) {
++		uprintf("unable to zero MBR/GPT\n");
++		if (!IS_ERROR(FormatStatus))
++			FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_WRITE_FAULT;
++		goto out;
++	}
++
++	UpdateProgress(OP_ZERO_MBR, -1.0f);
++	CHECK_FOR_USER_CANCEL;
++
++	if (!CreateUSBPartition(hPhysicalDrive, pt, fs, (pt==PARTITION_STYLE_MBR) && (bt==BT_UEFI), add_uefi_togo, sizeInKb)) {
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_PARTITION_FAILURE;
++		goto out;
++	}
++	UpdateProgress(OP_PARTITION, -1.0f);
++
++	// Close the (unmounted) volume before formatting
++	if ((hLogicalVolume != NULL) && (hLogicalVolume != INVALID_HANDLE_VALUE)) {
++		PrintInfoDebug(0, MSG_227);
++		if (!CloseHandle(hLogicalVolume)) {
++			uprintf("Could not close volume: %s\n", WindowsErrorString());
++			FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_ACCESS_DENIED;
++			goto out;
++		}
++	}
++	hLogicalVolume = INVALID_HANDLE_VALUE;
++
++	// Wait for the logical drive we just created to appear
++	uprintf("Waiting for logical drive to reappear...\n");
++	Sleep(200);
++	if (!WaitForLogical(DriveIndex))
++		uprintf("Logical drive was not found!\n");	// We try to continue even if this fails, just in case
++	CHECK_FOR_USER_CANCEL;
++
++	// If FAT32 is requested and we have a large drive (>32 GB) use 
++	// large FAT32 format, else use MS's FormatEx.
++	ret = use_large_fat32?FormatUSBFAT32(DriveIndex, label, clusterSize, dt):FormatUSBDrive(DriveIndex, fs, label, clusterSize, isQuick);
++	if (!ret) {
++		// Error will be set by FormatDrive() in FormatStatus
++		uprintf("Format error: %s\n", StrError(FormatStatus, TRUE));
++		goto out;
++	}
++
++	// Thanks to Microsoft, we must fix the MBR AFTER the drive has been formatted
++	if (pt == PARTITION_STYLE_MBR) {
++		PrintInfoDebug(0, MSG_228);	// "Writing master boot record..."
++		if ((!WriteUSBMBR(hPhysicalDrive, fs, dt, bt)) || (!WriteUSBSBR(hPhysicalDrive, dt))) {
++			if (!IS_ERROR(FormatStatus))
++				FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_WRITE_FAULT;
++			goto out;
++		}
++		UpdateProgress(OP_FIX_MBR, -1.0f);
++	}
++	Sleep(200);
++	WaitForLogical(DriveIndex);
++	// Try to continue
++	CHECK_FOR_USER_CANCEL;
++
++	guid_volume = GetLogicalName(DriveIndex, TRUE, TRUE);
++	if (guid_volume == NULL) {
++		uprintf("Could not get GUID volume name\n");
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_NO_VOLUME_ID;
++		goto out;
++	}
++	uprintf("Found volume GUID %s\n", guid_volume);
++
++	if (!MountVolume(drive_name, guid_volume)) {
++		uprintf("Could not remount %s on %s: %s\n", guid_volume, drive_name, WindowsErrorString());
++		FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_MOUNT_VOLUME);
++		goto out;
++	}
++	CHECK_FOR_USER_CANCEL;
++
++	if (TRUE) {
++		if (bt == BT_UEFI) {
++			// For once, no need to do anything - just check our sanity
++			if ( (dt != DT_ISO) || (!iso_report.has_efi) || (fs > FS_NTFS) ) {
++				uprintf("Spock gone crazy error!\n");
++				FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_INSTALL_FAILURE;
++				goto out;
++			}
++		} else if ((((dt == DT_WINME) || (dt == DT_FREEDOS) || (dt == DT_GRUB4DOS) || (dt == DT_GRUB2) || (dt == DT_REACTOS)) &&
++			(!use_large_fat32)) || ((dt == DT_ISO) && ((fs == FS_NTFS)||(iso_report.has_kolibrios||IS_GRUB(iso_report))))) {
++			// We still have a lock, which we need to modify the volume boot record 
++			// => no need to reacquire the lock...
++			hLogicalVolume = GetLogicalHandle(DriveIndex, TRUE, FALSE);
++			if ((hLogicalVolume == INVALID_HANDLE_VALUE) || (hLogicalVolume == NULL)) {
++				uprintf("Could not re-mount volume for partition boot record access\n");
++				FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_OPEN_FAILED;
++				goto out;
++			}
++			// NB: if you unmount the logical volume here, XP will report error:
++			// [0x00000456] The media in the drive may have changed
++			PrintInfoDebug(0, MSG_229);
++			if (!WriteUSBPBR(hLogicalVolume, fs, dt)) {
++				if (!IS_ERROR(FormatStatus))
++					FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_WRITE_FAULT;
++				goto out;
++			}
++			// We must close and unlock the volume to write files to it
++			safe_unlockclose(hLogicalVolume);
++		} else if ( (dt == DT_SYSLINUX_V4) || (dt == DT_SYSLINUX_V6) || ((dt == DT_ISO) && (!allow_dual_uefi_bios) &&
++			((fs == FS_FAT16) || (fs == FS_FAT32))) ) {
++			if (!InstallSyslinuxToUSB(DriveIndex, drive_name[0], fs, dt)) {
++				FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_INSTALL_FAILURE;
++			}
++		}
++	}
++	CHECK_FOR_USER_CANCEL;
++
++	// We issue a complete remount of the filesystem at on account of:
++	// - Ensuring the file explorer properly detects that the volume was updated
++	// - Ensuring that an NTFS system will be reparsed so that it becomes bootable
++	if (!RemountVolume(drive_name))
++		goto out;
++	CHECK_FOR_USER_CANCEL;
++
++	if (TRUE) {
++		if ((dt == DT_WINME) || (dt == DT_FREEDOS)) {
++			UpdateProgress(OP_DOS, -1.0f);
++			PrintInfoDebug(0, MSG_230);
++			if (!ExtractDOS(drive_name)) {
++				if (!IS_ERROR(FormatStatus))
++					FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_CANNOT_COPY;
++				goto out;
++			}
++		} else if (dt == DT_GRUB4DOS) {
++			grub4dos_dst[0] = drive_name[0];
++			uprintf("Installing: %s (Grub4DOS loader)\n", grub4dos_dst);
++			IGNORE_RETVAL(_chdirU(app_dir));
++			if (!CopyFileU(FILES_DIR "\\grub4dos\\grldr", grub4dos_dst, FALSE))
++				uprintf("Failed to copy file: %s", WindowsErrorString());
++		} else if (dt == DT_ISO) {
++			if (image_path != NULL) {
++				UpdateProgress(OP_DOS, 0.0f);
++				PrintInfoDebug(0, MSG_231);
++				drive_name[2] = 0;
++				if (HAS_TOGO(iso_report) && (Button_GetCheck(GetDlgItem(hMainDialog, IDC_WINDOWS_TO_GO)) == BST_CHECKED)) {
++					// Sanity checks
++					if (fs != FS_NTFS) {
++						FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_INCOMPATIBLE_FS);
++						goto out;
++					}
++					if ((nWindowsVersion < WINDOWS_8) || ((WimExtractCheck() & 4) == 0)) {
++						FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_NOT_SUPPORTED;
++						goto out;
++					}
++					if (!SetupWinToGo(drive_name)) {
++						if (!IS_ERROR(FormatStatus))
++							FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_ISO_EXTRACT;
++						goto out;
++					}
++				} else if (!ExtractISO(image_path, drive_name, FALSE)) {
++					if (!IS_ERROR(FormatStatus))
++						FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|ERROR_ISO_EXTRACT;
++					goto out;
++				}
++				if (iso_report.has_kolibrios) {
++					kolibri_dst[0] = drive_name[0];
++					uprintf("Installing: %s (KolibriOS loader)\n", kolibri_dst);
++					if (ExtractISOFile(image_path, "HD_Load/USB_Boot/MTLD_F32", kolibri_dst,
++						FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_SYSTEM) == 0) {
++						uprintf("Warning: loader installation failed - KolibriOS will not boot!\n");
++					}
++				}
++				// EFI mode selected, with no 'bootx64.efi' (bit #2) but Windows 7 x64's 'bootmgr.efi' (bit #0)
++				if ((bt == BT_UEFI) && (!(iso_report.has_efi & 4)) && (iso_report.has_efi & 1)) {
++					PrintInfoDebug(0, MSG_232);
++					wim_image[0] = drive_name[0];
++					efi_dst[0] = drive_name[0];
++					efi_dst[sizeof(efi_dst) - sizeof("\\bootx64.efi")] = 0;
++					if (!CreateDirectoryA(efi_dst, 0)) {
++						uprintf("Could not create directory '%s': %s\n", WindowsErrorString());
++						FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_PATCH);
++					} else {
++						efi_dst[sizeof(efi_dst) - sizeof("\\bootx64.efi")] = '\\';
++						if (!WimExtractFile(wim_image, 1, "Windows\\Boot\\EFI\\bootmgfw.efi", efi_dst)) {
++							uprintf("Failed to setup Win7 EFI boot\n");
++							FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_PATCH);
++						}
++					}
++				}
++			}
++			if ( (bt == BT_BIOS) && (IS_WINPE(iso_report.winpe)) ) {
++				// Apply WinPe fixup
++				if (!SetupWinPE(drive_name[0]))
++					FormatStatus = ERROR_SEVERITY_ERROR|FAC(FACILITY_STORAGE)|APPERR(ERROR_CANT_PATCH);
++			}
++		}
++		UpdateProgress(OP_FINALIZE, -1.0f);
++		PrintInfoDebug(0, MSG_233);
++		// Issue another complete remount before we exit, to ensure we're clean
++		if (RemountVolume(drive_name)) {
++			driveLetter[0] = drive_name[0];
++		}
++	}
++
++out:
++	safe_free(guid_volume);
++	safe_free(buffer);
++	safe_closehandle(hSourceImage);
++	safe_unlockclose(hLogicalVolume);
++	safe_unlockclose(hPhysicalDrive);	// This can take a while
++	if (IS_ERROR(FormatStatus)) {
++		guid_volume = GetLogicalName(DriveIndex, TRUE, FALSE);
++		if (guid_volume != NULL) {
++			if (MountVolume(drive_name, guid_volume))
++				uprintf("Re-mounted volume as '%c:' after error\n", drive_name[0]);
++			free(guid_volume);
++		}
++	}
++	PostMessage(hMainDialog, UM_FORMAT_COMPLETED, 0, 0);
++}
+diff --git a/src/localization.c b/src/localization.c
+index f358689..043b3bd 100644
+--- a/src/localization.c
++++ b/src/localization.c
+@@ -429,7 +429,7 @@ static void CALLBACK PrintMessageTimeout(HWND hWnd, UINT uMsg, UINT_PTR idEvent,
+ 	KillTimer(hMainDialog, idEvent);
+ }
+ 
+-void PrintStatusInfo(BOOL info, BOOL debug, unsigned int duration, int msg_id, ...)
++static void XPrintStatusInfo(BOOL info, BOOL debug, unsigned int duration, int msg_id, ...)
+ {
+ 	char *format = NULL, buf[MSG_LEN];
+ 	char *msg_hi = szMessage[info?MSG_INFO:MSG_STATUS][MSG_HIGH_PRI];
+diff --git a/src/rufus.c b/src/rufus.c
+index 96ad85d..c1f0d59 100644
+--- a/src/rufus.c
++++ b/src/rufus.c
+@@ -23,6 +23,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+@@ -731,7 +732,7 @@ static void InitProgress(BOOL bOnlyFormat)
+ /*
+  * Position the progress bar within each operation range
+  */
+-void UpdateProgress(int op, float percent)
++static void XXUpdateProgress(int op, float percent)
+ {
+ 	int pos;
+ 
+@@ -2343,9 +2344,9 @@ static void PrintUsage(char* appname)
+  * Application Entrypoint
+  */
+ #if defined(_MSC_VER) && (_MSC_VER >= 1600)
+-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
++int WINAPI XWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
+ #else
+-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
++int WINAPI XWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+ #endif
+ {
+ 	const char* old_wait_option = "/W";
+@@ -2760,3 +2761,42 @@ out:
+ 
+ 	return 0;
+ }
++
++BOOL SelectDrive(DWORD driveIndex)
++{
++	DWORD i;
++	int pt, bt;
++	char fs_type[32];
++
++	memset(&SelectedDrive, 0, sizeof(SelectedDrive));
++	SelectedDrive.DeviceNumber = driveIndex;
++
++	GetDrivePartitionData(SelectedDrive.DeviceNumber, fs_type, sizeof(fs_type), FALSE);
++
++	if (!DefineClusterSizes()) {
++		uprintf("No file system is selectable for this drive\n");
++		return FALSE;
++	}
++
++	// re-select existing FS if it's one we know
++	SelectedDrive.FSType = FS_UNKNOWN;
++	if (safe_strlen(fs_type) != 0) {
++		for (SelectedDrive.FSType=FS_MAX-1; SelectedDrive.FSType>=0; SelectedDrive.FSType--) {
++			if (safe_strcmp(fs_type, FileSystemLabel[SelectedDrive.FSType]) == 0) {
++				break;
++			}
++		}
++	} else {
++		SelectedDrive.FSType = FS_UNKNOWN;
++	}
++
++	return SetClusterSizes(SelectedDrive.FSType);
++}
++
++int CaclulateClusterSize(int fs, int sizeInKb) {
++	if (sizeInKb == 0) return 0;
++	SelectedDrive.DiskSize = 1024LL * sizeInKb;
++	SelectedDrive.Geometry.BytesPerSector = 512;
++	DefineClusterSizes();
++	return SelectedDrive.ClusterSize[fs].Default;
++}
+\ No newline at end of file
+diff --git a/src/rufus.h b/src/rufus.h
+index c771c99..8abc6d6 100644
+--- a/src/rufus.h
++++ b/src/rufus.h
+@@ -364,7 +364,8 @@ extern void PrintStatusInfo(BOOL info, BOOL debug, unsigned int duration, int ms
+ #define PrintStatusDebug(...) PrintStatusInfo(FALSE, TRUE, __VA_ARGS__)
+ #define PrintInfo(...) PrintStatusInfo(TRUE, FALSE, __VA_ARGS__)
+ #define PrintInfoDebug(...) PrintStatusInfo(TRUE, TRUE, __VA_ARGS__)
+-extern void UpdateProgress(int op, float percent);
++extern void UpdateProgress_msg(int op, const char *op_text, float percent);
++#define UpdateProgress(op_,percent_) UpdateProgress_msg((op_),#op_,(percent_))
+ extern const char* StrError(DWORD error_code, BOOL use_default_locale);
+ extern char* GuidToString(const GUID* guid);
+ extern char* SizeToHumanReadable(uint64_t size, BOOL log, BOOL fake_units);
+diff --git a/src/stdio.c b/src/stdio.c
+index 295c0be..7839355 100644
+--- a/src/stdio.c
++++ b/src/stdio.c
+@@ -22,6 +22,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdio.h>
+ #include <string.h>
+@@ -40,7 +41,7 @@
+ HWND hStatus;
+ 
+ #ifdef RUFUS_DEBUG
+-void _uprintf(const char *format, ...)
++void X_uprintf(const char *format, ...)
+ {
+ 	static char buf[4096];
+ 	char* p = buf;
+diff --git a/src/stdlg.c b/src/stdlg.c
+index 01cbeb1..7b7aad3 100644
+--- a/src/stdlg.c
++++ b/src/stdlg.c
+@@ -26,6 +26,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+diff --git a/src/syslinux.c b/src/syslinux.c
+index 9ca1571..1d59206 100644
+--- a/src/syslinux.c
++++ b/src/syslinux.c
+@@ -21,6 +21,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdio.h>
+ #include <malloc.h>
+@@ -394,3 +395,274 @@ uint16_t GetSyslinuxVersion(char* buf, size_t buf_size, char** ext)
+ 	}
+ 	return 0;
+ }
++
++/*
++ * Extract the ldlinux.sys and ldlinux.bss from resources,
++ * then patch and install them
++ */
++BOOL InstallSyslinuxToUSB(DWORD drive_index, char drive_letter, int fs_type, int dt)
++{
++	HANDLE f_handle = INVALID_HANDLE_VALUE;
++	HANDLE d_handle = INVALID_HANDLE_VALUE;
++	DWORD bytes_read;
++	DWORD bytes_written;
++	BOOL r = FALSE;
++	FILE* fd;
++	size_t length;
++
++	static unsigned char sectbuf[SECTOR_SIZE];
++	static char* resource[2][2] = {
++		{ MAKEINTRESOURCEA(IDR_SL_LDLINUX_V4_SYS), MAKEINTRESOURCEA(IDR_SL_LDLINUX_V4_BSS) },
++		{ MAKEINTRESOURCEA(IDR_SL_LDLINUX_V6_SYS), MAKEINTRESOURCEA(IDR_SL_LDLINUX_V6_BSS) } };
++	const char* ldlinux = "ldlinux";
++	const char* syslinux = "syslinux";
++	const char* ldlinux_ext[3] = { "sys", "bss", "c32" };
++	const char* mboot_c32 = "mboot.c32";
++	char path[MAX_PATH], tmp[64];
++	struct libfat_filesystem *fs;
++	libfat_sector_t s, *secp;
++	libfat_sector_t *sectors = NULL;
++	int ldlinux_sectors;
++	uint32_t ldlinux_cluster;
++	int i, nsectors;
++	BOOL use_v5 = (dt == DT_SYSLINUX_V6) || ((dt == DT_ISO) && (SL_MAJOR(iso_report.sl_version) >= 5));
++
++	PrintInfoDebug(0, MSG_234, (dt == DT_ISO)?iso_report.sl_version_str:embedded_sl_version_str[use_v5?1:0]);
++
++	/* Initialize the ADV -- this should be smarter */
++	syslinux_reset_adv(syslinux_adv);
++
++	/* Access a copy of the ldlinux.sys & ldlinux.bss resources (downloaded or embedded) */
++	if ((syslinux_ldlinux_len[0] != 0) && (syslinux_ldlinux_len[1] != 0)) {
++		IGNORE_RETVAL(_chdirU(app_dir));
++		for (i=0; i<2; i++) {
++			syslinux_ldlinux[i] = (unsigned char*) malloc(syslinux_ldlinux_len[i]);
++			if (syslinux_ldlinux[i] == NULL)
++				goto out;
++			static_sprintf(path, "%s/%s-%s%s/%s.%s", FILES_DIR, syslinux, iso_report.sl_version_str,
++				iso_report.sl_version_ext, ldlinux, i==0?"sys":"bss");
++			fd = fopen(path, "rb");
++			if (fd == NULL) {
++				uprintf("Could not open %s\n", path);
++				goto out;
++			}
++			length = fread(syslinux_ldlinux[i], 1, (size_t)syslinux_ldlinux_len[i], fd);
++			fclose(fd);
++			if (length != (size_t)syslinux_ldlinux_len[i]) {
++				uprintf("Could not read %s\n", path);
++				goto out;
++			}
++			uprintf("Using existing './%s'\n", path);
++		}
++	} else {
++		for (i=0; i<2; i++) {
++		static_sprintf(tmp, "%s.%s", ldlinux, ldlinux_ext[i]);
++		syslinux_ldlinux[i] = GetResource(hMainInstance, resource[use_v5?1:0][i],
++			_RT_RCDATA, tmp, &syslinux_ldlinux_len[i], TRUE);
++		if (syslinux_ldlinux[i] == NULL)
++			goto out;
++		}
++	}
++
++	/* Create ldlinux.sys file */
++	static_sprintf(path, "%C:\\%s.%s", drive_letter, ldlinux, ldlinux_ext[0]);
++	f_handle = CreateFileA(path, GENERIC_READ | GENERIC_WRITE,
++			  FILE_SHARE_READ | FILE_SHARE_WRITE,
++			  NULL, CREATE_ALWAYS,
++			  FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM |
++			  FILE_ATTRIBUTE_HIDDEN, NULL);
++
++	if (f_handle == INVALID_HANDLE_VALUE) {
++		uprintf("Unable to create '%s'\n", &path[3]);
++		goto out;
++	}
++
++	/* Write ldlinux.sys file */
++	if (!WriteFile(f_handle, (const char _force *)syslinux_ldlinux[0],
++		   syslinux_ldlinux_len[0], &bytes_written, NULL) ||
++		bytes_written != syslinux_ldlinux_len[0]) {
++		uprintf("Could not write '%s'\n", &path[3]);
++		goto out;
++	}
++	if (!WriteFile(f_handle, syslinux_adv, 2 * ADV_SIZE,
++		   &bytes_written, NULL) ||
++		bytes_written != 2 * ADV_SIZE) {
++		uprintf("Could not write ADV to '%s'\n", &path[3]);
++		goto out;
++	}
++
++	uprintf("Successfully wrote '%s'\n", &path[3]);
++	if (dt != DT_ISO)
++		UpdateProgress(OP_DOS, -1.0f);
++
++	/* Now flush the media */
++	if (!FlushFileBuffers(f_handle)) {
++		uprintf("FlushFileBuffers failed\n");
++		goto out;
++	}
++
++	/* Reopen the volume (we already have a lock) */
++	d_handle = GetLogicalHandle(drive_index, TRUE, FALSE);
++	if (d_handle == INVALID_HANDLE_VALUE) {
++		uprintf("Could open volume for Syslinux installation\n");
++		goto out;
++	}
++
++	/* Map the file (is there a better way to do this?) */
++	ldlinux_sectors = (syslinux_ldlinux_len[0] + 2 * ADV_SIZE + SECTOR_SIZE - 1) >> SECTOR_SHIFT;
++	sectors = (libfat_sector_t*) calloc(ldlinux_sectors, sizeof *sectors);
++	if (sectors == NULL)
++		goto out;
++	if (fs_type == FS_NTFS) {
++		DWORD err;
++		S_NTFSSECT_VOLINFO vol_info;
++		LARGE_INTEGER vcn, lba, len;
++		S_NTFSSECT_EXTENT extent;
++
++		static_sprintf(tmp, "%C:\\", drive_letter);
++		err = NtfsSectGetVolumeInfo(tmp, &vol_info);
++		if (err != ERROR_SUCCESS) {
++			uprintf("Could not fetch NTFS volume info");
++			goto out;
++		}
++		secp = sectors;
++		nsectors = 0;
++		for (vcn.QuadPart = 0;
++			NtfsSectGetFileVcnExtent(f_handle, &vcn, &extent) == ERROR_SUCCESS;
++			vcn = extent.NextVcn) {
++				err = NtfsSectLcnToLba(&vol_info, &extent.FirstLcn, &lba);
++				if (err != ERROR_SUCCESS) {
++					uprintf("Could not translate LDLINUX.SYS LCN to disk LBA");
++					goto out;
++				}
++				lba.QuadPart -= vol_info.PartitionLba.QuadPart;
++				len.QuadPart = ((extent.NextVcn.QuadPart -
++					extent.FirstVcn.QuadPart) *
++					vol_info.SectorsPerCluster);
++				while (len.QuadPart-- && nsectors < ldlinux_sectors) {
++					*secp++ = lba.QuadPart++;
++					nsectors++;
++				}
++		}
++		goto map_done;
++	}
++	fs = libfat_open(libfat_readfile, (intptr_t) d_handle);
++	if (fs == NULL) {
++		uprintf("Syslinux FAT access error\n");
++		goto out;
++	}
++	ldlinux_cluster = libfat_searchdir(fs, 0, "LDLINUX SYS", NULL);
++	secp = sectors;
++	nsectors = 0;
++	s = libfat_clustertosector(fs, ldlinux_cluster);
++	while (s && nsectors < ldlinux_sectors) {
++		*secp++ = s;
++		nsectors++;
++		s = libfat_nextsector(fs, s);
++	}
++	libfat_close(fs);
++map_done:
++
++	/* Patch ldlinux.sys and the boot sector */
++	syslinux_patch(sectors, nsectors, 0, 0, NULL, NULL);
++
++	/* Rewrite the file */
++	if (SetFilePointer(f_handle, 0, NULL, FILE_BEGIN) != 0 ||
++		!WriteFile(f_handle, syslinux_ldlinux[0], syslinux_ldlinux_len[0],
++			   &bytes_written, NULL)
++		|| bytes_written != syslinux_ldlinux_len[0]) {
++		uprintf("Could not write '%s': %s\n", &path[3], WindowsErrorString());
++		goto out;
++	}
++
++	/* Close file */
++	safe_closehandle(f_handle);
++
++	/* Read existing FAT data into boot sector */
++	if (SetFilePointer(d_handle, 0, NULL, FILE_BEGIN) != 0 ||
++		!ReadFile(d_handle, sectbuf, SECTOR_SIZE,
++			   &bytes_read, NULL)
++		|| bytes_read != SECTOR_SIZE) {
++		uprintf("Could not read boot record: %s\n", WindowsErrorString());
++		goto out;
++	}
++
++	/* Make the syslinux boot sector */
++	syslinux_make_bootsect(sectbuf, (fs_type == FS_NTFS)?NTFS:VFAT);
++
++	/* Write boot sector back */
++	if (SetFilePointer(d_handle, 0, NULL, FILE_BEGIN) != 0 ||
++		!WriteFile(d_handle, sectbuf, SECTOR_SIZE,
++			   &bytes_written, NULL)
++		|| bytes_written != SECTOR_SIZE) {
++		uprintf("Could not write Syslinux boot record: %s\n", WindowsErrorString());
++		goto out;
++	}
++
++	uprintf("Successfully wrote Syslinux boot record\n");
++
++	if (dt == DT_SYSLINUX_V6) {
++		IGNORE_RETVAL(_chdirU(app_dir));
++		static_sprintf(path, "%s/%s-%s", FILES_DIR, syslinux, embedded_sl_version_str[1]);
++		IGNORE_RETVAL(_chdir(path));
++		static_sprintf(path, "%C:\\%s.%s", drive_letter, ldlinux, ldlinux_ext[2]);
++		fd = fopen(&path[3], "rb");
++		if (fd == NULL) {
++			uprintf("Caution: No '%s' was provided. The target will be missing a required Syslinux file!\n", &path[3]);
++		} else {
++			fclose(fd);
++			if (CopyFileA(&path[3], path, TRUE)) {
++				uprintf("Created '%s' (from '%s/%s-%s/%s')", path, FILES_DIR, syslinux, embedded_sl_version_str[1], &path[3]);
++			} else {
++				uprintf("Failed to create '%s': %s\n", path, WindowsErrorString());
++			}
++		}
++	} else if (IS_REACTOS(iso_report)) {
++		uprintf("Setting up ReactOS...\n");
++		syslinux_mboot = GetResource(hMainInstance, MAKEINTRESOURCEA(IDR_SL_MBOOT_C32),
++			_RT_RCDATA, "mboot.c32", &syslinux_mboot_len, FALSE);
++		if (syslinux_mboot == NULL) {
++			goto out;
++		}
++		/* Create mboot.c32 file */
++		static_sprintf(path, "%C:\\%s", drive_letter, mboot_c32);
++		f_handle = CreateFileA(path, GENERIC_READ | GENERIC_WRITE,
++				  FILE_SHARE_READ | FILE_SHARE_WRITE,
++				  NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
++		if (f_handle == INVALID_HANDLE_VALUE) {
++			uprintf("Unable to create '%s'\n", path);
++			goto out;
++		}
++		if (!WriteFile(f_handle, syslinux_mboot, syslinux_mboot_len,
++			   &bytes_written, NULL) ||
++			bytes_written != syslinux_mboot_len) {
++			uprintf("Could not write '%s'\n", path);
++			goto out;
++		}
++		safe_closehandle(f_handle);
++		static_sprintf(path, "%C:\\syslinux.cfg", drive_letter);
++		fd = fopen(path, "w");
++		if (fd == NULL) {
++			uprintf("Could not create ReactOS 'syslinux.cfg'\n");
++			goto out;
++		}
++		/* Write the syslinux.cfg for ReactOS */
++		fprintf(fd, "DEFAULT ReactOS\nLABEL ReactOS\n  KERNEL %s\n  APPEND %s\n",
++			mboot_c32, iso_report.reactos_path);
++		fclose(fd);
++	}
++
++	if (dt != DT_ISO)
++		UpdateProgress(OP_DOS, -1.0f);
++
++	r = TRUE;
++
++out:
++	safe_free(syslinux_ldlinux[0]);
++	safe_free(syslinux_ldlinux[1]);
++	safe_free(sectors);
++	safe_closehandle(d_handle);
++	safe_closehandle(f_handle);
++	return r;
++}
++
+diff --git a/src/usb.c b/src/usb.c
+index 10c8874..e7af9af 100644
+--- a/src/usb.c
++++ b/src/usb.c
+@@ -24,6 +24,7 @@
+ #endif
+ 
+ #include <windows.h>
++#include "disableUI.h"
+ #include <windowsx.h>
+ #include <stdio.h>
+ #include <malloc.h>
+@@ -464,3 +465,331 @@ out:
+ 	htab_destroy(&htab_devid);
+ 	return r;
+ }
++
++BOOL GetUSBDeviceList(StrArray *diskIDs, StrArray *diskTexts)
++{
++	// The first two are standard Microsoft drivers (including the Windows 8 UASP one).
++	// The rest are the vendor UASP drivers I know of so far - list may be incomplete!
++	const char* storage_name[] = { "USBSTOR", "UASPSTOR", "VUSBSTOR", "ETRONSTOR" };
++	const char* scsi_name = "SCSI";
++	const char* usb_speed_name[USB_SPEED_MAX] = { "USB", "USB 1.0", "USB 1.1", "USB 2.0", "USB 3.0" };
++	// Hash table and String Array used to match a Device ID with the parent hub's Device Interface Path
++	htab_table htab_devid = HTAB_EMPTY;
++	StrArray dev_if_path;
++	char letter_name[] = " (?:)";
++	BOOL r = FALSE, is_SCSI;
++	HDEVINFO dev_info = NULL;
++	SP_DEVINFO_DATA dev_info_data;
++	SP_DEVICE_INTERFACE_DATA devint_data;
++	PSP_DEVICE_INTERFACE_DETAIL_DATA_A devint_detail_data;
++	DEVINST parent_inst, device_inst;
++	DWORD size, i, j, k, datatype, drive_index;
++	ULONG list_size[ARRAYSIZE(storage_name)] = { 0 }, full_list_size, ulFlags;
++	HANDLE hDrive;
++	LONG maxwidth = 0;
++	int s, score, drive_number;
++	char drive_letters[27], *device_id, *devid_list = NULL, entry_msg[128];
++	char *label, *entry, buffer[MAX_PATH], str[128];
++	usb_device_props props;
++
++	StrArrayClear(&DriveID);
++	StrArrayClear(&DriveLabel);
++	StrArrayCreate(&dev_if_path, 128);
++
++	device_id = (char*)malloc(MAX_PATH);
++	if (device_id == NULL)
++		goto out;
++
++	// Build a hash table associating a CM Device ID of an USB device with the SetupDI Device Interface Path
++	// of its parent hub - this is needed to retrieve the device speed
++	dev_info = SetupDiGetClassDevsA(&_GUID_DEVINTERFACE_USB_HUB, NULL, NULL, DIGCF_PRESENT|DIGCF_DEVICEINTERFACE);
++	if (dev_info != INVALID_HANDLE_VALUE) {
++		if (htab_create(DEVID_HTAB_SIZE, &htab_devid)) {
++			dev_info_data.cbSize = sizeof(dev_info_data);
++			for (i=0; SetupDiEnumDeviceInfo(dev_info, i, &dev_info_data); i++) {
++
++				devint_detail_data = NULL;
++				devint_data.cbSize = sizeof(devint_data);
++				// Only care about the first interface (MemberIndex 0)
++				if ( (SetupDiEnumDeviceInterfaces(dev_info, &dev_info_data, &_GUID_DEVINTERFACE_USB_HUB, 0, &devint_data))
++				  && (!SetupDiGetDeviceInterfaceDetailA(dev_info, &devint_data, NULL, 0, &size, NULL)) 
++				  && (GetLastError() == ERROR_INSUFFICIENT_BUFFER) 
++				  && ((devint_detail_data = (PSP_DEVICE_INTERFACE_DETAIL_DATA_A)calloc(1, size)) != NULL) ) {
++					devint_detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_A);
++					if (SetupDiGetDeviceInterfaceDetailA(dev_info, &devint_data, devint_detail_data, size, &size, NULL)) {
++
++						// Find the Device IDs for all the children of this hub
++						if (CM_Get_Child(&device_inst, dev_info_data.DevInst, 0) == CR_SUCCESS) {
++							device_id[0] = 0;
++							s = StrArrayAdd(&dev_if_path, devint_detail_data->DevicePath);
++							if ((s>= 0) && (CM_Get_Device_IDA(device_inst, device_id, MAX_PATH, 0) == CR_SUCCESS)) {
++								if ((k = htab_hash(device_id, &htab_devid)) != 0) {
++									htab_devid.table[k].data = (void*)(uintptr_t)s;
++								}
++								while (CM_Get_Sibling(&device_inst, device_inst, 0) == CR_SUCCESS) {
++									device_id[0] = 0;
++									if (CM_Get_Device_IDA(device_inst, device_id, MAX_PATH, 0) == CR_SUCCESS) {
++										if ((k = htab_hash(device_id, &htab_devid)) != 0) {
++											htab_devid.table[k].data = (void*)(uintptr_t)s;
++										}
++									}
++								}
++							}
++						}
++
++					}
++					free(devint_detail_data);
++				}
++			}
++		}
++		SetupDiDestroyDeviceInfoList(dev_info);
++	}
++	free(device_id);
++
++	// Build a single list of Device IDs from all the storage enumerators we know of
++	full_list_size = 0;
++	ulFlags = CM_GETIDLIST_FILTER_SERVICE;
++	if (nWindowsVersion >= WINDOWS_7)
++		ulFlags |= CM_GETIDLIST_FILTER_PRESENT;
++	for (s=0; s<ARRAYSIZE(storage_name); s++) {
++		// Get a list of device IDs for all USB storage devices
++		// This will be used to find if a device is UASP
++		if (CM_Get_Device_ID_List_SizeA(&list_size[s], storage_name[s], ulFlags) != CR_SUCCESS)
++			list_size[s] = 0;
++		if (list_size[s] != 0)
++			full_list_size += list_size[s]-1;	// remove extra NUL terminator
++	}
++	devid_list = NULL;
++	if (full_list_size != 0) {
++		full_list_size += 1;	// add extra NUL terminator
++		devid_list = (char*)malloc(full_list_size);
++		if (devid_list == NULL) {
++			uprintf("Could not allocate Device ID list\n");
++			return FALSE;
++		}
++		for (s=0, i=0; s<ARRAYSIZE(storage_name); s++) {
++			if (list_size[s] > 1) {
++				if (CM_Get_Device_ID_ListA(storage_name[s], &devid_list[i], list_size[s], ulFlags) != CR_SUCCESS)
++					continue;
++				// The list_size is sometimes larger than required thus we need to find the real end
++				for (i += list_size[s]; i > 2; i--) {
++					if ((devid_list[i-2] != '\0') && (devid_list[i-1] == '\0') && (devid_list[i] == '\0'))
++						break;
++				}
++			}
++		}
++	}
++
++	// Now use SetupDi to enumerate all our storage devices
++	dev_info = SetupDiGetClassDevsA(&_GUID_DEVINTERFACE_DISK, NULL, NULL, DIGCF_PRESENT|DIGCF_DEVICEINTERFACE);
++	if (dev_info == INVALID_HANDLE_VALUE) {
++		uprintf("SetupDiGetClassDevs (Interface) failed: %s\n", WindowsErrorString());
++		goto out;
++	}
++	dev_info_data.cbSize = sizeof(dev_info_data);
++	for (i=0; SetupDiEnumDeviceInfo(dev_info, i, &dev_info_data); i++) {
++		memset(buffer, 0, sizeof(buffer));
++		if (!SetupDiGetDeviceRegistryPropertyA(dev_info, &dev_info_data, SPDRP_ENUMERATOR_NAME,
++				&datatype, (LPBYTE)buffer, sizeof(buffer), &size)) {
++			uprintf("SetupDiGetDeviceRegistryProperty (Enumerator Name) failed: %s\n", WindowsErrorString());
++			continue;
++		}
++		// UASP drives are listed under SCSI (along with regular SYSTEM drives => "DANGER, WILL ROBINSON!!!")
++		is_SCSI = (safe_stricmp(buffer, scsi_name) == 0);
++		if ((safe_stricmp(buffer, storage_name[0]) != 0) && (!is_SCSI))
++			continue;
++
++		// We can't use the friendly name to find if a drive is a VHD, as friendly name string gets translated
++		// according to your locale, so we poke the Hardware ID
++		memset(&props, 0, sizeof(props));
++		memset(buffer, 0, sizeof(buffer));
++		props.is_VHD = SetupDiGetDeviceRegistryPropertyA(dev_info, &dev_info_data, SPDRP_HARDWAREID,
++			&datatype, (LPBYTE)buffer, sizeof(buffer), &size) && IsVHD(buffer);
++
++		memset(buffer, 0, sizeof(buffer));
++		if (!SetupDiGetDeviceRegistryPropertyA(dev_info, &dev_info_data, SPDRP_FRIENDLYNAME,
++				&datatype, (LPBYTE)buffer, sizeof(buffer), &size)) {
++			uprintf("SetupDiGetDeviceRegistryProperty (Friendly Name) failed: %s\n", WindowsErrorString());
++			// We can afford a failure on this call - just replace the name with "USB Storage Device (Generic)"
++			safe_strcpy(buffer, sizeof(buffer), lmprintf(MSG_045));
++		} else if ((!props.is_VHD) && (devid_list != NULL)) {
++			// Get the properties of the device. We could avoid doing this lookup every time by keeping
++			// a lookup table, but there shouldn't be that many USB storage devices connected...
++			// NB: Each of these Device IDs have an _only_ child, from which we get the Device Instance match.
++			for (device_id = devid_list; *device_id != 0; device_id += strlen(device_id) + 1) {
++				if ( (CM_Locate_DevNodeA(&parent_inst, device_id, 0) == CR_SUCCESS)
++				  && (CM_Get_Child(&device_inst, parent_inst, 0) == CR_SUCCESS)
++				  && (device_inst == dev_info_data.DevInst) ) {
++					// If we're not dealing with the USBSTOR part of our list, then this is an UASP device
++					props.is_UASP = ((((uintptr_t)device_id)+2) >= ((uintptr_t)devid_list)+list_size[0]);
++					// Now get the properties of the device, and its Device ID, which we need to populate the properties
++					j = htab_hash(device_id, &htab_devid);
++					if (j > 0) {
++						GetUSBProperties(dev_if_path.String[(uint32_t)htab_devid.table[j].data], device_id, &props);
++					}
++
++					// If the previous calls didn't succeed in getting the VID:PID, try from the device_id
++					// (This is for the case for USB media player devices, for instance)
++					if ((props.vid == 0) && (props.pid == 0)) {
++						BOOL post_backslash = FALSE;
++						for (j=0, k=0; (j<strlen(device_id))&&(k<2); j++) {
++							// The ID is in the form USB_VENDOR_BUSID\VID_xxxx&PID_xxxx\...
++							if (device_id[j] == '\\')
++								post_backslash = TRUE;
++							if (!post_backslash)
++								continue;
++							if (device_id[j] == '_') {
++								props.pid = (uint16_t)strtoul(&device_id[j+1], NULL, 16);
++								if (k++==0)
++									props.vid = props.pid;
++							}
++						}
++					}
++
++				}
++			}
++		}
++		if (props.is_VHD) {
++			uprintf("Found VHD device '%s'\n", buffer);
++		} else {
++			if ((props.vid == 0) && (props.pid == 0)) {
++				if (is_SCSI) {
++					// If we have an SCSI drive and couldn't get a VID:PID, we are most likely
++					// dealing with a system drive => eliminate it!
++					continue;
++				}
++				safe_strcpy(str, sizeof(str), "????:????");	// Couldn't figure VID:PID
++			} else {
++				static_sprintf(str, "%04X:%04X", props.vid, props.pid);
++			}
++			if (props.speed >= USB_SPEED_MAX)
++				props.speed = 0;
++			uprintf("Found %s%s%s device '%s' (%s)\n", props.is_UASP?"UAS (":"", 
++				usb_speed_name[props.speed], props.is_UASP?")":"", buffer, str);
++			if (props.is_LowerSpeed)
++				uprintf("NOTE: This device is an USB 3.0 device operating at lower speed...");
++		}
++		devint_data.cbSize = sizeof(devint_data);
++		hDrive = INVALID_HANDLE_VALUE;
++		devint_detail_data = NULL;
++		for (j=0; ;j++) {
++			safe_closehandle(hDrive);
++			safe_free(devint_detail_data);
++
++			if (!SetupDiEnumDeviceInterfaces(dev_info, &dev_info_data, &_GUID_DEVINTERFACE_DISK, j, &devint_data)) {
++				if(GetLastError() != ERROR_NO_MORE_ITEMS) {
++					uprintf("SetupDiEnumDeviceInterfaces failed: %s\n", WindowsErrorString());
++				} else {
++					uprintf("A device was eliminated because it didn't report itself as a disk\n");
++				}
++				break;
++			}
++
++			if (!SetupDiGetDeviceInterfaceDetailA(dev_info, &devint_data, NULL, 0, &size, NULL)) {
++				if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
++					devint_detail_data = (PSP_DEVICE_INTERFACE_DETAIL_DATA_A)calloc(1, size);
++					if (devint_detail_data == NULL) {
++						uprintf("Unable to allocate data for SP_DEVICE_INTERFACE_DETAIL_DATA\n");
++						continue;
++					}
++					devint_detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_A);
++				} else {
++					uprintf("SetupDiGetDeviceInterfaceDetail (dummy) failed: %s\n", WindowsErrorString());
++					continue;
++				}
++			}
++			if (devint_detail_data == NULL) {
++				uprintf("SetupDiGetDeviceInterfaceDetail (dummy) - no data was allocated\n");
++				continue;
++			}
++			if(!SetupDiGetDeviceInterfaceDetailA(dev_info, &devint_data, devint_detail_data, size, &size, NULL)) {
++				uprintf("SetupDiGetDeviceInterfaceDetail (actual) failed: %s\n", WindowsErrorString());
++				continue;
++			}
++
++			hDrive = CreateFileA(devint_detail_data->DevicePath, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ,
++				NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
++			if(hDrive == INVALID_HANDLE_VALUE) {
++				uprintf("Could not open '%s': %s\n", devint_detail_data->DevicePath, WindowsErrorString());
++				continue;
++			}
++
++			drive_number = GetDriveNumber(hDrive, devint_detail_data->DevicePath);
++			if (drive_number < 0)
++				continue;
++
++			drive_index = drive_number + DRIVE_INDEX_MIN;
++			if (!IsMediaPresent(drive_index)) {
++				uprintf("Device eliminated because it appears to contain no media\n");
++				safe_closehandle(hDrive);
++				safe_free(devint_detail_data);
++				break;
++			}
++
++			if (GetDriveLabel(drive_index, drive_letters, &label)) {
++				if ((!enable_HDDs) && (!props.is_VHD) &&
++					((score = IsHDD(drive_index, (uint16_t)props.vid, (uint16_t)props.pid, buffer)) > 0)) {
++					uprintf("Device eliminated because it was detected as an USB Hard Drive (score %d > 0)\n", score);
++					uprintf("If this device is not an USB Hard Drive, please e-mail the author of this application\n");
++					uprintf("NOTE: You can enable the listing of USB Hard Drives in 'Advanced Options' (after clicking the white triangle)");
++					safe_closehandle(hDrive);
++					safe_free(devint_detail_data);
++					break;
++				}
++
++				// The empty string is returned for drives that don't have any volumes assigned
++				if (drive_letters[0] == 0) {
++					entry = lmprintf(MSG_046, label, drive_number,
++						SizeToHumanReadable(GetDriveSize(drive_index), FALSE, use_fake_units));
++				} else {
++					// We have multiple volumes assigned to the same device (multiple partitions)
++					// If that is the case, use "Multiple Volumes" instead of the label
++					safe_strcpy(entry_msg, sizeof(entry_msg), ((drive_letters[0] != 0) && (drive_letters[1] != 0))?
++						lmprintf(MSG_047):label);
++					for (k=0; drive_letters[k]; k++) {
++						// Append all the drive letters we detected
++						letter_name[2] = drive_letters[k];
++						if (right_to_left_mode)
++							safe_strcat(entry_msg, sizeof(entry_msg), RIGHT_TO_LEFT_MARK);
++						safe_strcat(entry_msg, sizeof(entry_msg), letter_name);
++						if (drive_letters[k] == (PathGetDriveNumberU(app_dir) + 'A')) break;
++					}
++					// Repeat as we need to break the outside loop
++					if (drive_letters[k] == (PathGetDriveNumberU(app_dir) + 'A')) {
++						uprintf("Removing %c: from the list: This is the disk from which " APPLICATION_NAME " is running!\n", app_dir[0]);
++						safe_closehandle(hDrive);
++						safe_free(devint_detail_data);
++						break;
++					}
++					safe_sprintf(&entry_msg[strlen(entry_msg)], sizeof(entry_msg) - strlen(entry_msg),
++						"%s [%s]", (right_to_left_mode)?RIGHT_TO_LEFT_MARK:"", SizeToHumanReadable(GetDriveSize(drive_index), FALSE, use_fake_units));
++					entry = entry_msg;
++				}
++
++				// Must ensure that the combo box is UNSORTED for indexes to be the same
++				StrArrayAdd(&DriveID, buffer);
++				StrArrayAdd(&DriveLabel, label);
++
++				char driveIndexStr[30];
++				sprintf(driveIndexStr, "%X", drive_index);
++				StrArrayAdd(diskIDs, driveIndexStr);
++				StrArrayAdd(diskTexts, (entry == NULL ? "[UNKNOWN]" : entry));
++
++				maxwidth = max(maxwidth, GetEntryWidth(hDeviceList, entry));
++				safe_closehandle(hDrive);
++				safe_free(devint_detail_data);
++				break;
++			}
++		}
++	}
++	SetupDiDestroyDeviceInfoList(dev_info);
++
++	i = 0;
++	r = TRUE;
++
++out:
++	safe_free(devid_list);
++	StrArrayDestroy(&dev_if_path);
++	htab_destroy(&htab_devid);
++	return r;
++}
+\ No newline at end of file
+diff --git a/src/vhd.c b/src/vhd.c
+index 2f2cb2a..60b6bea 100644
+--- a/src/vhd.c
++++ b/src/vhd.c
+@@ -30,6 +30,8 @@
+ #include "registry.h"
+ #include "bled/bled.h"
+ 
++_CRTIMP time_t __cdecl __MINGW_NOTHROW _time32 (time_t *_Time);
++
+ #if defined(_MSC_VER)
+ #define bswap_uint64 _byteswap_uint64
+ #define bswap_uint32 _byteswap_ulong

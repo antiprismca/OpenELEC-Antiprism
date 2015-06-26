@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="wlan-firmware"
-PKG_VERSION="0.0.23"
+PKG_VERSION="0.0.27"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="Free-to-use"
@@ -33,7 +33,8 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 make_target() {
-  : # nothing todo
+  # add BCM20702A0 firmware
+  wget -O firmware/brcm/BCM20702A0-0a5c-21e8.hcd https://s3.amazonaws.com/plugable/bin/fw-0a5c_21e8.hcd  
 }
 
 makeinstall_target() {

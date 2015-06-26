@@ -1,0 +1,249 @@
+# XBMC Media Center language file
+# Addon Name: I2P
+# Addon id: plugin.program.i2p
+# Addon version: 1.0.12
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "I2P"
+msgstr "I2P"
+
+msgctxt "Addon Description"
+msgid "I2P XBMC Frontend"
+msgstr "I2P XBMC/Kodi Oberfläche"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Debug Protokoll einschalten"
+
+msgctxt "#32002"
+msgid "Please access I2P plugin from AntiPrism"
+msgstr "Bitte das I2P Plugin von AntiPrism verwenden"
+
+msgctxt "#32003"
+msgid "Torrents"
+msgstr "Torrents"
+
+msgctxt "#32004"
+msgid "Address Book"
+msgstr "Adressbuch"
+
+msgctxt "#32005"
+msgid "Secure Mail"
+msgstr "Sichere E-Mail"
+
+msgctxt "#32010"
+msgid "Torrents directory does not exist:"
+msgstr "Das Verzeichnis für Torrents existiert nicht:"
+
+msgctxt "#32011"
+msgid "Select a .torrent file to add"
+msgstr "Zum Hinzufügen wählen Sie eine .torrent Datei aus"
+
+msgctxt "#32012"
+msgid "Torrent already exists"
+msgstr "Torrent existiert bereits"
+
+msgctxt "#32013"
+msgid "Would you like to replace it?"
+msgstr "Möchten Sie ihn ersetzen?"
+
+msgctxt "#32014"
+msgid "Error"
+msgstr "Fehler"
+
+msgctxt "#32015"
+msgid "Copying failed"
+msgstr "Kopieren fehlgeschlagen"
+
+msgctxt "#32016"
+msgid "Deleting .torrent file:"
+msgstr ".torrent Datei wird gelöscht:"
+
+msgctxt "#32017"
+msgid "Open torrents directory..."
+msgstr "Öffnet das Verzeichnis für Torrents"
+
+msgctxt "#32018"
+msgid "Add a new torrent..."
+msgstr "Einen neuen Torrent hinzufügen..."
+
+msgctxt "#32019"
+msgid "Active torrents:"
+msgstr "Aktive Torrents:"
+
+msgctxt "#32020"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#32021"
+msgid "Delete .torrent"
+msgstr ".torrent löschen"
+
+msgctxt "#32022"
+msgid "Deleting failed"
+msgstr "Löschversuch fehlgeschlagen"
+
+msgctxt "#32023"
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgctxt "#32024"
+msgid "Status: "
+msgstr "Status: "
+
+msgctxt "#32025"
+msgid "Downloaded: "
+msgstr "Heruntergeladen: "
+
+msgctxt "#32026"
+msgid "Uploaded: "
+msgstr "Hochgeladen: "
+
+msgctxt "#32027"
+msgid "Search for torrents..."
+msgstr "Suche nach Torrents..."
+
+msgctxt "#32028"
+msgid "Search Postmaster Tracker for:"
+msgstr "Suche nach Postmaster Tracker für:"
+
+msgctxt "#32029"
+msgid "Select category"
+msgstr "Kategorieauswahl:"
+
+msgctxt "#32030"
+msgid "Order by"
+msgstr "Sortieren nach"
+
+msgctxt "#32031"
+msgid "Show"
+msgstr "Anzeigen"
+
+msgctxt "#32032"
+msgid "Language"
+msgstr "Sprache"
+
+msgctxt "#32033"
+msgid "Select torrent to download"
+msgstr "Auswahl des Torrents zum Herunterladen"
+
+msgctxt "#32034"
+msgid "[ Previous page ]"
+msgstr "[ Vorherige Seite ]"
+
+msgctxt "#32035"
+msgid "[ Next page ]"
+msgstr "[ Nächste Seite ]"
+
+msgctxt "#32036"
+msgid "[ Done ]"
+msgstr "[ Fertig ]"
+
+msgctxt "#32037"
+msgid "Your search produced no results"
+msgstr "Ihre Suchanfrage lieferte keine Ergebnisse."
+
+msgctxt "#32038"
+msgid "Queuing torrent"
+msgstr "Torrent wird in die Warteschlange gesetzt"
+
+msgctxt "#32049"
+msgid "Select a file name to export the contacts"
+msgstr "Wählen Sie einen Dateinamen für den Export der Kontakte aus"
+
+msgctxt "#32050"
+msgid "Select a file with contacts to import"
+msgstr "Wählen Sie eine Datei mit Kontakten zum Importieren aus"
+
+msgctxt "#32051"
+msgid "Enter your key password if the file is encrypted"
+msgstr "Sofern die Datei verschlüsselt ist, geben Sie Ihr Passwort ein"
+
+msgctxt "#32052"
+msgid "Enter I2P-Bote password if enabled"
+msgstr "Sofern eingeschaltet, geben Sie das Passwort für I2P-Bote ein"
+
+msgctxt "#32053"
+msgid "Select recepients:"
+msgstr "Empfängerauswahl:"
+
+msgctxt "#32054"
+msgid "Enter your key password to sign the export"
+msgstr "Geben Sie Ihr Passwort ein, um den Export zu signieren"
+
+msgctxt "#32055"
+msgid "[ Import... ]"
+msgstr "[ Importieren... ]"
+
+msgctxt "#32056"
+msgid "[ Export selected... ]"
+msgstr "[ Ausgewählte exportieren... ]"
+
+msgctxt "#32057"
+msgid "Address Book: (click to toggle selection)"
+msgstr "Adressbuch: (klicken, um Auswahl umzuschalten)"
+
+msgctxt "#32058"
+msgid "Export succeeded"
+msgstr "Export erfolgreich"
+
+msgctxt "#32059"
+msgid "[ OK ]"
+msgstr "[ OK ]"
+
+msgctxt "#32060"
+msgid "[ Cancel ]"
+msgstr "[ Abbruch ]"
+
+msgctxt "#32061"
+msgid "Choose saving method"
+msgstr "Auswahl der Speichermethode"
+
+msgctxt "#32062"
+msgid "Save to a file"
+msgstr "Speichern als eine Datei"
+
+msgctxt "#32063"
+msgid "Save to dead drop"
+msgstr "Speichern als Dead Drop"
+
+msgctxt "#32064"
+msgid "Dead drop URL (empty == default)"
+msgstr "Dead Drop URL (leer == Standard)"
+
+msgctxt "#32065"
+msgid "Choose import method"
+msgstr "Auswahl der Importmethode"
+
+msgctxt "#32066"
+msgid "Import from a file"
+msgstr "Aus einer Datei importieren"
+
+msgctxt "#32067"
+msgid "Import from dead drop"
+msgstr "Aus Dead Drop importieren"
+
+msgctxt "#32068"
+msgid "Enter drop ID:"
+msgstr "Eingabe der Drop ID:"
+
+msgctxt "#32069"
+msgid "Searching torrents..."
+msgstr "Suche nach Torrents..."
+
+msgctxt "#32070"
+msgid "Retrieving contacts..."
+msgstr "Kontakte werden Empfangen..."
+
+msgctxt "#32071"
+msgid "Please wait"
+msgstr "Bitte warten"
+
+msgctxt "#32072"
+msgid "[ Start all stopped torrents ]"
+msgstr "[ Starten aller angehaltenen Torrents ]"
+
+msgctxt "#32073"
+msgid "[ Stop all started torrents ]"
+msgstr "[ Anhalten aller gestarteten Torrents ]"

@@ -9,3 +9,12 @@
          // prevent correlation of eepsite timestamps with router first-seen time
          touchRecursive(new File(dirf, "eepsite/docroot"), EEPSITE_TIMESTAMP);
  
+@@ -214,7 +214,7 @@
+             String migrated[] = MIGRATE_BASE.split(",");
+             for (String file: files) {
+                 for (int i = 0; i < migrated.length; i++) {
+-                    if (file.equals(migrated[i]))
++                    if (file.equals(migrated[i]) && !"eepsite".equals(migrated[i]))
+                         return true;
+                 }
+             }

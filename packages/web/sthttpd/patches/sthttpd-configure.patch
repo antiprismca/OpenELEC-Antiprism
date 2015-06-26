@@ -1,0 +1,20 @@
+--- sthttpd/configure	2015-04-13 01:04:36.543575417 -0400
++++ sthttpd-patched/configure	2015-04-13 01:05:02.171576066 -0400
+@@ -5255,8 +5255,6 @@ else
+ esac
+ 
+ 
+-$as_echo "#define malloc rpl_malloc" >>confdefs.h
+-
+ fi
+ 
+ 
+@@ -5306,8 +5304,6 @@ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ $ac_includes_default
+-/* malloc might have been renamed as rpl_malloc. */
+-#undef malloc
+ 
+ /* Thanks to Mike Haertel and Jim Avera for this test.
+    Here is a matrix of mmap possibilities:

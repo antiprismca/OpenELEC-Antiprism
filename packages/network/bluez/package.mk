@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="bluez"
-PKG_VERSION="5.22"
+PKG_VERSION="5.27"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -44,7 +44,8 @@ else
   BLUEZ_CONFIG="$BLUEZ_CONFIG --disable-monitor --disable-test"
 fi
 
-PKG_CONFIGURE_OPTS_TARGET="--disable-dependency-tracking \
+PKG_CONFIGURE_OPTS_TARGET="LIBS=-ltinfo \
+                           --disable-dependency-tracking \
                            --disable-silent-rules \
                            --disable-library \
                            --enable-udev \

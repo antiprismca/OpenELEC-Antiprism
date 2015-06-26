@@ -1,0 +1,11 @@
+--- i2p.Seedless-0.1.7-0.1.12/neodatis/nbproject/build-impl.xml	2015-05-27 21:47:05.370942758 -0400
++++ i2p.Seedless-0.1.7-0.1.12.patch/neodatis/nbproject/build-impl.xml	2015-05-27 21:48:06.770941592 -0400
+@@ -20,7 +20,7 @@
+ 
+         -->
+ <project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir=".." default="default" name="neodatis-impl">
+-    <target depends="test,jar,javadoc" description="Build and test whole project." name="default"/>
++    <target depends="jar" description="Build and test whole project." name="default"/>
+     <!-- 
+                 ======================
+                 INITIALIZATION SECTION 

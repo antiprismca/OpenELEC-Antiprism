@@ -15,7 +15,7 @@ VIAddVersionKey InternalName "OpenELEC-Antiprism USB Stick Creator"
 BrandingText " "
 
 Var "DRIVE_LETTER"
-Var "STORAGE_SIZE_IN_KB"
+Var "DRIVE_NAME"
 
 !include "MUI.nsh"
 !include LogicLib.nsh
@@ -31,6 +31,11 @@ Var "STORAGE_SIZE_IN_KB"
 !define MAXLEN_VOLUME_GUID 51
 !define IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS 0x00560000
 !define EXTENTS_BUFFER_SIZE 512
+
+!define DRIVELIST_PREFIX "=DRIVELIST="
+!define MOUNTED_PREFIX "=MOUNTED="
+!define LOG_FILE "$EXEDIR\installer-log.txt"
+!define ANTIPRISM_FMT "3rdparty\format\antiprism-fmt.exe"
 
 !define MUI_ICON "openelec.ico"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp"
@@ -55,7 +60,7 @@ RequestExecutionLevel admin
 
 Page Custom CustomCreate CustomLeave
 !define MUI_PAGE_HEADER_TEXT "Preparing USB Stick"
-!define MUI_PAGE_HEADER_SUBTEXT "Please wait 45 seconds ..."
+!define MUI_PAGE_HEADER_SUBTEXT "Please wait..."
 !insertmacro MUI_PAGE_INSTFILES
 
 # http://nsis.sourceforge.net/Simple_write_text_to_file
@@ -87,38 +92,54 @@ FunctionEnd
 !define WriteToFile `!insertmacro WriteToFile false`
 !define WriteLineToFile `!insertmacro WriteToFile true`
 
+!macro RunProg CMDLINE
+!define ID ${__LINE__}
+  ${WriteToFile} '${LOG_FILE}' '> ${CMDLINE}'
+  nsExec::ExecToStack `"$R0" /c ${CMDLINE}`
+  pop $0
+  pop $R2
+  StrCmp $0 "0" exit_${ID}
+  ${WriteToFile} '${LOG_FILE}' '$R2'
+  DetailPrint "ERROR CODE: $0, MSG: $R2"
+  goto abort
+exit_${ID}:
+  ${WriteToFile} '${LOG_FILE}' '$R2'
+  nop
+!undef ID
+!macroend
+
 Section "oeusbstart"
-  ExpandEnvStrings $0 %COMSPEC%
+  ExpandEnvStrings $R0 %COMSPEC%
 
-  DetailPrint "- Formatting USB Device ($DRIVE_LETTER) ..."
-  nsExec::Exec `"$0" /c format $DRIVE_LETTER /V:LIVESYSTEM /Q /FS:FAT32 /X`
-
-  DetailPrint "- Making Device Bootable ..."
-  nsExec::Exec `"3rdparty\syslinux\win32\syslinux.exe" -f -m -a $DRIVE_LETTER`
-
+  DetailPrint "- Formatting USB Device $DRIVE_NAME ..."
+  nsExec::ExecToStack '"$R0" /c ${ANTIPRISM_FMT} FORMAT "$DRIVE_NAME" LIVESYSTEM 614400 FS_FAT32 DT_SYSLINUX_V6 2>>${LOG_FILE}'
+  pop $0
+  pop $1
+  StrCmp $0 "0" 0 abort
+  StrLen $0 ${MOUNTED_PREFIX}
+  StrCpy $2 $1 $0
+  
+  StrCmpS $2 ${MOUNTED_PREFIX} 0 abort
+  StrCpy '$DRIVE_LETTER' $1 "" $0
+  StrCpy '$INSTDIR' '$DRIVE_LETTER'
+  DetailPrint "- USB device is mounted on $DRIVE_LETTER"
+  
   DetailPrint "- Copying System Files ..."
-  nsExec::Exec `"$0" /c copy target\* $DRIVE_LETTER`
+  !insertmacro RunProg "copy /y target\KERNEL $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y target\KERNEL.md5 $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y target\SYSTEM $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y target\SYSTEM.md5 $DRIVE_LETTER"
 
   DetailPrint "- Copying Configuration Files ..."
-  nsExec::Exec `"$0" /c copy Autorun.inf $DRIVE_LETTER`
-  nsExec::Exec `"$0" /c copy openelec.ico $DRIVE_LETTER`
-  nsExec::Exec `"$0" /c copy CHANGELOG $DRIVE_LETTER`
-  nsExec::Exec `"$0" /c copy INSTALL $DRIVE_LETTER`
-  nsExec::Exec `"$0" /c copy README.md $DRIVE_LETTER`
-  nsExec::Exec `"$0" /c copy RELEASE $DRIVE_LETTER`
+#  !insertmacro RunProg "copy Autorun.inf $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y openelec.ico $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y CHANGELOG $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y INSTALL $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y README.md $DRIVE_LETTER"
+  !insertmacro RunProg "copy /y RELEASE $DRIVE_LETTER"
 
   DetailPrint "- Copying menu files..."
-  nsExec::Exec `"$0" /c copy 3rdparty\syslinux\com32\* $DRIVE_LETTER`
-  
-  StrCpy $0 '$DRIVE_LETTER\'
-  Call FreeDiskSpace
-  IntOp $1 $1 - 20480
-  IntCmp $1 4194303 fileSizeOk fileSizeOk fileSizeTooBig
-fileSizeTooBig:
-  StrCpy "$1" 4194303
-fileSizeOk:
-  StrCpy '$STORAGE_SIZE_IN_KB' $1
-  DetailPrint "- STORAGE size is $STORAGE_SIZE_IN_KB kilobytes"
+  !insertmacro RunProg "copy /y 3rdparty\syslinux\com32\*.* $DRIVE_LETTER"
   
   DetailPrint "- Creating Bootloader configuration ..."
   Delete '$DRIVE_LETTER\syslinux.cfg'
@@ -129,7 +150,7 @@ fileSizeOk:
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL livestorage'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Live Storage (use storage on live stick)'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  KERNEL /KERNEL'
-  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM disk=FILE=/flash/STORAGE STORAGE_SIZE_IN_KB=$STORAGE_SIZE_IN_KB max_loop=10 xbmc quiet tty'
+  ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM disk=FLASH xbmc quiet tty'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' ' '
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' 'LABEL storage'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Storage (use your local storage - may be dangerous)'
@@ -140,6 +161,14 @@ fileSizeOk:
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  MENU LABEL ^Install Antiprism on your local storage'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  KERNEL /KERNEL'
   ${WriteToFile} '$DRIVE_LETTER\syslinux.cfg' '  APPEND boot=LABEL=LIVESYSTEM installer quiet tty'
+  goto ok
+  
+abort:
+  DetailPrint "ERROR. See ${LOG_FILE}"
+  Abort
+  
+ok:
+  nop
 SectionEnd
 
 Function CustomCreate
@@ -154,10 +183,20 @@ Function CustomCreate
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 1' 'Text' \
     'Select drive for Installation (*** ALL DATA WILL BE REMOVED ***):'
 
-  StrCpy $R2 0
-  StrCpy $R0 ''
-  ${GetDrives} "FDD" GetDrivesCallBack
-
+  Delete "${LOG_FILE}"
+  ExpandEnvStrings $R0 %COMSPEC%
+  nsExec::ExecToStack '"$R0" /c "${ANTIPRISM_FMT}" LIST 2>>${LOG_FILE}'
+  pop $0
+  pop $R0
+  
+  StrCmp $0 "0" 0 nodrives
+  
+  StrLen $0 ${DRIVELIST_PREFIX}
+  StrCpy $1 $R0 $0
+  
+  StrCmpS $1 ${DRIVELIST_PREFIX} 0 nodrives
+  StrCpy $R0 $R0 "" $0
+  
   GetDlgItem $1 $HWNDPARENT 1
   ${If} $R0 == ""
     EnableWindow $1 0
@@ -165,13 +204,14 @@ Function CustomCreate
     EnableWindow $1 1
   ${EndIf}
 
+nodrives:
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'Type' 'DropList'
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'Left' '30'
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'Top' '20'
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'Right' '-31'
   WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'Bottom' '30'
-  WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'State' '$R1'
-  WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'ListItems' '$R0'
+  WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'State' '*** SELECT DRIVE ***'
+  WriteIniStr '$PLUGINSDIR\custom.ini' 'Field 2' 'ListItems' '*** SELECT DRIVE ***|$R0'
 
   push $0
   InstallOptions::Dialog '$PLUGINSDIR\custom.ini'
@@ -181,18 +221,8 @@ FunctionEnd
 
 Function CustomLeave
   ReadIniStr $0 '$PLUGINSDIR\custom.ini' 'Field 2' 'State'
-  StrCpy '$INSTDIR' '$0'
-  StrCpy '$DRIVE_LETTER' '$INSTDIR'
-FunctionEnd
-
-Function GetDrivesCallBack
-  IntCmp $R2 '0' def next next
-  def:
-    StrCpy $R1 '$9'
-  next:
-    IntOp $R2 $R2 + 1
-    StrCpy $R0 '$R0$9|'
-  Push $0
+  StrCpy '$DRIVE_NAME' '$0'
+  ReadIniStr $0 '$PLUGINSDIR\custom.ini' 'Field 3' 'State'
 FunctionEnd
 
 !define MUI_FINISHPAGE_TITLE "OpenELEC-Antiprism USB Stick Successfully Created"

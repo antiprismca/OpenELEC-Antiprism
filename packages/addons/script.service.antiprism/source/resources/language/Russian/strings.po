@@ -1,0 +1,550 @@
+# XBMC Media Center language file
+# Addon Name: AntiPrism
+# Addon id: script.service.antiprism
+# Addon version: 1.2.24
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "AntiPrism"
+msgstr "AntiPrism"
+
+msgctxt "Addon Description"
+msgid "\nAntiPrism is about web privacy for everyone\n    "
+msgstr "\nAntiPrism, веб-приватность для всех!\n    "
+
+msgctxt "#32001"
+msgid "Autostart"
+msgstr "Автозапуск"
+
+msgctxt "#32002"
+msgid "Profile container"
+msgstr "Контейнер профиля"
+
+msgctxt "#32003"
+msgid "Mount point"
+msgstr "Точка монтирования"
+
+msgctxt "#32004"
+msgid "Password-protected screensaver"
+msgstr "Хранитель экрана с паролем"
+
+msgctxt "#32005"
+msgid "Enable debug log"
+msgstr "Отладочный лог"
+
+msgctxt "#32010"
+msgid "Welcome to AntiPrism!"
+msgstr "  Добро пожаловать!"
+
+msgctxt "#32011"
+msgid "We need to create an encrypted container for your new AntiPrism profile.\nPlease click OK and answer some questions."
+msgstr "Для нового профиля АнтиПризмы требуется создать зашифрованный контейнер.\nПожалуйста, нажмите OK и ответьте на несколько вопросов."
+
+msgctxt "#32012"
+msgid "Enter your AntiPrism password:"
+msgstr "Введите пароль Вашей АнтиПризмы:"
+
+msgctxt "#32013"
+msgid "Main Menu:"
+msgstr "Главное Меню:"
+
+msgctxt "#32014"
+msgid "Enter password:"
+msgstr "Введите пароль:"
+
+msgctxt "#32015"
+msgid "Error:"
+msgstr "Ошибка:"
+
+msgctxt "#32016"
+msgid "Enter a valid size in Gigabytes!"
+msgstr "Введите разумное количество гигабайтов!"
+
+msgctxt "#32017"                   
+msgid "Passwords do not match!"
+msgstr "Пароли не совпадают!"
+
+msgctxt "#32018"
+msgid "Failed to create the container!"
+msgstr "Ошибка при создании контейнера!"
+                                                          
+msgctxt "#32019"
+msgid "Failed to initialize AntiPrism!"
+msgstr "Не удалось инициализировать АнтиПризму!"
+
+msgctxt "#32023"
+msgid "We need to create an encrypted container for your AntiPrism profile.\nPlease specify the required information:"
+msgstr "Для нового профиля АнтиПризмы требуется создать зашифрованный контейнер.\nПожалуйста, предоставьте информацию:"
+
+msgctxt "#32024"
+msgid "The encrypted container has been created.\nClick OK to activate AntiPrism! Or, you can also"
+msgstr "Зашифрованный контейнер создан.\nНажмите OK, чтобы активизировать АнтиПризму! Или, можете"
+
+msgctxt "#32025"
+msgid "Result:"
+msgstr "Результат:"
+
+msgctxt "#32026"
+msgid "Enter command:"
+msgstr "Введите команду:"
+
+msgctxt "#32027"
+msgid "Creating container..."
+msgstr "Контейнер создаётся..."
+
+msgctxt "#32028"
+msgid "Problems starting Tor"
+msgstr "Проблема с запуском Tor"
+
+msgctxt "#32029"
+msgid "Problems starting I2P"
+msgstr "Проблема с запуском I2P"
+
+msgctxt "#32030"
+msgid "Stopping AntiPrism..."
+msgstr "Деактивация..."
+
+msgctxt "#32031"
+msgid "    AntiPrism is Active"
+msgstr "  АнтиПризма активна"
+
+msgctxt "#32032"
+msgid "Starting AntiPrism..."
+msgstr "АнтиПризма стартует..."
+
+msgctxt "#32033"
+msgid "Changing password..."
+msgstr "Пароль меняется..."
+
+msgctxt "#32034"
+msgid "This can take several minutes...please wait..."
+msgstr "Это может занять несколько минут...подождите..."
+
+msgctxt "#32035"
+msgid "Checking filesystem..."
+msgstr "Проверка контейнера..."
+
+msgctxt "#32036"                                                    
+msgid "Backing up filesystem..."                                                                
+msgstr "Создание резервной копии..."
+
+msgctxt "#32037"                                       
+msgid "Problems with backup"                       
+msgstr "Проблемы с созданием резервной копии"
+
+msgctxt "#32098"
+msgid "Help"
+msgstr "СОС!"
+
+msgctxt "#32099"
+msgid "Cmd"
+msgstr "Шелл"
+
+msgctxt "#32100"
+msgid "OK"
+msgstr "ОКей"
+
+msgctxt "#32101"
+msgid "Cancel"
+msgstr "Отмена"
+
+msgctxt "#32102"
+msgid "Deactivate AntiPrism"
+msgstr "Деактивировать АнтиПризму"
+
+msgctxt "#32103"
+msgid "                                          Are you sure?"
+msgstr "                                          А Вы уверены?"
+
+msgctxt "#32104"
+msgid "Mount folder is not empty!"
+msgstr "Точка монтирования - непустой директорий!"
+
+msgctxt "#32105"
+msgid "Delete all the files?"
+msgstr "Удалить все файлы?"
+
+msgctxt "#32106"
+msgid "Container appears damaged!"
+msgstr "Контейнер повреждён!"
+
+msgctxt "#32107"
+msgid "\nRe-create the container loosing the data?\n(You can try to scan it for errors first)"
+msgstr "\nПере-создать контейнер, потеряв данные?\n(Но Вы можете попробовать починить его)"
+
+msgctxt "#32108"
+msgid "Password is too short. Are you sure you want to use it?"
+msgstr "Слишком короткий пароль. Вы уверены, что хотите именно такой?"
+
+msgctxt "#32109"
+msgid "Not enough free disk space."
+msgstr "Недостаточно свободного места на диске."
+
+msgctxt "#32110"
+msgid "Try to free up at least 50Mb"
+msgstr "Попробуйте освободить хотя бы 50Mb"
+
+msgctxt "#32111"
+msgid "Container is too small."
+msgstr "Слишком маленький контейнер."
+
+msgctxt "#32112"
+msgid "Need at least 50Mb"
+msgstr "Нужно хотя бы 50Mb"
+
+msgctxt "#32113"
+msgid "Passwords are not matching"
+msgstr "Пароли не совпадают"
+
+msgctxt "#32114"
+msgid "Please try again."
+msgstr "Попробуйте ещё раз."
+
+msgctxt "#32115"
+msgid "Preparing container"
+msgstr "Подготовка контейнера"
+
+msgctxt "#32116"
+msgid "Container size: "
+msgstr "Размер контейнера: "
+
+msgctxt "#32117"
+msgid "Click OK to continue"
+msgstr "Для продолжения нажмите OK"
+
+msgctxt "#32118"
+msgid "Initializing container..."
+msgstr "Инициализация контейнера..."
+
+msgctxt "#32119"
+msgid "Some errors occured during the startup of AntiPrism."
+msgstr "При старте АнтиПризмы возникли некоторые проблемы."
+
+msgctxt "#32120"
+msgid "Activate AntiPrism with either an existing or a new password"
+msgstr "Активизируйте АнтиПризму, введя или изменив пароль"
+
+msgctxt "#32121"
+msgid "Changing password..."
+msgstr "Изменение пароля..."
+
+msgctxt "#32122"
+msgid "Password has been changed.\nClick OK to activate AntiPrism!"
+msgstr "Пароль изменён.\nНажмите OK, чтобы активизировать АнтиПризму!"
+
+msgctxt "#32123"
+msgid "Container size in % of available disk space (1-100):"
+msgstr "Размер контейнера в % доступного пространства на диске (1-100):"
+
+msgctxt "#32124"
+msgid "New password (at least 20 characters):"
+msgstr "Новый пароль (хотя бы 20 символов):"
+
+msgctxt "#32125"
+msgid "Retype password:"
+msgstr "Повторите пароль:"
+
+msgctxt "#32126"
+msgid "Password is too short."
+msgstr "Пароль слишком короткий."
+
+msgctxt "#32150"
+msgid "Access Control"
+msgstr "Контроль доступа"
+
+msgctxt "#32151"
+msgid "Enable Firewall"
+msgstr "Включить фаяволл"
+
+msgctxt "#32152"
+msgid "Enable I2P"
+msgstr "Включить I2P"
+
+msgctxt "#32153"
+msgid "Enable Tor"
+msgstr "Включить Tor"
+
+msgctxt "#32154"
+msgid "Enable Web Access"
+msgstr "Разрешить веб-доступ"
+
+msgctxt "#32155"
+msgid "Enable SSH"
+msgstr "Включить SSH"
+
+msgctxt "#32156"
+msgid "Allow access from any IP"
+msgstr "Разрешить доступ с любого IP адреса"
+
+msgctxt "#32157"
+msgid "Trusted IP"
+msgstr "Разрешённый IP адрес"
+
+msgctxt "#32158"
+msgid "    Run as a Tor relay node"
+msgstr "    Запустить Tor relay node"
+
+msgctxt "#32159"
+msgid "Enable Privoxy (requires Tor)"
+msgstr "Включить Privoxy (требуется Tor)"
+
+msgctxt "#32160"
+msgid "    Entry nodes"
+msgstr "    Входные ноды"
+
+msgctxt "#32161"
+msgid "    Exit nodes"
+msgstr "    Выходные ноды"
+
+msgctxt "#32162"
+msgid "    Exclude nodes"
+msgstr "    Запрещённые ноды"
+
+msgctxt "#32163"
+msgid "    Exclude exit nodes"
+msgstr "    Запрещённые выходные ноды"
+
+msgctxt "#32165"
+msgid "Scan container for errors when activating"
+msgstr "Проверять и чинить контейнер при активизации"
+
+msgctxt "#32166"
+msgid "Choose a backup file to restore from"
+msgstr "Выберите файл для восстановления профиля"
+
+msgctxt "#32167"
+msgid "Restoring from backup..."
+msgstr "Идёт восстановление..."
+
+msgctxt "#32168"
+msgid "Container is ready"
+msgstr "Контейнер готов"
+
+msgctxt "#32169"
+msgid "Check file system during activation"
+msgstr "Проверять файловую систему при активизации"
+
+msgctxt "#32170"
+msgid "Backup file system during activation"
+msgstr "Создавать резервную копию профиля при активизации"
+
+msgctxt "#32171"
+msgid "File system type"
+msgstr "Тип файловой системы"
+
+msgctxt "#32172"
+msgid "Backup path"
+msgstr "Путь к резервной копии"
+
+msgctxt "#32173"
+msgid "Use TrueCrypt"
+msgstr "Использовать TrueCrypt"
+
+msgctxt "#32174"
+msgid "Config"
+msgstr "Конфиг"
+
+msgctxt "#32175"
+msgid "                        To deactivate AntiPrism, click Cancel."
+msgstr " Используйте кнопку 'Отмена' для деактивации АнтиПризмы ."
+
+msgctxt "#32176"
+msgid "    SOCKS port"
+msgstr "    Порт SOCKS"
+
+msgctxt "#32177"
+msgid "        Advertized port"
+msgstr "        Зарегистрированный порт сервиса"
+
+msgctxt "#32178"
+msgid "        Listen port"
+msgstr "        Порт для принятия соединений"
+
+msgctxt "#32179"
+msgid "        Enable obfuscation"
+msgstr "        Включить Obfsproxy"
+
+msgctxt "#32180"
+msgid "            Enable obfs2"
+msgstr "            Включить obfs2"
+
+msgctxt "#32181"
+msgid "                obfs2 port"
+msgstr "                Порт obfs2"
+
+msgctxt "#32182"
+msgid "            Enable obfs3"
+msgstr "            Включить obfs3"
+
+msgctxt "#32183"
+msgid "                obfs3 port"
+msgstr "                Порт obfs3"
+
+msgctxt "#32184"
+msgid "SSH public key finger print"
+msgstr "Фингерпринт публичного ключа SSH"
+
+msgctxt "#32185"
+msgid "Configuration changed"
+msgstr "Конфигурация изменилась"
+
+msgctxt "#32186"
+msgid "AntiPrism must be re-activated to apply these configuration changes"
+msgstr "Для всупления изменений в силу, необходимо ре-активировать АнтиПризму"
+
+msgctxt "#32187"
+msgid "        Run as a bridge relay"
+msgstr "        Активизировать мост-ретранслятор Тор"
+
+msgctxt "#32188"
+msgid "    Use bridges"
+msgstr "    Использовать мосты"
+
+msgctxt "#32189"
+msgid "      Bridges (comma-separated)"
+msgstr "      Список мостов (через запятую)"
+
+msgctxt "#32190"
+msgid "  Bootstrap I2P via Tor (requires Privoxy)"
+msgstr "  Запускать I2P через Tor (требует Privoxy)"
+
+msgctxt "#32191"
+msgid "No anonymizers enabled"
+msgstr "Нет активных анонимизаторов"
+
+msgctxt "#32192"
+msgid "Please enable Tor, Privoxy or I2P"
+msgstr "Активизируйте Tor, Privoxy или I2P"
+
+msgctxt "#32193"
+msgid "Run X terminal for command prompt (requires keyboard)"
+msgstr "Запускать X-терминал для командного интерфейса (нужна клавиатура)"
+
+msgctxt "#32194"
+msgid "\n        Your media center is anonymized with proxy settings."
+msgstr "\n      Ваш медиацентр анонимизирован установками прокси."
+
+msgctxt "#32195"
+msgid "\n     Your media center IS NOT anonymized."
+msgstr "\n   Ваш медиацентр НЕ анонимизирован."
+
+msgctxt "#32196"
+msgid "Enable OpenVPN server"
+msgstr "Включить сервер OpenVPN"
+
+msgctxt "#32197"
+msgid "Privoxy error, please check the log"
+msgstr "Ошибка Privoxy, проверьте лог"
+
+msgctxt "#32198"
+msgid "OpenVPN error, please check the log"
+msgstr "Ошибка OpenVPN, проверьте лог"
+
+msgctxt "#32200"
+msgid "          Enter Password"
+msgstr "          Введите пароль"
+
+msgctxt "#32201"
+msgid "          Change Password"
+msgstr "          Поменяйте пароль"
+
+msgctxt "#32202"
+msgid "        Restore from backup"
+msgstr "        Восстановить данные"
+
+msgctxt "#32203"
+msgid "          Anonymous Web"
+msgstr "          Анонимный Веб"
+
+msgctxt "#32204"
+msgid "        Anonymous Torrents"
+msgstr "      Анонимные Торренты"
+
+msgctxt "#32205"
+msgid "          Trusted Keys"
+msgstr "       Достоверные ключи"
+
+msgctxt "#32206"
+msgid "        Trusted Contacts"
+msgstr "    Достоверные контакты"
+
+msgctxt "#32207"
+msgid "Choose a password for SSH access (empty = disabled)"
+msgstr "Задайте пароль для SSH доступа (пустой = выкл.)"
+
+msgctxt "#32208"
+msgid "SSH and AntiPrism passwords should not be the same!"
+msgstr "Пароль SSH должен отличаться от пароля АнтиПризмы!"
+
+msgctxt "#32209"
+msgid "            Enable Obfs4proxy"
+msgstr "            Включить Obfs4proxy"
+
+msgctxt "#32210"
+msgid "            Enable obfs4"
+msgstr "            Включить obfs4"
+ 
+msgctxt "#32211"
+msgid "                obfs4 port"
+msgstr "                Порт obfs4"
+ 
+msgctxt "#32212"
+msgid "      Use Meek"
+msgstr "      Использовать Meek"
+ 
+msgctxt "#32213"
+msgid "      Use Obfsproxy"
+msgstr "      Использовать Obfsproxy"
+ 
+msgctxt "#32214"
+msgid "      Use Obfs4proxy"
+msgstr "      Использовать Obfs4proxy"
+ 
+msgctxt "#32215"
+msgid "Enable hidden website"
+msgstr "Включить скрытый вебсайт"
+
+msgctxt "#32216"
+msgid "    Enable onion router transparent proxy"
+msgstr "    Включить луковый маршрутизатор"
+
+msgctxt "#32217"
+msgid "      Route from the interface"
+msgstr "      Маршрутизировать с интерфейса"
+
+msgctxt "#32220"
+msgid "    Enable Bitcoin support"
+msgstr "    Enable Bitcoin support"
+
+msgctxt "#32221"
+msgid "Problems starting Bitcoind"
+msgstr "Problems starting Bitcoind"
+
+msgctxt "#32222"
+msgid "You need at least 64Gb free disk space to run Bitcoin"
+msgstr "You need at least 64Gb free disk space to run Bitcoin"
+
+msgctxt "#32223"
+msgid "  Use Jetty"
+msgstr "  Использовать Jetty"
+
+msgctxt "#32224"
+msgid "  Use Hiawatha"
+msgstr "  Использовать Hiawatha"
+
+msgctxt "#32225"
+msgid "Problems launching Hiawatha"
+msgstr "Ошибка Hiawatha, проверьте лог"
+
+msgctxt "#32226"
+msgid "\n         Your media center is anonymized with onion router."
+msgstr "\nВаш медиацентр анонимизирован луковым маршрутизатором."
+
+msgctxt "#32227"
+msgid "This feature is not available in this build"
+msgstr "Этого в данной версии пока что нет"
+
+msgctxt "#32228"
+msgid "Keep anonymizers data in RAM (new identity with every startup)"
+msgstr "Держать данные анонимайзеров в ОЗУ (новая идентичность при каждой загрузке)"
+

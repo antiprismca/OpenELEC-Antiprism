@@ -17,7 +17,8 @@
 ################################################################################
 
 PKG_NAME="connman"
-PKG_VERSION="1.25"
+# DO NOT UPGRADE!!
+PKG_VERSION="1.23"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -47,6 +48,7 @@ else
 fi
 
 PKG_CONFIGURE_OPTS_TARGET="WPASUPPLICANT=/usr/bin/wpa_supplicant \
+                           LIBS=-ltinfo \
                            --disable-gtk-doc \
                            --disable-debug \
                            --disable-hh2serial-gps \
@@ -75,6 +77,8 @@ PKG_CONFIGURE_OPTS_TARGET="WPASUPPLICANT=/usr/bin/wpa_supplicant \
                            --disable-tools \
                            --enable-client \
                            --enable-datafiles \
+                           --with-dbusconfdir=/etc \
+                           --with-systemdunitdir=/usr/lib/systemd/system \
                            --disable-silent-rules"
 
 
@@ -102,9 +106,9 @@ post_makeinstall_target() {
         -e "s|^# FallbackNameservers.*|FallbackNameservers = 8.8.8.8,8.8.4.4|g" \
         -e "s|^# FallbackTimeservers.*|FallbackTimeservers = 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org,3.pool.ntp.org|g" \
         -e "s|^# PreferredTechnologies.*|PreferredTechnologies = cellular,wifi,ethernet|g" \
-        -e "s|^# TetheringTechnologies.*|TetheringTechnologies = wifi|g" \
+        -e "s|^# TetheringTechnologies.*|TetheringTechnologies = wifi,ethernet|g" \
         -e "s|^# AllowHostnameUpdates.*|AllowHostnameUpdates = false|g" \
-        -e "s|^# PersistentTetheringMode.*|PersistentTetheringMode = true|g"
+        -e "s|^# PersistentTetheringMode.*|PersistentTetheringMode = false|g"
 
   mkdir -p $INSTALL/usr/config
     cp $PKG_DIR/config/hosts.conf $INSTALL/usr/config

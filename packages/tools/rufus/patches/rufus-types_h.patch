@@ -1,0 +1,12 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/libcdio/cdio/types.h	2015-03-30 22:30:10.614344710 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/libcdio/cdio/types.h	2015-03-30 22:30:37.794344195 -0400
+@@ -152,8 +152,7 @@
+ #endif  /* !__GNUC__ */
+   
+ #if defined(__MINGW32__)
+-#  define PRAGMA_BEGIN_PACKED _Pragma("pack(push)") \
+-                              _Pragma("pack(1)")
++#  define PRAGMA_BEGIN_PACKED _Pragma("pack(push,1)")
+ #  define PRAGMA_END_PACKED   _Pragma("pack(pop)")
+ #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+      /* should work with most EDG-frontend based compilers */

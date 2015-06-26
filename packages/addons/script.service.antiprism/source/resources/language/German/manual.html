@@ -1,0 +1,851 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>&Uuml;bersicht</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice 4.1.1  (Win32)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20150611;11262698">
+	<STYLE TYPE="text/css">
+	<!--
+		P.msonormal { margin-bottom: 0cm }
+		A:visited { color: #800080 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="de-DE" VLINK="#800080" DIR="LTR"><A NAME="TOP"></A>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0 STYLE="page-break-before: always">
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50% HEIGHT=1>
+			<H1 STYLE="margin-top: 0cm"><FONT FACE="Thorndale, serif"><FONT SIZE=6><B>AntiPrism</B></FONT></FONT></H1>
+			<P STYLE="font-weight: normal"><FONT FACE="Thorndale, serif"><FONT SIZE=3>Copyright
+			&copy; 2014-2015 AntiPrism.ca</FONT></FONT></P>
+		</TD>
+		<TD WIDTH=50%>
+			<P ALIGN=RIGHT><IMG SRC="manual_html_m7a19acf1.png" NAME="graphics2" ALIGN=RIGHT WIDTH=171 HEIGHT=171 BORDER=0><BR CLEAR=RIGHT><BR>
+			</P>
+		</TD>
+	</TR>
+</TABLE>
+<DL>
+	<DT><B>Inhaltsverzeichnis</B> 
+	</DT><DT>
+	<A HREF="#OVERVIEW">&Uuml;bersicht</A> 
+	</DT><DT>
+	<A HREF="#WHY">Warum ben&ouml;tige ich AntiPrism?</A> 
+	</DT><DT>
+	<A HREF="#SYSTEM">Systemkomponenten</A> 
+	</DT><DT>
+	<A HREF="#DOWNLOAD">AntiPrism herunterladen</A> 
+	</DT><DT>
+	<A HREF="#CREATING">Erstellung des Installations-USB-Sticks</A> 
+	</DT><DT>
+	<A HREF="#BOOTING">Booten des Installations-USB-Sticks</A> 
+	</DT><DT>
+	<A HREF="#CONTAINER">Erstellung des Datei-Containers</A> 
+	</DT><DT>
+	<A HREF="#MAIN">AntiPrisms Hauptansicht</A> 
+	</DT><DL>
+		<DT>
+		<A HREF="#WEB">Anonymes Web</A> 
+		</DT><DT>
+		<A HREF="#TORRENTS">Anonyme Torrents</A> 
+		</DT><DT>
+		<A HREF="#KEYS">Vertrauensw&uuml;rdige Schl&uuml;ssel</A> 
+		</DT><DT>
+		<A HREF="#CONTACTS">Vertrauensw&uuml;rdige Kontakte</A> 
+		</DT></DL>
+	<DT>
+	<A HREF="#SETTINGS">Einstellungen</A> 
+	</DT><DL>
+		<DT>
+		<A HREF="#GENERAL">Allgemeine Einstellungen</A> 
+		</DT><DT>
+		<A HREF="#ACCESS">Zugriffskontrolle</A> 
+		</DT></DL>
+	<DT>
+	<A HREF="Verwendung">Anwendungsf&auml;lle</A> 
+	</DT><DL>
+		<DT>
+		<A HREF="#STANDALONE">AntiPrism als Einzelsystem</A> 
+		</DT><DT>
+		<A HREF="#CROSSOVER">Einzelner Client mittels Cross-Over Patch
+		Kabel</A> 
+		</DT><DT>
+		<A HREF="#ONIONR">Onion-Router</A> 
+		</DT><DT>
+		<A HREF="#MULTIVPN">Mehrere Clients mittels VPN Verbindung</A> 
+		</DT></DL>
+	<DT>
+	<A HREF="#HIDDENWEB">Hosting von einer versteckte Webseite</A> 
+	</DT><DT>
+	<A HREF="#LICENSE">Lizenz</A> 
+	</DT><DT>
+	<A HREF="http://www.antiprism.ca/home">AntiPrism Neuigkeiten</A> 
+	</DT><DT>
+	<A HREF="http://www.antiprism.ca/forum">AntiPrism Forum</A> 
+	</DT><DT>
+	<A HREF="https://github.com/antiprismca/OpenELEC-Antiprism/" TARGET="_blank">AntiPrism
+	bei GitHub</A> 
+	</DT><DT>
+	<A HREF="http://www.antiprism.ca/support_de.html">Unterst&uuml;tze
+	AntiPrism!</A> 
+	</DT>
+</DL>
+<BR><HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="OVERVIEW"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>&Uuml;bersicht</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><IMG SRC="venn.png" NAME="graphics4" ALIGN=LEFT WIDTH=377 HEIGHT=347 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism ist eine
+Toolbox-Plattform f&uuml;r die Sicherung der Online-Pr&auml;senz,
+Web-Browsing und Kommunikation. Implementiert als ein Satz an
+Erweiterungen zu der von <A HREF="http://openelec.tv/">OpenELEC</A>
+abgeleitete Software f&uuml;r Mediacenter, erm&ouml;glicht es eine
+universelle und nahtlos integrierte L&ouml;sung zur Sicherstellung
+der Privatsph&auml;re f&uuml;r zu Hause und kleine Unternehmen. Es
+l&auml;uft auf einem rein leseberechtigten Dateisystem, das in eine
+sichere Linux Betriebsumgebung integriert ist und entweder von einem
+USB-Stick aus gebootet oder auf die Festplatte installiert wird.
+AntiPrism wird mittels Passwort aktiviert, das gleichzeitig zur
+Entschl&uuml;sselung eines versteckten Dateisystems (Container)
+dient. Sobald deaktiviert, hinterl&auml;sst es keinerlei Spuren. Der
+Computer von dem aus AntiPrism l&auml;uft, kann als Mediacenter zum
+Anschauen von Filmen, Streamen von Musik, Spielen oder mit dem
+integrierten Browser zum Web-Surfen verwendet werden, weil die
+Basiseigenschaften der externen Plugins f&uuml;r <A HREF="http://xbmc.org/" TARGET="_blank">XBMC/Kodi</A>
+beibehalten bleiben und als Anonymisierungstool in Hintergrund
+weiterlaufen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Der gr&ouml;&szlig;te
+Unterschied zwischen AntiPrism und anderen existierenden Linux
+basierten L&ouml;sungen zur Anonymisierung (z.B. <A HREF="http://tails.boum.org/" TARGET="_blank">Tails</A>,
+<A HREF="https://www.whonix.org/wiki/Main_Page/de" TARGET="_blank">Whonix</A>,
+<A HREF="http://dee.su/liberte" TARGET="_blank">Liberte</A>, u.a.)
+sind durch den Einsatzszweck bestimmt. Im Grunde bietet AntiPrism ein
+&quot;sicheres und anonymisiertes Mediacenter&quot;, das sofern nicht
+gerade im Einsatz, normalerweise nur wenig macht, aber nun mit
+verstecken F&auml;higkeiten ausgestattet wird. Einige Beispiele sind:
+anonymisierte Suche, Download und Ansehen von Torrents direkt vom
+Ger&auml;t ohne zuerst eine Kopie auf einem anderen Ger&auml;t
+anzufertigen. Gleichzeitig ist es in der Lage, eine &quot;versteckte&quot;
+kundengerechte sichere Website mit Web-Kameras,
+Home-Automation-Portal oder Ihren eigenen Online-Shop zu f&uuml;hren.
+Es l&auml;uft als Zwischen- oder Einstiegsknoten in die anonymen
+Netzwerke und st&auml;rkt sowie verbessert deren Verf&uuml;gbarkeit.
+Es hat aufgrund des schnellen <A HREF="http://de.wikipedia.org/wiki/Systemd" TARGET="_blank">Systemd</A>
+Linux Backend eine bemerkenswerte hohe Performanz mit einer
+IRQ-Verarbeitung in nahezu Echtzeit. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Die aktuelle
+AntiPrism Version unterst&uuml;tzt i386, x86_64 und ARM kompatible
+Prozessoren.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Diese Anleitung
+beschreibt die Hauptfunktionen von AntiPrism: ein verschl&uuml;sseltes
+Dateisystem (Container), Austausch und Verifizierung von Schl&uuml;sseln
+sowie Authentifizierung von Dokumenten mit digitalen Signaturen, ein
+E-Mail &auml;hnliches Modul, das dem Benutzer erm&ouml;glicht unter
+Wahrung seiner Privatsph&auml;re E-Mails zu senden und zu empfangen,
+im Internet anonym und uneingeschr&auml;nkt zu surfen, zu
+ver&ouml;ffentlichen und Dateien auszutauschen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="WHY"></A><FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Warum
+ben&ouml;tige ich AntiPrism?</B></FONT></FONT></P>
+<UL>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Wahrhaftig
+	wird ein Gro&szlig;teil des Surfens, E-Mail-Verkehrs, Chattens,
+	VoIP-Telefonierens oder Video-Verkehrs im modernen Internet gobal
+	&uuml;berwacht. Das Programm <A HREF="http://de.wikipedia.org/wiki/PRISM" TARGET="_blank">PRISM</A>
+	der NSA (USA), die <A HREF="http://de.wikipedia.org/wiki/Projekt_Goldener_Schild" TARGET="_blank">Gro&szlig;e
+	Firewall</A> (China), das <A HREF="http://de.wikipedia.org/wiki/Sorm" TARGET="_blank">SORM-2</A>
+	Projekt (Russland), die <A HREF="http://de.wikipedia.org/wiki/UKUSA-Vereinbarung" TARGET="_blank">Five
+	Eyes L&auml;nder</A> und andere <A HREF="https://www.aclu.org/blog/tag/government-surveillance" TARGET="_blank">&auml;hnliche
+	Initiativen</A> &uuml;berwachen die meisten Verbindungen. Obwohl es
+	zun&auml;chst nicht st&ouml;rend erscheint, ist dies potentiell
+	gef&auml;hrlich, weil irgendein Witz oder eine beliebige
+	Suchanfrage, den oder die man unbedarft Online gemacht hat, ein
+	Warnsignal hervorufen kann und man landet schnell auf der Liste an
+	verd&auml;chtigen Personen der Regierung. Einige der unerw&uuml;nschten
+	Resultate k&ouml;nnten Reisebeschr&auml;nkungen, Verhaftungen oder
+	sogar Freiheitsentzug sein. Die &Uuml;berwachung des Intranet ist
+	ein weiteres Problemfeld, das potentielle Unternehmen und sogar
+	Privathaushalte betrifft.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Regionale
+	Inhaltsrestriktionen, z.B. kann in Deutschland etwa die H&auml;lfte
+	aller Musikvideos auf YouTube aufgrund lokaler
+	Urheberschutzbestimmungen nicht abgespielt werden. Mittels AntiPrism
+	k&ouml;nnen durch die Auswahl von Ausgangsknoten au&szlig;erhalb
+	Deutschlands Benutzer in Deutschland nahezu alle YouTube Videos
+	ansehen. 
+	</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Der eingebaute
+	Onion-Router-Funktionalit&auml;t kann das gesamte Netzwerk
+	transparent anonymisieren, sodass die regionalen
+	Inhaltsbeschr&auml;nkungen f&uuml;r Ger&auml;te wie Chrome, AppleTV
+	oder &auml;hnliches zu umgehen. Betrachten Sie das als ein &quot;freie
+	VPN&quot;-Service in dem Land Ihrer Wahl!</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Versteckte
+	pers&ouml;nliche Webseiten k&ouml;nnen in AntiPrism ver&ouml;ffentlicht
+	werden, und niemand kann ihren physischen Standorten auf der
+	Grundlage ihrer &ouml;ffentlichen Adressen verfolgen.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism ist
+	kostenlos und Open-Source - jeder kann sicherstellen, dass keine
+	versteckten Funktionen existieren, indem der Quellcode analysiert
+	und die Software selbst kompiliert wird.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism ist
+	einfach zu konfigurieren, um selbst in sehr restriktiven Umgebungen
+	voll funktionsf&auml;hig zu sein. 
+	</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Auch wenn
+	andere existierende L&ouml;sungen &auml;hnliche Funktionalit&auml;ten
+	bereitstellen, ben&ouml;tigen diese in der Regel einen dezidierten
+	PC o.&auml;. und besitzen nicht eine gewohnte und einfach zu
+	benutzende Bedienoberfl&auml;che. AntiPrism teilt den PC oder HTPC
+	mit der Mediacenter Software. Alle Dienste von AntiPrism sind
+	mittels sicherer VPN Verbindung zum PC oder HTPC auch f&uuml;r
+	andere Endger&auml;te verf&uuml;gbar.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="http://i2pbote.i2p.us/" TARGET="_blank">I2P-Bote</A>,
+	das I2P Chatprogramm ben&ouml;tigt vor der Nutzung der sicheren
+	Kommunikation den Austausch von Identifizierungsmerkmalen. I2P
+	bietet daf&uuml;r keinen einfachen und sicheren Weg. AntiPrism
+	bietet mit dem Web of Trust und der &quot;Dead Drop&quot;
+	Technologie hingegen solch einen Mechnanismus an.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism ist
+	sicherer als <A HREF="https://www.torproject.org/projects/torbrowser.html" TARGET="_blank">Tor
+	Browser</A> oder <A HREF="https://geti2p.net/de/" TARGET="_blank">I2P</A>
+	in Windows oder jedem anderen propriet&auml;ren (closed-source)
+	Betriebssystem, da sichergestellt wird, dass die Privatschl&uuml;ssel
+	nicht aufgrund eines infizierten Betriebssystems oder durch
+	Komponenten von Drittanbietern unerw&uuml;nschten Organisation in
+	die H&auml;nde fallen.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Das Hinzuf&uuml;gen
+	Ihres PCs als weiteren Knoten zum globalen Anonymisierungs-Netzwerk,
+	erh&ouml;ht die Sicherheit, Performanz und Verf&uuml;gbarkeit,
+	wodurch Sie wiederrum gutes Karma erhalten.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism kann
+	einfach als Update zu Ihrem existierenden 32- oder 64-bit Intel oder
+	Raspberry Pi OpenELEC System installiert werden.&nbsp;</P>
+</UL>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="SYSTEM"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Systemkomponenten</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><IMG SRC="manual_html_45769400.png" NAME="graphics1" ALIGN=LEFT WIDTH=769 HEIGHT=716 BORDER=0><BR CLEAR=LEFT><BR><BR>
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism is als
+ein Satz an eingebauten Erweiterungen zum Mediacenter implementiert.
+Es erm&ouml;glicht sich mit den popul&auml;ren
+Anonymisierungs-Programmen <A HREF="http://torproject.org/" TARGET="_blank">Tor</A>,
+<A HREF="https://geti2p.net/de/" TARGET="_blank">I2P</A> und <A HREF="http://privoxy.org/" TARGET="_blank">Privoxy</A>
+anonym im Internet zu bewegen. Es implementiert ein <A HREF="http://de.wikipedia.org/wiki/Web_of_Trust" TARGET="_blank">Web
+of Trust</A> Kommunikationmodell unter Verwednung von <A HREF="https://www.gnupg.org/" TARGET="_blank">GnuPG</A>
+zum Austausch von Schl&uuml;sseln und Kontakten.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Der verschl&uuml;sselte
+Container beherbergt Ihre sensitive Daten ebenso wie Ihre
+Privatschl&uuml;ssel, sichere Identit&auml;ten usw. Privatschl&uuml;ssel
+und Identit&auml;ten k&ouml;nnen nicht nach Au&szlig;en gelangen -
+auch wenn Ihr Ger&auml;t gestohlen oder der Copmputer mit einem
+Virus/Trojaner infiziert wurde. <A HREF="http://linux.die.net/man/8/cryptsetup" TARGET="_blank">Cryptsetup</A>,
+das native Festplattenverschl&uuml;sselungssystem von Linux
+(Standardeinstellung) und optional <A HREF="http://de.wikipedia.org/wiki/TrueCrypt" TARGET="_blank">TrueCrypt</A>
+7.1a werden zur Verschl&uuml;sselung voll unterst&uuml;tzt.
+Vorkonfigurierte <A HREF="http://wiki.apparmor.net/index.php/Main_Page" TARGET="_blank">AppArmor</A>
+Regeln besch&uuml;tzen Ihre Dateien und sorgen f&uuml;r die n&ouml;tige
+Zugriffskontrolle.&nbsp;</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="http://torproject.org/" TARGET="_blank">Tor</A>
+ist eine kostenlose Software, die Online-Anonymit&auml;t bewahrt und
+Online-Zensur widersteht. Es wurde so gestaltet, dass es Nutzern
+erm&ouml;glichte, im Internet anonym zu surfen, so da&szlig; deren
+Aktivit&auml;ten und Aufenhaltsorte nicht durch Regierungen,
+Unternehmen oder irgendjemanden erkannt werden. Tor leitet
+Internetanfragen durch ein freies, weltweites und freiwilliges
+Netzwerk, das durch mehrere Knotenpunkten den Aufenthaltsort und die
+Nutzung vor jedem, der Netzwerk&uuml;berwachung oder
+Datenverkehranalysen betreibt, verbirgt. Die Verwendung von Tor
+erschwert es die Internetaktivit&auml;ten vom Anwederr
+zur&uuml;ckzuverfolgen: dies beinhaltet &quot;besuchte Webseiten,
+online get&auml;tigte Aussagen, Chatnachrichten und andere
+Kommunikationsarten&quot;. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm; border: none; padding: 0cm">
+<A HREF="https://geti2p.net/de/" TARGET="_blank">I2P</A> (das
+Invisible Internet Projekt) ist ein Computer Netzwerk, das Anwedungen
+erlaubt, Nachrichten unter Pseudonymen sicher zu versenden. U.a.
+beinhaltet es Anonymit&auml;t beim Web Surfen, Chatten, Blogging und
+Datentransfer. Die Software ist kostenlos sowie Open-Source und ist
+unter verschiedenen Lizenzen ver&ouml;ffentlicht.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Die in AntiPrism
+eingebauten Funktionen wie Web-Browsing, Web-Hosting, Chatten, und
+Datentransfer sind mittels Tor und I2P gesch&uuml;tzt. Die
+Privatschl&uuml;ssel, die von Tor, I2P, SSH und OpenVPN sowie den
+anderen Diensten in AntiPrism verwendet werden, sind in dem
+verschl&uuml;sselten Dateisystem gespeichert und werden durch das
+AppArmor Modul gesch&uuml;tzt.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Externe Browser
+k&ouml;nnen AntiPrism als sicheren Anonymisierungs-Proxy oder
+Onion-Router verwenden. Die Verbindung zwischen Browser und AntiPrism
+kann optional mit einem Point-to-Point VPN Tunnel verschl&uuml;sselt
+werden, wodurch das Risiko einer &Uuml;berwachung des Intranets
+eliminiert wird.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="DOWNLOAD"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>AntiPrism herunterladen</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism kann
+kostenlos von seinem <A HREF="https://github.com/antiprismca/OpenELEC-Antiprism/releases" TARGET="_blank">GitHub
+Release Repository</A> heruntergeladen werden.<BR>F&uuml;r
+ausf&uuml;hrbare Installationsprogramme laden Sie die 32- oder 64-bit
+oder ARM RPi Release TAR Pakete herunter. F&uuml;r den Quellcode
+laden Sie die Quellcode-Pakete oder benutzen das Git Tool zum Klonen
+des Baumes bzw. laden die &Auml;nderungen wie dort beschrieben
+herunter.<BR>Verifizieren Sie die herunterladene Datei mittels den
+Anweisungen, die auf der &quot;AntiPrism herunterladen&quot; Seite
+beschrieben sind. Die Verifizierung ist sehr wichtig, um
+sicherzustellen, da&szlig; die Software, die Sie heruntegeladen
+haben, den Original-Dateien entsprechen und nicht durch schadhafte
+Drittanbieter ver&auml;ndert wurde. Verwenden Sie zur Verifizierung
+den <A HREF="http://www.antiprism.ca/pubkey.pem">&ouml;ffentlichen
+Schl&uuml;ssel von AntiPrism</A>. Sobal verifiziert, entpacken Sie
+das Archiv und fahren entweder mit der Erstellung des
+Installations-USB-Sticks oder dem <A HREF="https://github.com/antiprismca/OpenELEC-Antiprism/#antiprism" TARGET="_blank">Kompilieren
+des Quellcodes</A> fort. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="CREATING"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Erstellung des
+Installations-USB-Sticks</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Mit nur wenigen
+Anpassungen, k&ouml;nnen Sie die <A HREF="http://wiki.openelec.tv/index.php/HOW-TO:Installing_OpenELEC" TARGET="_blank">Installations-Anweisungen
+in der OpenELEC Wiki</A> befolgen: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Aktuell sind nur Windows und Linux
+	Installationen unterst&uuml;tzt. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Wenn Sie den USB-Stick unter
+	Windows installieren, verwenden Sie die Datei
+	create_installstick.exe und folgen den Hinweisen. 
+	</P>
+</UL>
+<UL>
+	<LI><P>Um auf eine SD-Speicherkarte f&uuml;r RPi zu installieren,
+	verwenden Sie die create_sdcard Linux-Tool, das mit dem Paket kommt.</P>
+</UL>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="BOOTING"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Booten des
+Installations-USB-Sticks</B></FONT></FONT></P>
+<UL>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Stecken Sie
+	den AntiPrism USB-Stick in Ihren Computer. 
+	</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Booten Sie
+	Ihren Computer vom USB-Stick.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Verwenden Sie
+	AntiPrism als Live-Boot, w&auml;hlen Sie &quot;Live Storage&quot;
+	und der Container wird auf dem USB-Stick erstellt. Andernfalls
+	w&auml;hlen Sie &quot;Storage&quot; oder &quot;Install&quot;, um den
+	Container auf Ihrer Festplatte zu erstellen, dabei werden die Daten
+	auf der Festplatte zerst&ouml;rt. &quot;Install&quot; erm&ouml;glicht
+	es zus&auml;tzlich, dass das System ohne USB-Stick starten kann.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">W&auml;hlen
+	Sie den Namen f&uuml;r Ihren neuen Dienst und klicken auf &quot;Done&quot;.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">W&auml;hlen
+	Sie ein Netzwerk aus, mit dem Sie sich verbinden m&ouml;chten.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Es erscheint
+	die AntiPrism Hauptansicht.</P>
+</UL>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="CONTAINER"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Erstellung des
+Datei-Containers</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Die Erstellung des
+Containers ist ein wichtiger Schritt, der nicht &uuml;bersprungen
+werden darf. 
+</P>
+<UL>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Bevor Sie den
+	Container erstellen, k&ouml;nnen Sie optional den Typ des
+	Containers, den Dateinamen, das Dateisystem, und ob TrueCrypt
+	verwendet werden soll, w&auml;hlen (siehe Einstellungen). Es ist in
+	Ordnung, wenn Sie die Standardeinstellungen verwenden, es sei denn
+	Sie haben gewisse Spezialanforderungen.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Um die
+	Erstellung zu starten, klicken Sie &quot;OK&quot;. W&auml;hlen Sie
+	die Container Gr&ouml;&szlig;e in Prozent des verf&uuml;gbaren
+	Speicherplatzes aus. Je gr&ouml;&szlig;er, desto l&auml;nger dauert
+	es.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Bestimmen Sie
+	ein Password (mindestens 20 Buchstaben). Dieses Password wir all
+	Ihre Daten sch&uuml;tzen. W&auml;hlen Sie ein nicht leicht zu
+	erratendes Passwort und behalten Sie dieses an einem sicheren Ort
+	auf.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism
+	erstellt den Container und initialisiert ihn. In Abh&auml;ngigkeit
+	der Gr&ouml;&szlig;e des Containers und der Leistung Ihres PCs kann
+	dies etwas dauern.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Sobald der
+	Container fertig ist, haben Sie die M&ouml;glichkeit Ihr Backup
+	(sofern vorhanden) wiederherzustellen.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Wenn Sie SSH
+	aktiviert haben, werden Sie aufgefordert ein SSH Passwort zu
+	bestimmen. W&auml;hlen Sie ein anderes Passwort als f&uuml;r den
+	Container.</P>
+</UL>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="MAIN"></A><FONT FACE="Thorndale, serif"><FONT SIZE=6><B>AntiPrisms
+Hauptansicht</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Sobald der
+Container erstellt ist oder das korrekte Passwort eingegeben wurde,
+erscheint die Hauptansicht.</P>
+<UL>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Anonymes Web:
+	Startet den eingebauten Web-Browser.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Anonyme
+	Torrents: Erlaubt es Ihre sicheren Torrents zu verwalten.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Vertrauensw&uuml;rdige
+	Schl&uuml;ssel: Erm&ouml;glicht Ihre GPG/PGP Schl&uuml;ssel zu
+	verwalten.</P>
+	<LI><P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Vertrauensw&uuml;rdige
+	Kontakte: Exportiert und importiert Ihr Adressbuch.</P>
+</UL>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Wenn Sie
+Kommandozeilen-Aufrufe t&auml;tigen m&ouml;chten, klicken Sie auf
+&quot;Befehl&quot;. Zwischen XBMC/Kodi, der Kommadozeile oder dem
+Web-Browser k&ouml;nnen Sie mit den Tasten Alt+Tab hin- und
+herschalten. Die Historisierung der Kommadozeilen-Aufrufe und des
+Web-Browsers sind ausgeschaltet. Die Einstellungen und Lesezeichen
+des Browsers werden im verschl&uuml;sselten Container aufbewahrt.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Wenn Sie &quot;OK&quot;
+dr&uuml;cken, l&auml;uft AntiPrism im Hintergrund weiter. Durch
+klicken auf &quot;Abbrechen&quot; wird es deaktiviert. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="WEB"></A><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Anonymes
+Web</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Diese Schaltfl&auml;che
+startet den eingebauten <A HREF="http://links.twibright.com/" TARGET="_blank">Links
+Web Browser</A>, der - je nachdem welche Dienste aktiviert sind -
+mittels Privoxy, Tor und I2P anonymisiert ist. Die standardm&auml;&szlig;ige
+Startseite zeigt einige popul&auml;re Links an. Mehr Informationen
+zum den Funktionen des Browsers und seinen Shortcuts finden Sie <A HREF="http://links.twibright.com/user_en.html" TARGET="_blank">hier</A>.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="TORRENTS"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Anonyme Torrents</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Hiermit wird das
+I2P Snark XBMC/Kodi Plugin gestartet. Dies erm&ouml;glicht den
+Zugriff und das Verwalten von Torrents. Von I2P existiert auch ein
+webbasiertes I2P Snark, aber die Bedienung in XBMC/Kodi ist deutlich
+erleichtert.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="KEYS"></A><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Vertrauensw&uuml;rdige
+Schl&uuml;ssel</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Hiermit wird das
+GnuPG XBMC/Kodi Plugin ge&ouml;ffnet. Wenn es aus AntiPrism heraus
+gestartet wird, greift es auf die Schl&uuml;ssel im verschl&uuml;sselten
+Container zu. GnuPG ist die Kernkomponente f&uuml;r das Web-of-Trust.
+Bevor verschl&uuml;sselte Kontakte ausgetauscht werden k&ouml;nnen,
+m&uuml;ssen die &ouml;ffentlichen Schl&uuml;ssel ausgetauscht und
+verifiziert werden. Daf&uuml;r ben&ouml;tigt zun&auml;chst jeder
+einen eigenen Schl&uuml;ssel. &Ouml;ffentliche Schl&uuml;ssel k&ouml;nnen
+exportiert und mittels normaler E-Mail, USB-Stick oder einem
+Schl&uuml;ssel-Server ausgetauscht werden. Nach dem Empfang m&uuml;ssen
+alle Fingerabdruck der Schl&uuml;ssel durch einen galubw&uuml;rdigen
+Kommunikationskanal (z.B. Keysigining Party, pers&ouml;nliches
+Gespr&auml;ch oder Telefonat) verifiziert werden. Bitte verifizieren
+Sie den Fingerabdruck nicht durch normale E-Mail, diese k&ouml;nnte
+bereits kompromittiert sein.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Nachdem die
+Verifizierung abgeschlossen ist, werden die Schl&uuml;ssel als
+vertrauensw&uuml;rdig eingestuft und k&ouml;nnen zum Austausch und
+Verifizierung verschl&uuml;sselter Daten verwendet werden.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Jegliche
+Kommunikation zum Schl&uuml;ssel-Server sind durch AntiPrism
+verschl&uuml;sselt.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="CONTACTS"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Vertrauensw&uuml;rdige
+Kontakte</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Dies &ouml;ffnet
+das <A HREF="http://i2pbote.i2p.us/" TARGET="_blank">I2P-Bote</A>
+Adressbuch Plugin f&uuml;r XBMC/Kodi. Von hier aus kann man sicher
+Kontakte und Identit&auml;tsinformationen austauschen. Kontakte
+k&ouml;nnen f&uuml;r eine Mehrzahl an Empf&auml;ngern exportiert
+werden, vorausgesetzt deren &ouml;ffentliche Schl&uuml;ssel sind in
+GnuPG vorhanden. F&uuml;r den Export wird die Information digital
+signiert und verschl&uuml;sselt, so da&szlig; sie hinterher vom
+Empf&auml;nger wieder entschl&uuml;sselt und verifiziert (mittels
+Ihres &ouml;ffentlichen Schl&uuml;ssels) werden kann. Die
+exportierten Kontakte k&ouml;nnen mittels normaler E-Mail bzw.
+Datentransfer ausgetauscht werden (dies ist sicher, da nur der
+Besitzer des Schl&uuml;ssels diese entschl&uuml;sseln kann) oder
+&ouml;ffentlicher &quot;Dead Drop&quot; Diensten. Solche Dienste
+erhalten durch GnuPG verschl&uuml;sselte Kontakte und behalten diese
+f&uuml;r einige Tage, stets mit einer eindeutigen &quot;Drop ID&quot;
+assoziert. Diese Drop ID wird vom Empf&auml;nger verwendet, um den
+Inhalt zu erhalten. Diese Technik ist sehr praktisch und effizient,
+da die Drop IDs &uuml;ber die &uuml;blichen Kommunikationswege
+(Telefon, E-Mail, Chat, usw.) erfolgen kann. Die standardm&auml;&szlig;ige
+Dead Drop URL von AtiPrism ist in die Software eingebaut. Jegliche
+Dead Drop Kommunikation ist durch AntiPrism anonymisiert. Sobald die
+Kontakte ausgetauscht sind, kann der Austausch an Nachrichten &uuml;ber
+I2P-Bote vollkommen sicher beginnen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="SETTINGS"></A>
+&nbsp;<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Einstellungen</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Sie erreichen die
+Einstellungen durch Klick auf &quot;Konfig&quot; in der AntiPrism
+Hauptansicht.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="GENERAL"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Allgemeine
+Einstellungen</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Autostart:
+AntiPrism startet beim Systemstart. Sofern ausgestellt, k&ouml;nnen
+Sie AntiPrism manuel durch das Programm Men&uuml; starten.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Profil Container:
+Pfad zur Container-Datei. Sie k&ouml;nnen mehrere Container
+erstellen, wobei jeder davon unterschiedliche Kontakte und
+Identit&auml;ten beinhalten kann.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Mount Point:
+Verzeichnis, in dem der Container eingebunden wird.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Passwortgesch&uuml;tzer
+Bildschirmschoner: Sie k&ouml;nnen w&auml;hlen, ob der Bildschirm
+nach einer bestimmten Zeit gesperrt wird (Sie ben&ouml;tigen Ihr
+Container Passwort, um den Bildschirm zu entsperren).</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Dateisystem:
+Standard ist ext4. Sie k&ouml;nnen einen anderes Dateisystem w&auml;hlen,
+wenn Sie Ihren Container auf einem anderen Computer einbinden
+m&ouml;chten, der ext4 nicht unterst&uuml;tzt. Alternativen sind
+ext2, ext3 und NTFS. Diese Einstellung sollte vor der Erstellung des
+Containers bestimmt und behalten werden.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">&Uuml;berpr&uuml;fung
+des Containers w&auml;hrend der Aktivierung: AntiPrism &uuml;berpr&uuml;ft
+das Dateisystem bevor es startet. Werden Fehler gefunden, versucht
+AntiPrism diese zu reparieren.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Backup Container
+w&auml;hrend Aktivierung: Vor dem Starten erstellt AntiPrism ein
+Backup Ihres Containers. Sofern dies eingeschaltet ist, muss ein
+Backuppfad spezifiziert sein (sollte &uuml;ber Schreibrechte und
+ausreichend Speicherplatz verf&uuml;gen).</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Verwende TrueCrypt:
+W&auml;hlen Sie diese Option, wenn Sie TrueCrypt verwenden m&ouml;chten
+(f&uuml;r Fortgeschrittene). Diese Einstellung sollte vor der
+Erstellung des Containers bestimmt und behalten werden.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">X Terminal als
+Kommandozeile starten (Tastatur ben&ouml;tigt): Ein vollst&auml;ndiges
+Shell Terminal wird gestartet, wenn Sie die &quot;Befehl&quot;
+Schaltfl&auml;che klicken. Offensichtlich wird daf&uuml;r eine
+Tastatur ben&ouml;tigt, deswegen ist dies standardm&auml;&szlig;ig
+ausgeschaltet und erlaubt nur die Ausf&uuml;hrung von einzelnen
+Kommadozeilen-Aufrufen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="ACCESS"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Zugriffskontrolle</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Hier k&ouml;nnen
+Sie die Anonymisierungsdienste I2P, Tor und Privoxy konfigurieren und
+die Web-Oerfl&auml;che aktivieren sowie den SSH und VPN Zugriff
+einstellen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Anonymizer-Daten im
+RAM halten (neue Identit&auml;t mit jedem Systemstart): Wenn
+aktiviert, werden die Tor und I2P-Dateien nicht innerhalb des
+Containers, sondern in der RAM-Disk gehalten. Daher m&uuml;ssen die
+Netze vollst&auml;ndig initialisiert werden mit neuen Identit&auml;ten
+w&auml;hrend jeder Inbetriebnahme. Nach der Initialisierung wird die
+Leistung erh&ouml;hen, da keine Aufzeichnung der Netzwerkdaten in dem
+Flash-Speicher ausgef&uuml;hrt wird. Wenn eingeschaltet, wird
+versteckte Webseite-Unterst&uuml;tzung deaktiviert.
+Standardeinstellung ist aus.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">I2P aktivieren: Der
+I2P Dienst wird gestartet und die Ports f&uuml;r den Zugriff durch
+die Firewall ge&ouml;ffnet.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Bootstrapping I2P
+&uuml;ber Tor (ben&ouml;tigt Privoxy): Erlaubt I2P in restriktiven
+Umgebungen zu starten, welche die Bootrapping-Server von I2P
+blockieren. China w&auml;re daf&uuml;r ein gutes Beispiel. Das
+Bootstrapping &uuml;ber Tor umgeht solche Blockaden. Standardm&auml;&szlig;ig
+ist dies ausgeschaltet.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Versteckte Webseite
+aktivieren: Wenn aktiviert, werden die eingebaute versteckte
+Web-Services - Hiawatha oder Jetty oder beides - gestartet. Die
+versteckten Web-Sites werden unter zuf&auml;llig erzeugten .onion und
+.i2p Hostnamen in den Tor und I2P Netzwerke bzw. zug&auml;nglich. Die
+.onion-Hostname wird aus dem System per SSH abgerufen, w&auml;hrend
+die .i2p-Hostname kann &uuml;ber das Web-Frontend von I2P abgerufen
+werden. Standardeinstellung ist aus.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Tor aktivieren:
+Aktiviert Tor und erm&ouml;glicht den Zugriff auf die ben&ouml;tigten
+Ports durch die Firewall.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">SOCKS port: TCP
+Portnummer f&uuml;r SOCKS Verbindungen. Standardeinstellung ist 1080.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Br&uuml;cken
+verwenden: F&uuml;r den Fall, dass Ihre Umgebung Tor Bootrapping
+blockiert, kann die Br&uuml;cken-Obfuskierung von Tor dies umgehen.
+Standardm&auml;&szlig;ig ist dies ausgeschaltet. Sofern aktiviert,
+geben Sie im daf&uuml;r vorgesehen Feld eine Anzahl an Br&uuml;cken
+an. Die Br&uuml;cken k&ouml;nnen auf
+<A HREF="https://bridges.torproject.org/options" TARGET="_blank">https://bridges.torproject.org/options</A>
+eingesehen, oder durch das Senden einer Anfrage an
+<A HREF="mailto:bridges@torproject.org">bridges@torproject.org</A>
+angefordert werden und muss im selben Format, durch Kommata getrennt,
+eingegeben werden. Fingerabdr&uuml;cke nach Adresse:Port sind
+optional aber empfohlen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Tor als Relayknoten
+verwenden: Sofern eingeschaltet, ist Ihre Anwendung als Zwischen-
+oder Einstiegsknoten Teil des Tor Netzwerkes. Ausgangsknoten ist
+immer ausgeschaltet. Standardm&auml;&szlig;ig ist dies ausgeschaltet.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Br&uuml;cken Relay
+verwenden: Dies versteckt Ihren Relayknoten von der Liste der Knoten
+und der Knoten ist nur mittels Br&uuml;cken-Anfrage verf&uuml;gbar.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Angegebener Port:
+Der im Tor Netzwerk registrierte TCP Port Ihres Knotens. N&uuml;tzlich,
+wenn Sie hinter einem NAT Gateway mit Port-Weiterleitung sind und
+eine andere Portnummer ben&ouml;tigt wird, um au&szlig;erhalb des
+Netzwerkes erkennbar zu sein. Standardeinstellung ist 9050.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Lausch-Port:
+Eigentlicher TCP Port f&uuml;rs Lauschen. Standardeinstellung ist
+9050.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Obfsproxy
+aktivieren: Aktiviert den Br&uuml;cken Modus zum Obfuskieren.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Einschalten des
+obfs2/obfs3, obfs2/obfs3 Ports: Spezifiert, ob obfs2 oder obfs3
+(bevorzugt) aktiviert werden soll und die jeweiligen Ports zum
+Lauschen (Zuweisung erfolgt zuf&auml;llig, kann aber ge&auml;ndert
+werden). Eine obfs3 Br&uuml;cke anzubieten ist extrem hilfreich f&uuml;r
+Nutzer in China, Iran und anderen L&auml;ndern, die den
+Internetverkehr blockieren und analysieren.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Einstieg/Ausgangs/Ausschlu&szlig;/Ausgeschlossende
+Ausgangsknoten: Spezifiziert die Tor Knoten, die erlaubt und verboten
+sind. L&auml;ndern werden durch ihre jewiligen L&auml;ndercodes in
+geschweiften Klammern und durch Komma getrennt angegeben, z.B.
+{de},{ca},{nl}</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Onion-Routing
+aktivieren: aktiviert die Unterst&uuml;tzung f&uuml;r transparente
+Proxy-Verbindungen zus&auml;tzlich zu den regul&auml;ren
+Proxy-Verbindungen. Mit traditionellen Methoden wie SOCKS-Proxy, die
+Einrichtung des Proxy-Server selbst ist nicht genug;
+Proxy-Unterst&uuml;tzung von Anwendungen m&uuml;ssen so gew&auml;hlt
+werden, und jede Anwendung auf jedem Rechner mit dem Proxy m&uuml;ssen
+vom Benutzer oder Netzwerkadministrator konfiguriert werden, &uuml;ber
+den Proxy zu verbinden. Manchmal ist dies nicht m&ouml;glich, da eine
+Anwendung SOCKS nicht unterst&uuml;tzt, oder der Administrator m&ouml;chte
+Nutzer nicht zu wissen, dass ihren Verkehr &uuml;ber einen Proxy
+gesendet wird. Diese Probleme k&ouml;nnen durch Verwendung von
+Onion-Routing gel&ouml;st werden. Standardeinstellung ist ein.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Privoxy aktivieren
+(ben&ouml;tigt Tor): Startet einen Filterproxy, der zus&auml;tzliche
+Privatsph&auml;re bewahrt und einige nervende Dinge verschwinden
+l&auml;sst. Privoxy ist so konfiguriert, da&szlig; alle externen
+Netzwerkanfragen mit Ausnahme der .i2p Dom&auml;ne &uuml;ber Tor
+weitergeleitet werden. I2P Anfragen werden an I2P weitergeleitet und
+Intranet bzw. localhost Anfragen werden direkt behandelt. Cahing ist
+deaktiviert.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Web Zugriff
+erlauben: Erlaubt die standardm&auml;&szlig;ige XBMC/Kodi Web
+Oberfl&auml;che.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">SSH aktivieren:
+Aktiviert den SSH Dienst.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">OpenVPN Server
+aktivieren: Erm&ouml;glicht den Peer-to-Peer OpenVPN Server Modus.
+Kommunikationen werden mit einem Gemeinsamen Schl&uuml;ssel, der
+remote durch SSH aus dem Ordner .openvpn in Ihrem Container geholt
+werden kann.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Zugang von
+beliebiger IP erm&ouml;glichen: Sie k&ouml;nnen den Zugang zu
+AntiPrism durch andere Ger&auml;te &uuml;ber die IP-Adressen
+einschr&auml;nken. Sofern ausgeschaltet, ben&ouml;tigen Sie eine
+vertrauensw&uuml;rdige IP-Adresse von der aus der Zugang erlaubt ist.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism muss
+reaktiviert werden, nachdem Einstellungen in der Zugriffskontrolle
+ver&auml;ndert wurden.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="USAGE"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Anwendungsf&auml;lle</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="STANDALONE"></A>
+Ganz allgemein kann AntiPrism als Einzelsystem mit nur einem sicher
+verbundenen Client oder mit mehreren Cients &uuml;ber ein unsicheres
+Netz verwendet werden. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>AntiPrism
+als Einzelsystem</B></FONT></FONT></P>
+<P><A NAME="CROSSOVER"></A>Mit dieser Einstellung &ouml;ffnen Sie
+AntiPrism HTPC nicht f&uuml;r externe Client-Verbindungen. Den
+Zugriff von externen IP Adressen konfigurieren und verbieten Sie in
+der Zugriffskontrolle. Der AntiPrism Dienst ist nur &uuml;ber die
+XBMC/Kodi Benutzeroberfl&auml;che erreichbar. Ihre Torrents erreichen
+Sie durch den Dateimanager in XBMC/Kodi im Ordner
+/storage/.Profile/i2p/i2psnark (Standardeinstellung). 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Einzelner
+Client mittels Cross-Over Patch Kabel</B></FONT></FONT></P>
+<P><A NAME="MULTIVPN"></A><IMG SRC="AP_crossover.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=446 HEIGHT=274 BORDER=0><BR><BR>Mit
+dieser Einstellung arbeitet AntiPrism als Anonymisierungs-Proxy f&uuml;r
+einen einzelnen Computer, der direkt &uuml;ber ein Cross-Over
+Ethernet Kabel verbunden ist. AntiPrism verwendet Wlan um eine
+Verbindung zum Router herzustellen. Diese Konfiguration ben&ouml;tigt
+keine weitere VPN Sicherheit, da die Verbindung zwischen AntiPrism
+und den Clients sicher ist. 
+</P>
+<P>Wenn beide Onion-Routing und Ethernet-Tethering aktiviert sind,
+ist keine weitere Konfiguration des Browser-PC erforderlich. Die wird
+automatisch mit TCP/IP-Einstellungen zugewiesen werden, und seine
+Netzwerkverkehr wird transparent &uuml;ber Tor geleitet. 
+</P>
+<P>Andernfalls werden die TCP/IP-Einstellungen der
+Ethernet-Verbindung automatisch mit ZeroConf gesetzt. Sie sollten die
+Proxyeinstellungen des externen Bowsers mit der IP-Adresse der
+Ethernet-Schnittstelle von AntiPrism anpassen (Sie finden diese
+Information unter den Einstellunegn &quot;Verbindungen&quot;) Die
+Protokolle und Einstellungen der Ports f&uuml;r den Proxy h&auml;ngen
+von den Diensten an, die in AntiPrism aktiviert sind. Verwenden Sie
+HTTP/HTTPS Proxy standardm&auml;&szlig;ig mit Port 8118. 
+</P>
+<P>I2P Dienste k&ouml;nnen durch den externen Browser &uuml;ber die
+IP-Adresse von AntiPrism (Port 7657) erreicht werden. Die IP-Adresse
+des verbundenen Computers sollten den vertrauensw&uuml;rdigen IPs in
+der Zugriffskontrolle hinzugef&uuml;gt werden. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="ONIONR"></A><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Onion-Router</B></FONT></FONT></P>
+<P>Mit diesem Setup arbeitet AntiPrism als eine Anonymisierungs-Gateway,
+die alle ausgehenden Verbindungen aus dem LAN und lokalen Host-Klienten 
+transparent &uuml;ber das Tor-Netzwerk routet. Diese Funktion ist
+sehr praktisch, wenn mit Software oder externe Ger&auml;te, die Proxy-Konfiguration nicht
+unterst&uuml;tzen oder ignorieren, verwendet wird. Aktivieren Sie drahtlose oder Ethernet-Tethering in
+den OpenELEC-Netzwerkeinstellungen um dieses Feature mit externen
+Ger&auml;ten zu benutzen.</P>
+<P>WARNUNG: Tethered-Ethernet-Schnittstelle sollte niemals auf
+Firmennetzwerke verbunden werden, da sie den normalen Betrieb dieser
+Netze st&ouml;ren kann!</P>
+<P>Da es keine zus&auml;tzliche VPN-Datenverschl&uuml;sselung mit dem
+LAN-Segment der Netzwerkpfad angelegt wird, sollte diese Einstellung
+nur mit vertrauensw&uuml;rdigen lokalen Netzen verwendet werden. F&uuml;r
+nicht-vertrauensw&uuml;rdigen Netzwerken mit m&ouml;glichen Spionage
+/ Schn&uuml;ffeln des Verkehrs, verwenden Sie das mehrere Clients
+mittels VPN-Verbindung-Setup.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><FONT FACE="Thorndale, serif"><FONT SIZE=5><B>Mehrere
+Clients mittels VPN Verbindung</B></FONT></FONT></P>
+<P>Mit diesem Setup arbeitet AntiPrism als Anonymisierungs-Proxy f&uuml;r
+eine Gruppe an Computern, die &uuml;ber Wlan oder Ethernet verbunden
+sind. Da keiner die Abwesenheit von spionierenden Netzwerkkomponenten
+sicherstellen kann, ist eine VPN Verbindung mehr als empfohlen.
+AntiPrism unterst&uuml;tzt <A HREF="http://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html" TARGET="_blank">OpenVPN
+Protokol mit statischem Gemeinsamen Schl&uuml;ssel</A> Der Schl&uuml;ssel
+kann &uuml;ber SSH aus dem verschl&uuml;sselten Container im
+Ordner/storage/.Profile/.openvpn geholt werden. Ausschalten,
+reaktivieren, einschlaten und nochmaliges reaktivieren von OpenVPN
+oder SSH erstellt deren Schl&uuml;ssel nochmals. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="HIDDENWEB"></A><FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Hosting
+von einer versteckte Webseite</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism
+unterst&uuml;tzt sowohl Tor's .onion auch I2P's .i2p versteckten
+Webseiten-Hosting. Web-Anwendungen-Support sind CGIs in Python, Linux
+Shell-Skripte oder Java. Dies ist eine gro&szlig;artige M&ouml;glichkeit,
+mit denen Sie eine Webcam, einen Online-Shop, ein
+Home-Automation-Portal oder irgendetwas anderes laufen lassen k&ouml;nnen,
+die anonym ausgef&uuml;hrt werden. Es wird auch empfolen, Tor und
+I2P-Relais an Ihrem AntiPrism-K&auml;stchen zu aktiviert und allezeit
+laufen zu lassen - auf diese Weise werden Verkehrsanalyse-Methoden
+fehlschlagen, um Zusammenh&auml;nge zwischen Anforderungen an Ihre
+verborgenen website's Adresse und seine Aktivit&auml;t gemacht zu
+erkennen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Web-Anwendungen
+k&ouml;nnen von ZIP-Archive mit der folgenden internen Struktur
+installiert werden:</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">/cgi-bin - habe
+alle CGI-Programme in diesem Unterverzeichnis</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">/data - alle
+Dateien oder Datenbanken mit CGIs verwendet werden, sollten in diesem
+Unterverzeichnis werden</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">/docroot - die
+statische Dokumentstammverzeichnis mit index.html</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">README.txt -
+Details der Web-Anwendung</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Das Archiv sollte
+mit SSH in die Web-Server's Root-Verzeichnis innerhalb des
+verschl&uuml;sselten Container entpackt werden. F&uuml;r Jetty ist es
+i2p/eepsite/; f&uuml;r Hiawatha ist es .hiawatha/. Einige Beispiele
+von Web-Anwendungen sind in der AntiPrism- Website verf&uuml;gbar.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Namen Ihrer .onion
+oder .i2p Website k&ouml;nnen von Tor oder I2P abgerufen werden nach
+dem versteckten Website aktiviert ist. Tor speichert die .onion
+Site-Namen innerhalb der hostname-Datei im Web-Server's
+Root-Verzeichnis erstellt. I2P erm&ouml;glicht, um die versteckten
+Web-Service-Namen von seiner Web-Front-End abzurufen.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><BR><BR>
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A NAME="LICENSE"></A>
+<FONT FACE="Thorndale, serif"><FONT SIZE=6><B>Lizenz</B></FONT></FONT></P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">AntiPrism ist unter
+einem Mixed-License Modell ver&ouml;ffentlicht. 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Die auf OpenELEC
+basierende Platform ist unter der GNU GPLv2 Lizenz ver&ouml;ffentlicht.
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Die auf AntiPrism
+bezogenen Addons (AntiPrism, I2P und GnuPG) sind unter einer
+BSD-Lizenz ver&ouml;ffentlicht:</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Copyright (c)
+2014-2015, AntiPrism.ca</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Alle Rechte
+vorbehlaten.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">Weitervertrieb und
+Nutzung im Quell- und Maschinencode, mit oder ohne &Auml;nderungen,
+sind erlaubt, soweit die folgenden Bedingungen erf&uuml;llt sind: 
+</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">1. Bei
+Weitervertrieb des Quellcodes ist der oben angegebene Lizenz-Vermerk,
+diese Liste an Bedingungen und der nachfolgende Disclaimer
+beizubehalten.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">2. Bei
+Weitervertrieb des Maschinencodes m&uuml;ssen der oben angegebenen
+Lizenz-Vermerk, diese Liste an Bedingungen und der folgenden
+Discalimer in der Dokumentation und/oder in weiteren Materialen, die
+mitausgeliefert werden, reproduziert werden.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm">3. Weder der Name
+der Lizenzinhaber noch die Namen der Mitwirkenden d&uuml;rfen ohne
+vorherige, ausdr&uuml;ckliche und schriftliche Zustimmung zur Werbung
+oder F&ouml;rderung von Produkten, die von dieser Software abgeleitet
+sind, benutzt werden.</P>
+<P CLASS="msonormal" ALIGN=JUSTIFY STYLE="margin-bottom: 0.5cm">DIESE
+SOFTWARE WIRD VON DEN URHEBERRECHTSINHABERN UND MITWIRKENDEN &quot;WIE
+BESEHEN&quot; ZUR VERF&Uuml;GUNG GESTELLT UND JEGLICHE AUSDR&Uuml;CKLICHE
+ODER IMPLIZITE GEW&Auml;HRLEISTUNG,</P>
+<P CLASS="msonormal" ALIGN=JUSTIFY STYLE="margin-bottom: 0.5cm">EINSCHLIE&szlig;LICH,
+ABER NICHT BESCHR&Auml;NKT AUF DIE IMPLIZITE GEW&Auml;HRLEISTUNG
+HINSICHTLICH MARKTG&Auml;NGIGKEIT UND EIGNUNG F&Uuml;R EINEN
+BESTIMMTEN ZWECK WERDEN NICHT ANERKANNT. DIE URHEBERRECHTSINHABER
+ODER IHRE MITWIRKENDEN SIND UNTER KEINEN UMST&Auml;NDEN F&Uuml;R
+JEGLICHE DIREKTEN, INDIREKTDEN, ZUF&Auml;LLIGEN, SPEZIELLEN,
+EXEMPLARISCHEN SCH&Auml;DEN ODER FOLGESCH&Auml;DEN VERANTWORTLICH
+(EINSCHLIE&szlig;LICH, ABER NICHT BESCHR&Auml;NKT AUF DIE BESCHAFFUNG
+ODER DEN ERSATZ VON WAREN ODER DIENSTEN, NUTZUNGS-, DATEN-, ODER
+GEWINNVERLUST ODER UNTERBRECHUNG DES GESCH&Auml;FTSBETRIEBS), DIE
+UNABH&Auml;NGIG VON DER URSACHE UND BELIEBIGER THEORETISCHEN
+HAFTBARKEIT, OB VERTRAGLICH FESTGELEGT, PER KAUSALHAFTUNG ODER
+DELIKTSHAFTUNG (EINSCHLIE&szlig;LICH FAHRL&Auml;SSIGKEIT ODER AUF
+ANDEREM WEGE) DURCH DIE VERWENDUNG DIESER SOFTWARE ENTSTANDEN SIND,
+AUCH WENN INFORMATIONEN &Uuml;BER DIE M&Ouml;GLICHKEIT SOLCHER
+SCH&Auml;DEN VORLAGEN.</P>
+<P CLASS="msonormal" STYLE="margin-bottom: 0.5cm"><A HREF="#TOP">Nach
+oben</A></P>
+<HR>
+</BODY>
+</HTML>

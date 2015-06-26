@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="obfsproxy"
-PKG_VERSION="0.2.12"
+PKG_VERSION="0.2.13"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"

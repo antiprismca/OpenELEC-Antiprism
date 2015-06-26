@@ -17,12 +17,13 @@
 ################################################################################
 
 PKG_NAME="privoxy"
-PKG_VERSION="3.0.21-stable"
+PKG_VERSION="3.0.23-stable"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.privoxy.org"
-PKG_URL="http://hivelocity.dl.sourceforge.net/project/ijbswa/Sources/3.0.21%20%28stable%29/privoxy-3.0.21-stable-src.tar.gz"
+# PKG_URL="http://hivelocity.dl.sourceforge.net/project/ijbswa/Sources/3.0.21%20%28stable%29/privoxy-3.0.21-stable-src.tar.gz"
+PKG_URL="http://iweb.dl.sourceforge.net/project/ijbswa/Sources/3.0.23%20%28stable%29/privoxy-3.0.23-stable-src.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="security"
@@ -54,7 +55,7 @@ makeinstall_target() {
   mkdir -p $INSTALL/etc/privoxy
   mkdir -p $INSTALL/etc/privoxy/templates
   cp privoxy $INSTALL/usr/bin/
-  strip $INSTALL/usr/bin/privoxy
+  ${TARGET_STRIP} $INSTALL/usr/bin/privoxy
   sed -e "s/listen-address\ \ 127.0.0.1:8118/listen-address  0.0.0.0:8118/g" -e "s/confdir\ \./confdir\ \/etc\/privoxy/g" -e "s/logdir\ \./logdir\ \/var\/log\/privoxy/g" config > $INSTALL/etc/privoxy/config
   echo "forward-socks5	/	127.0.0.1:1080 ." >> $INSTALL/etc/privoxy/config
   echo "forward	.i2p	127.0.0.1:4444" >> $INSTALL/etc/privoxy/config

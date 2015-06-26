@@ -1,0 +1,11 @@
+--- gnupg-1.4.16/tools/Makefile.in	2015-01-04 18:19:42.491832313 -0500
++++ gnupg-1.4.16/tools/Makefile.in	2015-01-04 18:20:36.535831286 -0500
+@@ -110,7 +110,7 @@
+ CONFIG_CLEAN_VPATH_FILES =
+ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)"
+ @HAVE_SHM_TRUE@am__EXEEXT_1 = shmtest$(EXEEXT)
+-PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
++PROGRAMS = $(bin_PROGRAMS)
+ bftest_SOURCES = bftest.c
+ bftest_OBJECTS = bftest.$(OBJEXT)
+ am__DEPENDENCIES_1 =

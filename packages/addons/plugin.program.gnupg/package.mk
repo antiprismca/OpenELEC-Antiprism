@@ -41,4 +41,10 @@ makeinstall_target() {
 
 }
 
+post_makeinstall_target() {
+  if (test -d $INSTALL/usr/share/xbmc) && (test ! -e $INSTALL/usr/share/kodi); then
+    mv $INSTALL/usr/share/xbmc $INSTALL/usr/share/kodi
+    ln -s kodi $INSTALL/usr/share/xbmc
+  fi
+}
 

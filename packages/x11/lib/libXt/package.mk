@@ -33,13 +33,13 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="--enable-static \
-                           --disable-shared \
+                           --enable-shared \
                            --with-gnu-ld \
                            --enable-malloc0returnsnull"
 
 pre_make_target() {
   make -C util CC=$HOST_CC \
-               CFLAGS="$HOST_CFLAGS -I$SYSROOT_PREFIX/usr/include" \
+               CFLAGS="$HOST_CFLAGS " \
                LDFLAGS="$HOST_LDFLAGS" \
                makestrs
 }

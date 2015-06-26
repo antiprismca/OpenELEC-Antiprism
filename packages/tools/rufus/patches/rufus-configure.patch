@@ -1,0 +1,11 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/configure-orig	2015-04-04 18:25:58.169369872 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/configure	2015-04-04 18:26:43.345369013 -0400
+@@ -3786,7 +3786,7 @@
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ CFLAGS="${saved_CFLAGS}"
+ 
+-AM_CFLAGS="$AM_CFLAGS -std=gnu99 -Wshadow -Wall -Wundef -Wunused -Wstrict-prototypes -Werror-implicit-function-declaration $nopointersign_cflags"
++AM_CFLAGS="$AM_CFLAGS -std=gnu99 -Wall -Wundef -Wstrict-prototypes -Werror-implicit-function-declaration $nopointersign_cflags"
+ 
+ 
+ 

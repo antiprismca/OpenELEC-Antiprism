@@ -1,10 +1,10 @@
 # VERSION: set full version, use "devel" for development version
-  OPENELEC_VERSION="4.1.6"
-  ANTIPRISM_VERSION="0.9.7"
+  OPENELEC_VERSION="5.0.8"
+  ANTIPRISM_VERSION="0.9.8"
 
 # OS_VERSION: OS Version
-  OS_VERSION="4.2"
+  OS_VERSION="5.0"
 
 # ADDON_VERSION: Addon version
-  ADDON_VERSION="4.1"
+  ADDON_VERSION="4.3"
 

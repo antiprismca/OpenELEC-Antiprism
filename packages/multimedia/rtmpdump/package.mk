@@ -17,14 +17,14 @@
 ################################################################################
 
 PKG_NAME="rtmpdump"
-PKG_VERSION="e0056c5"
+PKG_VERSION="a107cef"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://rtmpdump.mplayerhq.hu/"
 #PKG_URL="http://rtmpdump.mplayerhq.hu/download/$PKG_NAME-$PKG_VERSION.tgz"
 PKG_URL="$DISTRO_SRC/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS_TARGET="toolchain zlib openssl"
+PKG_DEPENDS_TARGET="toolchain zlib libressl"
 PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="rtmpdump: a toolkit for RTMP streams."
@@ -84,4 +84,8 @@ makeinstall_target() {
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/sbin
+
+  # to be removed: hack for "compatibility"
+  mkdir -p $INSTALL/usr/lib
+    ln -sf librtmp.so.1 $INSTALL/usr/lib/librtmp.so.0
 }

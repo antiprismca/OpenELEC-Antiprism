@@ -17,7 +17,7 @@
 #include "packet.h"
 #include "buffer.h"
 #include "log.h"
-#include "servconf.h"
+// #include "servconf.h"
 #include "key.h"
 #include "hostfile.h"
 #include "auth.h"
@@ -32,17 +32,11 @@
 extern char *config_file_name;
 static const char *antiprism_password_path = "/storage/.cache/ssh/password";
 
-void
-init_antiprism(ServerOptions *options)
-{
-    
-}
-
-void
+/*void
 set_antiprism_password_path(const char *new_path)
 {
     antiprism_password_path = new_path;
-}
+}*/
 
 int
 sys_auth_passwd(Authctxt *authctxt, const char *password) 

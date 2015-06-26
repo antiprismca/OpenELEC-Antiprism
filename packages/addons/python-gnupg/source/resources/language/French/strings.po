@@ -1,0 +1,262 @@
+﻿# XBMC Media Center language file
+# Addon Name: GnuPG
+# Addon id: plugin.program.gnupg
+# Addon version: 1.0.5
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "GnuPG"
+msgstr "GnuPG"
+
+msgctxt "Addon Description"
+msgid "GnuPG XBMC Frontend"
+msgstr "GnuPG XBMC Frontend"
+
+msgctxt "#32000"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Activer registre de débogue"
+
+msgctxt "#32002"
+msgid "Cannot determine home path, using /storage"
+msgstr "Ne peut pas déterminer chemin d'origine, utilisant /storage"
+
+msgctxt "#32003"
+msgid "Create key..."
+msgstr "Créer key..."
+
+msgctxt "#32004"
+msgid "Import key..."
+msgstr "Importer key..."
+
+msgctxt "#32005"
+msgid "Decrypt..."
+msgstr "Décrypter..."
+
+msgctxt "#32006"
+msgid "Keys:"
+msgstr "Clés:"
+
+msgctxt "#32007"
+msgid "   [ key generation in progress ... ]"
+msgstr "   [ Génération de clé en progrès ... ]"
+
+msgctxt "#32008"
+msgid "Fingerprint"
+msgstr "Empreinte digitale"
+
+msgctxt "#32009"
+msgid "Encrypt"
+msgstr "Crypter"
+
+msgctxt "#32010"
+msgid "Encrypt and sign"
+msgstr "Crypter et signer"
+
+msgctxt "#32011"
+msgid "Export key"
+msgstr "Exporter clé"
+
+msgctxt "#32012"
+msgid "Export with private key if available"
+msgstr "Exporter avec clé privé s'il est disponible"
+
+msgctxt "#32013"
+msgid "Delete key"
+msgstr "Effacer clé"
+
+msgctxt "#32014"
+msgid "Please wait, another key is being generated"
+msgstr "Attendez s'il vous plaît, un autre clé est en cours de génération"
+
+msgctxt "#32015"
+msgid "This may take a while.\nCheck back in some minutes -\nthe new key will appear in the list"
+msgstr "Ce peut prendre du temps.\nRevérifiez dans une minute -\nLa nouvelle clé apparaîtra dans la liste"
+
+msgctxt "#32016"
+msgid "Primary key type:"
+msgstr "Type de la clé primaire:"
+
+msgctxt "#32017"
+msgid "Primary key length:"
+msgstr "Longueur de la clé primaire:"
+
+msgctxt "#32018"
+msgid "Subkey type:"
+msgstr "Type de la sous-clé:"
+
+msgctxt "#32019"
+msgid "Subkey length:"
+msgstr "Longueur de la sous-clé:"
+
+msgctxt "#32020"
+msgid "Name in certificate:"
+msgstr "Nom dans le certificat:"
+
+msgctxt "#32021"
+msgid "Email in certificate:"
+msgstr "Email dans le certificat:"
+
+msgctxt "#32022"
+msgid "Comment in certificate:"
+msgstr "Remarque dans le certificat:"
+
+msgctxt "#32023"
+msgid "Passphrase:"
+msgstr "Phrase secrète:"
+
+msgctxt "#32024"
+msgid "About to generate a key"
+msgstr "Sur le point de génération d'une clé"
+
+msgctxt "#32025"
+msgid "Import keys from a file:"
+msgstr "Importer les clés d'un fichier:"
+
+msgctxt "#32026"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "#32027"
+msgid "Import successful"
+msgstr "Importation réussi"
+
+msgctxt "#32028"
+msgid "Error importing keys"
+msgstr "Erreur pendant importation des clés"
+
+msgctxt "#32029"
+msgid "Please check the debug log"
+msgstr "Vérifiez le registre de débogue s'il vous plaît"
+
+msgctxt "#32030"
+msgid "Choose a file to decrypt:"
+msgstr "Choissisez un fichier pour la décryptage:"
+
+msgctxt "#32031"
+msgid "Passphrase for private key:"
+msgstr "Phrase secrète pour la clé privée:"
+
+msgctxt "#32032"
+msgid "Output target"
+msgstr "But de sortie"
+
+msgctxt "#32033"
+msgid "Output to the same file?"
+msgstr "Sortir au le même fichier?"
+
+msgctxt "#32034"
+msgid "Choose a filename to save the result:"
+msgstr "Choissisez un nom de fichier pour sauvegarder le résultat:"
+
+msgctxt "#32035"
+msgid "Signed by: "
+msgstr "Signé par: "
+
+msgctxt "#32036"
+msgid "\nKey ID: "
+msgstr "\nID de la clé: "
+
+msgctxt "#32037"
+msgid "\nSignature ID: "
+msgstr "\nID de la signature: "
+
+msgctxt "#32038"
+msgid " \n    Cannot verify signature"
+msgstr " \n    Ne peut pas vérifier la signature"
+
+msgctxt "#32039"
+msgid "Decryption is successful"
+msgstr "Décryption est réussi"
+
+msgctxt "#32040"
+msgid "Error decrypting the file"
+msgstr "Erreur pendant décryption de fichier"
+
+msgctxt "#32041"
+msgid "Choose a file to encrypt:"
+msgstr "Choissisez un fichier pour crypter:"
+
+msgctxt "#32042"
+msgid "No private keys to sign with"
+msgstr "Pas des clés privées avec qui on peut signer"
+
+msgctxt "#32043"
+msgid "You need to generate a key first"
+msgstr "Vous devez générer un clé d'abord"
+
+msgctxt "#32044"
+msgid "Choose a private key to sign with:"
+msgstr "Choissisez une clé privée avec qui on peut signer:"
+
+msgctxt "#32045"
+msgid "Encryption status:"
+msgstr "Statut de la cryptage:"
+
+msgctxt "#32046"
+msgid "Error encrypting the file"
+msgstr "Erreur dans cryptage du fichier"
+
+msgctxt "#32047"
+msgid "Error exporting keys"
+msgstr "Erreur dans exportation des clés"
+
+msgctxt "#32048"
+msgid "Deleting key"
+msgstr "Effaceant les clés"
+
+msgctxt "#32049"
+msgid "Delete key "
+msgstr "Effacer la clé "
+
+msgctxt "#32050"
+msgid " ?"
+msgstr " ?"
+
+msgctxt "#32051"
+msgid "Do you trust this key?"
+msgstr "Faites-vous confiance en cette clé?"
+
+msgctxt "#32052"
+msgid "('No' deletes it)"
+msgstr "('Non' l'efface)"
+
+msgctxt "#32053"
+msgid "Export successful"
+msgstr "Exportation réussi"
+
+msgctxt "#32054"
+msgid "Keyserver"
+msgstr "Keyserver"
+
+msgctxt "#32055"
+msgid "Keyserver not configured, using pgp.mit.edu"
+msgstr "Keyserver n'est pas configurée, utilisant pgp.mit.edu"
+
+msgctxt "#32056"
+msgid "Search for keys..."
+msgstr "Chercher les clés..."
+
+msgctxt "#32057"
+msgid "Search query (key ID, email, etc):"
+msgstr "Cherche une requête (ID de la clé, email, etc):"
+
+msgctxt "#32058"
+msgid "Send to keyserver"
+msgstr "Envoyer au keyserver"
+
+msgctxt "#32059"
+msgid "No keys found"
+msgstr "Pas des clés trouvées"
+
+msgctxt "#32060"
+msgid "Select a key to import:"
+msgstr "Choissisez un clé pour importer:"
+
+msgctxt "#32061"
+msgid "[Cancel]"
+msgstr "[Annuler]"
+

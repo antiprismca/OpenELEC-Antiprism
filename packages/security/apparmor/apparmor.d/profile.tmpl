@@ -1,0 +1,148 @@
+profile common /**  flags=(complain)  {
+  %include = deny-all
+  %include = allow-general, kodi-caps
+
+  /usr/bin/i2p-runplain Px,
+  /usr/bin/tor Px,
+  /usr/share/kodi/addons/plugin.program.truecrypt/bin/truecrypt.sh Px,
+  /usr/share/kodi/addons/script.service.antiprism/bin/cryptsetup.sh Px,
+  /usr/share/kodi/addons/script.service.antiprism/bin/{backup_profile.sh,restore_profile.sh} Px,
+  /usr/share/kodi/addons/plugin.program.i2p/bin/addressbook.sh Px,
+  /usr/bin/gpg Px,
+  /usr/bin/links Px,
+  /usr/sbin/connman-vpnd Px -> openvpn,
+  /usr/sbin/openvpn Px -> openvpn,
+
+  /usr/sbin/hiawatha Px,
+  /usr/bin/systemctl Ux,
+  /usr/lib/systemd/systemd-udevd Ux,
+  /usr/lib/systemd/systemd-sysctl Ux,
+}
+
+profile ecc_tools flags=(complain)  {
+  %include = allow-general
+}
+
+profile backup_util flags=(complain)  {
+  %include = deny-all/i2p-all-files/tor-files/gnupg-files
+  %include = allow-general
+}
+
+/bin/switch_root flags=(complain)  {
+  %include = deny-all
+  %include = allow-general-common, chroot-caps
+}
+
+/usr/sbin/hiawatha flags=(complain)  {
+  %include = deny-all/v4l2grab-files
+  %include = allow-general, kodi-caps
+}
+
+profile sshd flags=(complain)  {
+  %include = deny-all/ssh-files
+  %include = allow-general-common, sshd-caps
+
+  /bin/chmod ix,
+  /usr/sbin/sshd ix,
+  /bin/sh Px -> sshd_sh,
+}
+
+profile sshd_sh flags=(complain)  {
+  %include = deny-all/i2p-site-files/tor-site-files,allow-read-tor-site-files
+  %include = allow-general, sshd_sh-caps
+}
+
+/usr/bin/tor flags=(complain)  {
+  %include = deny-all/tor-files/i2p-site-files
+  %include = allow-general,setgid-caps
+}
+
+/usr/bin/i2p-runplain flags=(complain)  {
+  %include = deny-all/i2p-all-files
+  %include = allow-general,setgid-caps,i2p-extra-caps
+  
+  /usr/bin/links Px,
+}
+
+/usr/bin/privoxy flags=(complain)  {
+  %include = deny-all/i2p-all-files/tor-files
+  %include = allow-general
+}
+
+/usr/share/kodi/addons/plugin.program.truecrypt/bin/truecrypt.sh flags=(complain)  {
+  %include = deny-all/openvpn-files/tor-torrc-file
+  %include = allow-general-common, truecrypt-caps
+
+  /usr/sbin/openvpn Px -> openvpn,
+  /usr/bin/{ecc_tools,ecc_key_gen,ecc_encrypt} Px -> ecc_tools,
+  /usr/sbin/sshd Px -> sshd,
+  /usr/bin/ssh-keygen Px -> sshd,
+  /usr/bin/ecc_hashpassword Px -> sshd,
+  /bin/{rm,mkdir,sed} Px -> unconfined_sh,
+}
+
+/usr/share/kodi/addons/script.service.antiprism/bin/cryptsetup.sh flags=(complain)  {
+  %include = deny-all/openvpn-files/tor-torrc-file
+  %include = allow-general-common, truecrypt-caps
+
+  /usr/sbin/openvpn Px -> openvpn,
+  /usr/bin/{ecc_tools,ecc_key_gen,ecc_encrypt} Px -> ecc_tools,
+  /usr/sbin/sshd Px -> sshd,
+  /usr/bin/ssh-keygen Px -> sshd,
+  /usr/bin/ecc_hashpassword Px -> sshd,
+  /bin/{rm,mkdir,sed} Px -> unconfined_sh,
+}
+
+/usr/share/kodi/addons/script.service.antiprism/bin/backup_profile.sh flags=(complain)  {
+  %include = deny-all
+  %include = allow-general-common, truecrypt-caps
+
+  /bin/tar Px -> backup_util,
+  /usr/bin/{ecc_tools,ecc_key_gen,ecc_encrypt} Px -> ecc_tools,
+}
+
+/usr/share/kodi/addons/script.service.antiprism/bin/restore_profile.sh flags=(complain)  {
+  %include = deny-all
+  %include = allow-general-common, truecrypt-caps
+
+  /bin/tar Px -> backup_util,
+  /usr/bin/{ecc_tools,ecc_key_gen,ecc_encrypt} Px -> ecc_tools,
+}
+
+/usr/share/kodi/addons/plugin.program.i2p/bin/addressbook.sh flags=(complain)  {
+  %include = deny-all/exchange-files/i2pbote-profile-files,allow-read-keyfile
+  %include = allow-general-common
+
+  /usr/bin/{ecc_tools,ecc_safedecrypt,ecc_safeencrypt} Px -> ecc_tools,
+  /usr/bin/gpg Px,
+  /bin/{cat,cp,rm,mv,busybox} ix,
+  /usr/bin/jq ix,
+}
+
+/usr/bin/gpg flags=(complain)  {
+  %include = deny-all/gnupg-files/exchange-files,allow-read-keyfile
+  %include = allow-general-common, gnupg-caps
+  
+  /usr/bin/gpg ix,
+}
+
+/usr/bin/links flags=(complain)  {
+  %include = deny-all/links-files
+  %include = allow-general-common
+  
+  /usr/bin/links ix,
+}
+
+profile openvpn flags=(complain)  {
+  %include = deny-all/openvpn-files
+  %include = allow-general-common, openvpn-caps
+  
+  /usr/sbin/openvpn ix,
+}
+
+profile unconfined_sh flags=(complain)  {
+  %include = flash-mount-point
+  # no restrictions
+  %include = allow-general-common, unconfined_sh-caps
+}
+

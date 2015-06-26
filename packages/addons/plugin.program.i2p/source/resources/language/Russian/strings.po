@@ -1,0 +1,249 @@
+# XBMC Media Center language file
+# Addon Name: I2P
+# Addon id: plugin.program.i2p
+# Addon version: 1.0.12
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "I2P"
+msgstr "I2P"
+
+msgctxt "Addon Description"
+msgid "I2P XBMC Frontend"
+msgstr "Интерфейс пользователя I2P для XBMC"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Отладочный лог"
+
+msgctxt "#32002"
+msgid "Please access I2P plugin from AntiPrism"
+msgstr "Пожалуйста, запускайте плагин I2P из AntiPrism"
+
+msgctxt "#32003"
+msgid "Torrents"
+msgstr "Торренты"
+
+msgctxt "#32004"
+msgid "Address Book"
+msgstr "Адресная книга"
+
+msgctxt "#32005"
+msgid "Secure Mail"
+msgstr "Защищённая почта"
+
+msgctxt "#32010"
+msgid "Torrents directory does not exist:"
+msgstr "Директорий торрентов не существует:"
+
+msgctxt "#32011"
+msgid "Select a .torrent file to add"
+msgstr "Выберите файл с расшинением .torrent"
+
+msgctxt "#32012"
+msgid "Torrent already exists"
+msgstr "Торрент уже существует"
+
+msgctxt "#32013"
+msgid "Would you like to replace it?"
+msgstr "Хотите его заменить?"
+
+msgctxt "#32014"
+msgid "Error"
+msgstr "Ошибка"
+
+msgctxt "#32015"
+msgid "Copying failed"
+msgstr "Копирование неуспешно"
+
+msgctxt "#32016"
+msgid "Deleting .torrent file:"
+msgstr "Удаление файла .torrent:"
+
+msgctxt "#32017"
+msgid "Open torrents directory..."
+msgstr "Открыть директорий торрентов..."
+
+msgctxt "#32018"
+msgid "Add a new torrent..."
+msgstr "Добавить торрент..."
+
+msgctxt "#32019"
+msgid "Active torrents:"
+msgstr "Активные торренты:"
+
+msgctxt "#32020"
+msgid "Info"
+msgstr "Информация"
+
+msgctxt "#32021"
+msgid "Delete .torrent"
+msgstr "Удалить .torrent"
+
+msgctxt "#32022"
+msgid "Deleting failed"
+msgstr "Удаление неуспешно"
+
+msgctxt "#32023"
+msgid "Unknown"
+msgstr "Неизвестно"
+
+msgctxt "#32024"
+msgid "Status: "
+msgstr "Статус: "
+
+msgctxt "#32025"
+msgid "Downloaded: "
+msgstr "Закачано: "
+
+msgctxt "#32026"
+msgid "Uploaded: "
+msgstr "Откачано: "
+
+msgctxt "#32027"
+msgid "Search for torrents..."
+msgstr "Искать торренты..."
+
+msgctxt "#32028"
+msgid "Search Postmaster Tracker for:"
+msgstr "Искать на Postmaster Tracker:"
+
+msgctxt "#32029"
+msgid "Select category"
+msgstr "Выберите категорию"
+
+msgctxt "#32030"
+msgid "Order by"
+msgstr "Упорядочивание"
+
+msgctxt "#32031"
+msgid "Show"
+msgstr "Показывать"
+
+msgctxt "#32032"
+msgid "Language"
+msgstr "Язык"
+
+msgctxt "#32033"
+msgid "Select torrent to download"
+msgstr "Выберите торрент для скачивания"
+
+msgctxt "#32034"
+msgid "[ Previous page ]"
+msgstr "[ Предыдущая страница ]"
+
+msgctxt "#32035"
+msgid "[ Next page ]"
+msgstr "[ Следующая страница ]"
+
+msgctxt "#32036"
+msgid "[ Done ]"
+msgstr "[ Готово ]"
+
+msgctxt "#32037"
+msgid "Your search produced no results"
+msgstr "Ваш поиск закончился безрезультатно"
+
+msgctxt "#32038"
+msgid "Queuing torrent"
+msgstr "Постановка торрента в очередь"
+
+msgctxt "#32049"
+msgid "Select a file name to export the contacts"
+msgstr "Задайте имя файла экспорта контактов"
+
+msgctxt "#32050"
+msgid "Select a file with contacts to import"
+msgstr "Выберите файл для импорта контактов"
+
+msgctxt "#32051"
+msgid "Enter your key password if the file is encrypted"
+msgstr "Введите пароль Вашего ключа, если файл зашифрован"
+
+msgctxt "#32052"
+msgid "Enter I2P-Bote password if enabled"
+msgstr "Введите пароль I2P-Bote, если сконфигурирован"
+
+msgctxt "#32053"
+msgid "Select recepients:"
+msgstr "Выберите ключи получателей:"
+
+msgctxt "#32054"
+msgid "Enter your key password to sign the export"
+msgstr "Введите пароль Вашего ключа для подписи файла экспорта"
+
+msgctxt "#32055"
+msgid "[ Import... ]"
+msgstr "[ Импортировать... ]"
+
+msgctxt "#32056"
+msgid "[ Export selected... ]"
+msgstr "[ Экспортировать выбранное... ]"
+
+msgctxt "#32057"
+msgid "Address Book: (click to toggle selection)"
+msgstr "Адресная книга: (нажмите, чтобы изменить выбор)"
+
+msgctxt "#32058"
+msgid "Export succeeded"
+msgstr "Экспорт успешен"
+
+msgctxt "#32059"
+msgid "[ OK ]"
+msgstr "[ OKей ]"
+
+msgctxt "#32060"
+msgid "[ Cancel ]"
+msgstr "[ Отмена ]"
+
+msgctxt "#32061"
+msgid "Choose saving method"
+msgstr "Выберите метод сохранения экспорта"
+
+msgctxt "#32062"
+msgid "Save to a file"
+msgstr "Сохранить в файл"
+
+msgctxt "#32063"
+msgid "Save to dead drop"
+msgstr "Сохранить в тайнике"
+
+msgctxt "#32064"
+msgid "Dead drop URL (empty == default)"
+msgstr "URL тайника (пустой == по умолчанию)"
+
+msgctxt "#32065"
+msgid "Choose import method"
+msgstr "Выберите метод импортирования"
+
+msgctxt "#32066"
+msgid "Import from a file"
+msgstr "Импортировать из файла"
+
+msgctxt "#32067"
+msgid "Import from dead drop"
+msgstr "Импортировать из тайника"
+
+msgctxt "#32068"
+msgid "Enter drop ID:"
+msgstr "Введите идентификационный номер тайника:"
+
+msgctxt "#32069"
+msgid "Searching torrents..."
+msgstr "Поиск в процессе..."
+
+msgctxt "#32070"
+msgid "Retrieving contacts..."
+msgstr "Контакты загружаются..."
+
+msgctxt "#32071"
+msgid "Please wait"
+msgstr "Подождите пожалуйста"
+
+msgctxt "#32072"
+msgid "[ Start all stopped torrents ]"
+msgstr "[ Запустить все остановленные торренты ]"
+
+msgctxt "#32073"
+msgid "[ Stop all started torrents ]"
+msgstr "[ Остановить все запущенные торренты ]"

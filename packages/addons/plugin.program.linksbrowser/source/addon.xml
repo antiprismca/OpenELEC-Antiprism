@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<addon id="plugin.program.linksbrowser"
+       name="Links Web Browser"
+       version="1.0.2"
+       provider-name="www.antiprism.ca">
+  <extension point="xbmc.python.pluginsource" provides="executable" library="addon.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Links Web Browser plugin for OpenELEC</summary>
+    <description>
+Links Web Browser plugin for OpenELEC
+Links is free software of Twibright Labs (http://links.twibright.com/)
+Visit http://www.antiprism.ca for more privacy tools
+    </description>
+    <platform>all</platform>
+    <license>GPL</license>
+  </extension>
+</addon>

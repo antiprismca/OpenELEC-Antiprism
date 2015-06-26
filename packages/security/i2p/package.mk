@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="i2p"
-PKG_VERSION="0.9.16"
+PKG_VERSION="0.9.20"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -66,7 +66,7 @@ replace_paths() {
 }
 
 replace_rules() {
-  sed -i 's#clientApp\.0\.args\=7657\ \:\:1\,127\.0\.0\.1#\#clientApp.0.args=7657 ::1,127.0.0.1#g;s#\#clientApp\.0\.args\=7657\ 0\.0\.0\.0#clientApp.0.args=7657 0.0.0.0#g;s#\#clientApp\.0\.args\=7657\ \:\:\ #clientApp.0.args=7657 :: #g' clients.config
+  sed -i 's#clientApp\.0\.args\=7657\ \:\:1\,127\.0\.0\.1#\#clientApp.0.args=7657 ::1,127.0.0.1#g;s#\#clientApp\.0\.args\=7657\ 0\.0\.0\.0#clientApp.0.args=7657 0.0.0.0#g;s#\#clientApp\.0\.args\=7657\ \:\:\ #clientApp.0.args=7657 :: #g;s#clientApp\.4\.startOnLoad\=true#clientApp.4.startOnLoad=false#g' clients.config
   sed -i 's#interface\=127\.0\.0\.1#interface=0.0.0.0#g' i2ptunnel.config
 }
 

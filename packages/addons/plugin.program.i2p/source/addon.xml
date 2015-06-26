@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<addon id="plugin.program.i2p"
+       name="I2P"
+       version="1.0.12"
+       provider-name="www.antiprism.ca">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" provides="executable" library="addon.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>I2P frontend for XBMC</summary>
+    <description>
+Python GUI interface for I2P under XBMC
+Copyright (c) 2014, AntiPrism.ca
+All rights reserved.
+For more privacy tools, visit http://www.antiprism.ca
+    </description>
+    <platform>all</platform>
+    <license>BSD</license>
+  </extension>
+</addon>

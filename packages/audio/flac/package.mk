@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="flac"
-PKG_VERSION="1.3.0"
+PKG_VERSION="1.3.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
@@ -33,7 +33,9 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 # package specific configure options
-PKG_CONFIGURE_OPTS_TARGET="--disable-rpath \
+PKG_CONFIGURE_OPTS_TARGET="--enable-static \
+                           --disable-shared \
+                           --disable-rpath \
                            --disable-altivec \
                            --disable-doxygen-docs \
                            --disable-thorough-tests \
@@ -48,6 +50,13 @@ if [ $TARGET_ARCH = "i386" -o $TARGET_ARCH = "x86_64" ]; then
 else
   PKG_CONFIGURE_OPTS_TARGET="$PKG_CONFIGURE_OPTS_TARGET --disable-sse"
 fi
+
+pre_configure_target() {
+  # flac-1.3.1 dont build with LTO support
+  strip_lto
+
+  export CFLAGS="$CFLAGS -fPIC -DPIC"
+}
 
 post_makeinstall_target() {
   rm -rf $INSTALL/usr/bin

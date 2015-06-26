@@ -1,0 +1,10 @@
+--- gpm/src/daemon/open_console.c	2015-04-12 10:57:33.562289379 -0400
++++ gpm-patched/src/daemon/open_console.c	2015-04-12 10:58:00.510290061 -0400
+@@ -23,6 +23,7 @@
+ #include <fcntl.h>              /* open and co.  */
+ #include <sys/stat.h>           /* stat() */
+ #include <sys/ioctl.h>          /* ioctl() */
++#include <sys/sysmacros.h>
+ 
+ /* Linux specific (to be outsourced in gpm2 */
+ #include <linux/serial.h>       /* for serial console check */

@@ -1,0 +1,44 @@
+--- tor-browser_en-US/start-tor-browser	1999-12-31 19:00:00.000000000 -0500
++++ tor-browser_en-US-patched/start-tor-browser	2015-03-15 00:42:10.012138997 -0400
+@@ -111,10 +111,10 @@ complain () {
+ 	fi
+ }
+ 
+-if [ "`id -u`" -eq 0 ]; then
+-	complain "The Tor Browser Bundle should not be run as root.  Exiting."
+-	exit 1
+-fi
++#if [ "`id -u`" -eq 0 ]; then
++#	complain "The Tor Browser Bundle should not be run as root.  Exiting."
++#	exit 1
++#fi
+ 
+ debug=0
+ usage_message="usage: $0 [--debug]"
+@@ -207,18 +207,18 @@ else
+ 	export HOME
+ fi
+ 
+-SYSARCHITECTURE=$(getconf LONG_BIT)
+-TORARCHITECTURE=$(expr "$(file TorBrowser/Tor/tor)" : '.*ELF \([[:digit:]]*\)')
+-
+-if [ $SYSARCHITECTURE -ne $TORARCHITECTURE ]; then
+-   complain "Wrong architecture? 32-bit vs. 64-bit."
+-   exit 1
+-fi
++#SYSARCHITECTURE=$(getconf LONG_BIT)
++#TORARCHITECTURE=$(expr "$(file TorBrowser/Tor/tor)" : '.*ELF \([[:digit:]]*\)')
++#
++#if [ $SYSARCHITECTURE -ne $TORARCHITECTURE ]; then
++#   complain "Wrong architecture? 32-bit vs. 64-bit."
++#   exit 1
++#fi
+ 
+ LD_LIBRARY_PATH="${HOME}/TorBrowser/Tor/"
+ export LD_LIBRARY_PATH
+ 
+-function setControlPortPasswd() {
++setControlPortPasswd() {
+     local ctrlPasswd=$1
+ 
+     if test -z "$ctrlPasswd" -o "$ctrlPasswd" = $'\"secret\"' ; then

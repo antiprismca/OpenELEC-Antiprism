@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="wpa_supplicant"
-PKG_VERSION="2.2"
+PKG_VERSION="2.4"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://hostap.epitest.fi/wpa_supplicant/"
 PKG_URL="http://hostap.epitest.fi/releases/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain dbus libnl openssl"
+PKG_DEPENDS_TARGET="toolchain dbus libnl libressl"
 PKG_PRIORITY="optional"
 PKG_SECTION="network"
 PKG_SHORTDESC="wpa_supplicant: An IEEE 802.11i supplicant implementation"

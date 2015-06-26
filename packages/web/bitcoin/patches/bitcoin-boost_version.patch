@@ -1,0 +1,91 @@
+--- bitcoin/configure	2015-02-26 22:22:49.207695330 -0500
++++ bitcoin-patched/configure	2015-03-11 10:45:01.980309150 -0400
+@@ -23925,9 +23925,6 @@ fi
+                   done
+ 
+             fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_system library!" "$LINENO" 5
+-            fi
+ 			if test "x$link_system" = "xno"; then
+ 				as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+ 			fi
+@@ -24164,12 +24161,6 @@ fi
+                   done
+ 
+             fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_filesystem library!" "$LINENO" 5
+-            fi
+-			if test "x$link_filesystem" != "xyes"; then
+-				as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+-			fi
+ 		fi
+ 
+ 		CPPFLAGS="$CPPFLAGS_SAVED"
+@@ -24392,12 +24383,6 @@ fi
+ 
+                   done
+                 fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_program_options library!" "$LINENO" 5
+-            fi
+-				if test "x$link_program_options" != "xyes"; then
+-					as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+-				fi
+ 		fi
+ 		CPPFLAGS="$CPPFLAGS_SAVED"
+ 	LDFLAGS="$LDFLAGS_SAVED"
+@@ -24655,9 +24640,6 @@ fi
+                   done
+ 
+             fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_thread library!" "$LINENO" 5
+-            fi
+ 			if test "x$link_thread" = "xno"; then
+ 				as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+                         else
+@@ -24905,9 +24887,6 @@ fi
+                   done
+ 
+             fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_chrono library!" "$LINENO" 5
+-            fi
+ 			if test "x$link_chrono" = "xno"; then
+ 				as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+ 			fi
+@@ -25187,12 +25166,6 @@ fi
+                   done
+                done
+             fi
+-            if test "x$ax_lib" = "x"; then
+-                as_fn_error $? "Could not find a version of the boost_unit_test_framework library!" "$LINENO" 5
+-            fi
+-			if test "x$link_unit_test_framework" != "xyes"; then
+-				as_fn_error $? "Could not link against $ax_lib !" "$LINENO" 5
+-			fi
+ 		fi
+ 
+ 		CPPFLAGS="$CPPFLAGS_SAVED"
+@@ -25236,8 +25209,9 @@ if test x$use_boost = xyes; then
+ BOOST_LIBS="$BOOST_LDFLAGS $BOOST_SYSTEM_LIB $BOOST_FILESYSTEM_LIB $BOOST_PROGRAM_OPTIONS_LIB $BOOST_THREAD_LIB"
+ 
+ if test x$ax_cv_boost_chrono = xyes; then
++BOOST_CHRONO_LIB=-lboost_chrono
+ TEMP_LIBS="$LIBS"
+-LIBS="$BOOST_LIBS $BOOST_CHRONO_LIB $LIBS"
++LIBS="$BOOST_LIBS $BOOST_CHRONO_LIB $LIBS -lboost_system"
+ TEMP_CPPFLAGS="$CPPFLAGS"
+ CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -25290,7 +25264,7 @@ int
+ main ()
+ {
+ 
+-  #if BOOST_VERSION <= 105600
++  #if BOOST_VERSION <= 105700
+       boost::this_thread::sleep(boost::posix_time::milliseconds(0));
+   #else
+    choke me

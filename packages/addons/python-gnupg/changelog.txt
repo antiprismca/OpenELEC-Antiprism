@@ -1,0 +1,28 @@
+Current Version: 1.0.6
+
+Added Russian resources
+
+Version: 1.0.5
+
+Addressed plugin caching issue
+
+Version: 1.0.4
+
+Some keyserver-related fixes
+
+Version: 1.0.3
+
+Added background graphics
+Changed license to BSD
+
+Version: 1.0.2
+
+Added verification of fingerprint in import
+Displaying the home path
+
+Version: 1.0.1
+
+Basic GnuPG functionality
+Single destination only (multiple recepients - todo)
+Sign/verify only with encrypt/decrypt
+

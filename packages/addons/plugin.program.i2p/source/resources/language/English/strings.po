@@ -1,0 +1,249 @@
+# XBMC Media Center language file
+# Addon Name: I2P
+# Addon id: plugin.program.i2p
+# Addon version: 1.0.12
+# Addon Provider: AntiPrism.ca
+
+msgctxt "Addon Summary"
+msgid "I2P"
+msgstr "I2P"
+
+msgctxt "Addon Description"
+msgid "I2P XBMC Frontend"
+msgstr "I2P XBMC Frontend"
+
+msgctxt "#32001"
+msgid "Enable debug log"
+msgstr "Enable debug log"
+
+msgctxt "#32002"
+msgid "Please access I2P plugin from AntiPrism"
+msgstr "Please access I2P plugin from AntiPrism"
+
+msgctxt "#32003"
+msgid "Torrents"
+msgstr "Torrents"
+
+msgctxt "#32004"
+msgid "Address Book"
+msgstr "Address Book"
+
+msgctxt "#32005"
+msgid "Secure Mail"
+msgstr "Secure Mail"
+
+msgctxt "#32010"
+msgid "Torrents directory does not exist:"
+msgstr "Torrents directory does not exist:"
+
+msgctxt "#32011"
+msgid "Select a .torrent file to add"
+msgstr "Select a .torrent file to add"
+
+msgctxt "#32012"
+msgid "Torrent already exists"
+msgstr "Torrent already exists"
+
+msgctxt "#32013"
+msgid "Would you like to replace it?"
+msgstr "Would you like to replace it?"
+
+msgctxt "#32014"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "#32015"
+msgid "Copying failed"
+msgstr "Copying failed"
+
+msgctxt "#32016"
+msgid "Deleting .torrent file:"
+msgstr "Deleting .torrent file:"
+
+msgctxt "#32017"
+msgid "Open torrents directory..."
+msgstr "Open torrents directory..."
+
+msgctxt "#32018"
+msgid "Add a new torrent..."
+msgstr "Add a new torrent..."
+
+msgctxt "#32019"
+msgid "Active torrents:"
+msgstr "Active torrents:"
+
+msgctxt "#32020"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "#32021"
+msgid "Delete .torrent"
+msgstr "Delete .torrent"
+
+msgctxt "#32022"
+msgid "Deleting failed"
+msgstr "Deleting failed"
+
+msgctxt "#32023"
+msgid "Unknown"
+msgstr "Unknown"
+
+msgctxt "#32024"
+msgid "Status: "
+msgstr "Status: "
+
+msgctxt "#32025"
+msgid "Downloaded: "
+msgstr "Downloaded: "
+
+msgctxt "#32026"
+msgid "Uploaded: "
+msgstr "Uploaded: "
+
+msgctxt "#32027"
+msgid "Search for torrents..."
+msgstr "Search for torrents..."
+
+msgctxt "#32028"
+msgid "Search Postmaster Tracker for:"
+msgstr "Search Postmaster Tracker for:"
+
+msgctxt "#32029"
+msgid "Select category"
+msgstr "Select category"
+
+msgctxt "#32030"
+msgid "Order by"
+msgstr "Order by"
+
+msgctxt "#32031"
+msgid "Show"
+msgstr "Show"
+
+msgctxt "#32032"
+msgid "Language"
+msgstr "Language"
+
+msgctxt "#32033"
+msgid "Select torrent to download"
+msgstr "Select torrent to download"
+
+msgctxt "#32034"
+msgid "[ Previous page ]"
+msgstr "[ Previous page ]"
+
+msgctxt "#32035"
+msgid "[ Next page ]"
+msgstr "[ Next page ]"
+
+msgctxt "#32036"
+msgid "[ Done ]"
+msgstr "[ Done ]"
+
+msgctxt "#32037"
+msgid "Your search produced no results"
+msgstr "Your search produced no results"
+
+msgctxt "#32038"
+msgid "Queuing torrent"
+msgstr "Queuing torrent"
+
+msgctxt "#32049"
+msgid "Select a file name to export the contacts"
+msgstr "Select a file name to export the contacts"
+
+msgctxt "#32050"
+msgid "Select a file with contacts to import"
+msgstr "Select a file with contacts to import"
+
+msgctxt "#32051"
+msgid "Enter your key password if the file is encrypted"
+msgstr "Enter your key password if the file is encrypted"
+
+msgctxt "#32052"
+msgid "Enter I2P-Bote password if enabled"
+msgstr "Enter I2P-Bote password if enabled"
+
+msgctxt "#32053"
+msgid "Select recepients:"
+msgstr "Select recepientis:"
+
+msgctxt "#32054"
+msgid "Enter your key password to sign the export"
+msgstr "Enter your key password to sign the export"
+
+msgctxt "#32055"
+msgid "[ Import... ]"
+msgstr "[ Import... ]"
+
+msgctxt "#32056"
+msgid "[ Export selected... ]"
+msgstr "[ Export selected... ]"
+
+msgctxt "#32057"
+msgid "Address Book: (click to toggle selection)"
+msgstr "Address Book: (click to toggle selection)"
+
+msgctxt "#32058"
+msgid "Export succeeded"
+msgstr "Export succeeded"
+
+msgctxt "#32059"
+msgid "[ OK ]"
+msgstr "[ OK ]"
+
+msgctxt "#32060"
+msgid "[ Cancel ]"
+msgstr "[ Cancel ]"
+
+msgctxt "#32061"
+msgid "Choose saving method"
+msgstr "Choose saving method"
+
+msgctxt "#32062"
+msgid "Save to a file"
+msgstr "Save to a file"
+
+msgctxt "#32063"
+msgid "Save to dead drop"
+msgstr "Save to dead drop"
+
+msgctxt "#32064"
+msgid "Dead drop URL (empty == default)"
+msgstr "Dead drop URL (empty == default)"
+
+msgctxt "#32065"
+msgid "Choose import method"
+msgstr "Choose import method"
+
+msgctxt "#32066"
+msgid "Import from a file"
+msgstr "Import from a file"
+
+msgctxt "#32067"
+msgid "Import from dead drop"
+msgstr "Import from dead drop"
+
+msgctxt "#32068"
+msgid "Enter drop ID:"
+msgstr "Enter drop ID:"
+
+msgctxt "#32069"
+msgid "Searching torrents..."
+msgstr "Searching torrents..."
+
+msgctxt "#32070"
+msgid "Retrieving contacts..."
+msgstr "Retrieving contacts..."
+
+msgctxt "#32071"
+msgid "Please wait"
+msgstr "Please wait"
+
+msgctxt "#32072"
+msgid "[ Start all stopped torrents ]"
+msgstr "[ Start all stopped torrents ]"
+
+msgctxt "#32073"
+msgid "[ Stop all started torrents ]"
+msgstr "[ Stop all started torrents ]"

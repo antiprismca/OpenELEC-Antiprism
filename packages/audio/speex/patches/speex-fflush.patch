@@ -1,0 +1,33 @@
+--- speex/src/skeleton.c	2015-03-08 09:18:14.721618521 -0400
++++ speex-patched/src/skeleton.c	2015-03-08 12:12:18.065882789 -0400
+@@ -17,6 +17,7 @@ int write_ogg_page_to_file(ogg_page *og,
+    
+    written = fwrite(og->header,1, og->header_len, out);
+    written += fwrite(og->body,1, og->body_len, out);
++   if (fflush(out)) exit(1);
+ 
+    return written;
+ }
+--- speex/src/speexenc.c	2015-03-08 09:18:46.885619318 -0400
++++ speex-patched/src/speexenc.c	2015-03-08 12:12:55.089883718 -0400
+@@ -73,6 +73,7 @@ int oe_write_page(ogg_page *page, FILE *
+    int written;
+    written = fwrite(page->header,1,page->header_len, fp);
+    written += fwrite(page->body,1,page->body_len, fp);
++   if (fflush(fp)) exit(1);
+    
+    return written;
+ }
+--- speex/src/speexdec.c	2015-03-08 09:18:34.469619021 -0400
++++ speex-patched/src/speexdec.c	2015-03-08 12:13:13.837884195 -0400
+@@ -748,7 +748,10 @@ int main(int argc, char **argv)
+                            WIN_Play_Samples (out+frame_offset*channels, sizeof(short) * new_frame_size*channels);
+                         else
+ #endif
++                        {
+                            fwrite(out+frame_offset*channels, sizeof(short), new_frame_size*channels, fout);
++                           if (fflush(fout)) exit(1);
++                        }
+                   
+                         audio_size+=sizeof(short)*new_frame_size*channels;
+                      }

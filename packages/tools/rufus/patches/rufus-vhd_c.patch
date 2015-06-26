@@ -1,0 +1,39 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/vhd.c	2015-03-31 23:42:38.464053461 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/vhd.c	2015-03-31 23:43:13.440052796 -0400
+@@ -32,15 +32,27 @@
+ 
+ _CRTIMP time_t __cdecl __MINGW_NOTHROW _time32 (time_t *_Time);
+ 
+-#if defined(_MSC_VER)
+-#define bswap_uint64 _byteswap_uint64
+-#define bswap_uint32 _byteswap_ulong
+-#define bswap_uint16 _byteswap_ushort
+-#else
+-#define bswap_uint64 __builtin_bswap64
+-#define bswap_uint32 __builtin_bswap32
+-#define bswap_uint16 __builtin_bswap16
+-#endif
++static uint16_t
++bswap_uint16(uint16_t v)
++{
++   return   ((v >>  8) & 0xFF00)
++          | ((v & 0xFF00) <<  8);
++}
++
++static uint32_t
++bswap_uint32(uint32_t v)
++{
++   return    (v >> 24)
++          | ((v >>  8) & 0xFF00)
++          | ((v & 0xFF00) <<  8)
++          |  (v << 24)          ;
++}
++
++static uint64_t
++bswap_uint64(uint64_t v)
++{
++   return ((uint64_t)bswap_uint32((uint32_t)v) << 32) | bswap_uint32((uint32_t)(v >> 32));
++}
+ 
+ #define VHD_FOOTER_COOKIE					{ 'c', 'o', 'n', 'e', 'c', 't', 'i', 'x' }
+ 

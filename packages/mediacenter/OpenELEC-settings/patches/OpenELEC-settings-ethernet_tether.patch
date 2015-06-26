@@ -1,0 +1,52 @@
+--- OpenELEC-settings-0.5.8/src/resources/lib/modules/connman.py	2015-01-22 17:05:40.000000000 -0500
++++ OpenELEC-settings-0.5.8.patch/src/resources/lib/modules/connman.py	2015-05-24 16:34:15.130631239 -0400
+@@ -1308,6 +1308,17 @@
+                         'type': 'bool',
+                         'dbus': 'Boolean',
+                         'InfoText': 730,
++                        },
++                        'Tethering': {
++                            'order': 2,
++                            'name': 32392,
++                            'value': '',
++                            'action': 'set_technologie',
++                            'type': 'bool',
++                            'dbus': 'Boolean',
++                            'parent': {'entry': 'Powered', 'value': ['1'
++                                    ]},
++                            'InfoText': 32393,
+                         }}, 
+                     'order': 1
+                     },
+@@ -1830,6 +1841,16 @@
+                             if technologie['Powered'] != True:
+                                 self.Technology.SetProperty('Powered',
+                                         dbus.Boolean(True, variant_level=1))
++                            if settings['Tethering']['value'] == '1':
++                                time.sleep(5)
++                                if technologie['Tethering'] != True:
++                                    self.Technology.SetProperty('Tethering',
++                                            dbus.Boolean(True, variant_level=1))
++                            else:
++                                if technologie['Tethering'] != False:
++                                    self.Technology.SetProperty('Tethering',
++                                            dbus.Boolean(False,
++                                            variant_level=1))
+                         else:
+                             if technologie['Powered'] != False:
+                                 self.Technology.SetProperty('Powered',
+--- OpenELEC-settings-0.5.8/language/English/strings.po	2015-01-22 17:05:40.000000000 -0500
++++ OpenELEC-settings-0.5.8.patch/language/English/strings.po	2015-05-24 16:31:29.910631259 -0400
+@@ -1141,3 +1141,12 @@
+ msgctxt "#32391"
+ msgid "Enable LCD Driver Support"
+ msgstr ""
++
++msgctxt "#32392"
++msgid "Enable 'tethered' Ethernet connection"
++msgstr ""
++
++msgctxt "#32393"
++msgid "NOTE: Tethered ethernet should never be connected to corporate or home network as it will disrupt normal operation of these networks."
++msgstr ""
++

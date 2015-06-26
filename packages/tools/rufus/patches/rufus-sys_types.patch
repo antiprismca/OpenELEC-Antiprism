@@ -1,0 +1,8 @@
+--- rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f/src/sys_types.h	2015-03-31 21:41:28.028191690 -0400
++++ rufus-d32e9dcb451b7d3a8d37241be73e5a3ae7837e8f.patch/src/sys_types.h	2015-03-31 21:42:26.236190584 -0400
+@@ -1,4 +1,4 @@
+-﻿/*
++/*
+     GNU fdisk - a clone of Linux fdisk.
+ 
+     Copyright (C) 2006

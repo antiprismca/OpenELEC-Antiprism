@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category id="general">
+    <setting id="logging" type="bool" label="32001" default="false" />
+    <setting id="deaddropurl" type="text" label="32064" default="" />
+  </category>
+</settings>

@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="boost"
-PKG_VERSION="1_56_0"
+PKG_VERSION="1_57_0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -45,16 +45,13 @@ makeinstall_host() {
 }
 
 pre_configure_target() {
-# boost fails building with LTO support
-  strip_lto
-
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
   export LDFLAGS="$LDFLAGS -fPIC"
 }
 
 configure_target() {
-  sh bootstrap.sh --prefix=/usr \
+  sh bootstrap.sh --prefix=$SYSROOT_PREFIX/usr \
                   --with-bjam=$ROOT/$TOOLCHAIN/bin/bjam \
                   --with-python=$ROOT/$TOOLCHAIN/bin/python \
 
@@ -69,13 +66,15 @@ make_target() {
 makeinstall_target() {
   $ROOT/$TOOLCHAIN/bin/bjam -d2 --toolset=gcc link=static \
                                 --prefix=$SYSROOT_PREFIX/usr \
-				--ignore-site-config \
-                                  --layout=system \
-                                  --with-thread \
-                                  --with-iostreams \
-                                  --with-system \
-                                  --with-serialization \
-                                  --with-filesystem \
-                                  --with-regex -sICU_PATH="$SYSROOT_PREFIX/usr" \
-                                  install
+                                --ignore-site-config \
+                                --layout=tagged \
+                                --with-thread \
+                                --with-iostreams \
+                                --with-system \
+                                --with-serialization \
+                                --with-filesystem \
+                                --with-chrono \
+                                --with-regex -sICU_PATH="$SYSROOT_PREFIX/usr" \
+                                -sICU_PATH="$SYSROOT_PREFIX/usr" \
+                                install
 }

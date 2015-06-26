@@ -18,13 +18,13 @@
 ################################################################################
 
 PKG_NAME="openvpn"
-PKG_VERSION="2.3.4"
+PKG_VERSION="2.3.5"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://openvpn.net"
 PKG_URL="http://swupdate.openvpn.org/community/releases/$PKG_NAME-$PKG_VERSION.tar.xz"
-PKG_DEPENDS_TARGET="toolchain lzo openssl"
+PKG_DEPENDS_TARGET="toolchain lzo libressl"
 PKG_PRIORITY="optional"
 PKG_SECTION="network"
 PKG_SHORTDESC="openvpn: a full featured SSL VPN software solution that integrates OpenVPN server capabilities."
@@ -34,13 +34,14 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 PKG_CONFIGURE_OPTS_TARGET="ac_cv_have_decl_TUNSETPERSIST=no \
+                           --disable-server \
                            --enable-password-save \
                            --disable-plugins \
                            --enable-iproute2 IPROUTE=/sbin/ip \
                            --enable-management \
                            --disable-socks \
                            --disable-http-proxy \
-                           --disable-fragment \
+                           --enable-fragment \
                            --disable-multihome \
                            --disable-port-share \
                            --disable-debug"

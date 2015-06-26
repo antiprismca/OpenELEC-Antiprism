@@ -53,6 +53,12 @@ makeinstall_init() {
     elif [ -f $PROJECT_DIR/$PROJECT/splash/splash-1024.png \
            -o -f $PROJECT_DIR/$PROJECT/splash/splash-full.png ]; then
       cp $PROJECT_DIR/$PROJECT/splash/splash-*.png $INSTALL/splash
+    elif [ -f $DISTRO_DIR/$DISTRO/splash/splash.conf ]; then
+      cp $DISTRO_DIR/$DISTRO/splash/splash.conf $INSTALL/splash
+      cp $DISTRO_DIR/$DISTRO/splash/*.png $INSTALL/splash
+    elif [ -f $DISTRO_DIR/$DISTRO/splash/splash-1024.png \
+           -o -f $DISTRO_DIR/$DISTRO/splash/splash-full.png ]; then
+      cp $DISTRO_DIR/$DISTRO/splash/splash-*.png $INSTALL/splash
     else
       cp $PKG_DIR/splash/splash-*.png $INSTALL/splash
     fi

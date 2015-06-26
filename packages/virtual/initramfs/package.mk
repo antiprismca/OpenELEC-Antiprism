@@ -23,7 +23,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.openelec.tv"
 PKG_URL=""
-PKG_DEPENDS_TARGET="toolchain libc:init busybox:init linux:init plymouth-lite:init diskdev_cmds:init util-linux:init e2fsprogs:init dosfstools:init"
+PKG_DEPENDS_TARGET="toolchain libc:init busybox:init linux:init plymouth-lite:init util-linux:init e2fsprogs:init dosfstools:init"
 PKG_PRIORITY="optional"
 PKG_SECTION="virtual"
 PKG_SHORTDESC="initramfs: Metapackage for installing initramfs"
@@ -38,6 +38,12 @@ fi
 
 if [ "$ANTIPRISM" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET apparmor:target"
+fi
+
+if [ "$INITRAMFS_PARTED_SUPPORT" = yes ]; then
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET util-linux:init"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET e2fsprogs:init"
+  PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET parted:init"
 fi
 
 post_install() {

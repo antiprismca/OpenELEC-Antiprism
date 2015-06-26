@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="alsa-utils"
-PKG_VERSION="1.0.28"
+PKG_VERSION="1.0.29"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.alsa-project.org/"
 PKG_URL="ftp://ftp.alsa-project.org/pub/utils/$PKG_NAME-$PKG_VERSION.tar.bz2"
-PKG_DEPENDS_TARGET="toolchain alsa-lib"
+PKG_DEPENDS_TARGET="toolchain alsa-lib ncurses"
 PKG_PRIORITY="optional"
 PKG_SECTION="audio"
 PKG_SHORTDESC="alsa-utils: Advanced Linux Sound Architecture utilities"
@@ -32,15 +32,17 @@ PKG_LONGDESC="This package includes the utilities for ALSA, like alsamixer, apla
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+export TARGET_CFLAGS="$TARGET_CFLAGS -I$SYSROOT_PREFIX/usr/include/ncurses -L$SYSROOT_PREFIX/usr/lib"
+
 # package specific configure options
 PKG_CONFIGURE_OPTS_TARGET="--disable-dependency-tracking \
                            --disable-xmlto \
-                           --disable-alsamixer \
+                           --enable-alsamixer \
                            --disable-alsaconf \
                            --disable-alsaloop \
                            --enable-alsatest \
-                           --disable-nls"
-
+                           --disable-nls \
+                           --with-curses=ncurses"
 
 post_makeinstall_target() {
   rm -rf $INSTALL/lib $INSTALL/var
@@ -52,7 +54,7 @@ post_makeinstall_target() {
 # so we avoid resetting our soundconfig
   rm -rf $INSTALL/usr/lib/udev/rules.d/90-alsa-restore.rules
 
-  for i in aconnect alsaucm amidi aplaymidi arecord arecordmidi aseqdump aseqnet iecset; do
+  for i in aconnect alsaucm amidi aplaymidi arecordmidi aseqdump aseqnet iecset; do
     rm -rf $INSTALL/usr/bin/$i
   done
 

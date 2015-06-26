@@ -62,7 +62,7 @@ makeinstall_init() {
   (cd parser
     make DESTDIR="$install_dir" install-arch)
   if test -d $PKG_DIR/apparmor.d; then
-    cp -r $PKG_DIR/apparmor.d/*.profile $install_dir/etc/apparmor.d
+    $PKG_DIR/tools/mkrules.sh $PKG_DIR/apparmor.d/rules.def <$PKG_DIR/apparmor.d/profile.tmpl >$install_dir/etc/apparmor.d/all.profile
     for f in $install_dir/etc/apparmor.d/*.profile; do
         sed -i -e 's/\s*flags=(complain)\s*/ /g' "$f"
     done
