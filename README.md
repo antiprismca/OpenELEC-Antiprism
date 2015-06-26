@@ -15,7 +15,7 @@ solution for home and small office.
 * See how OpenELEC can be [compiled from source](http://wiki.openelec.tv/index.php/Compile_from_source), 
 check if your system meets the requirements, install needed compilers and tools.
 * Keep in mind following differences:
- * only *i386* and *x86_64* architectures are supported in Antiprism
+ * only *i386*, *x86_64* and *arm* architectures are supported in Antiprism
  * additional software tools are needed: [Ant](http://ant.apache.org/) and 
  [JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). Only Oracle JDK7 is tested
  but other versions may work as well. Obviously, Ant and JDK can be installed from packages on your Linux.
@@ -33,6 +33,22 @@ check if your system meets the requirements, install needed compilers and tools.
         JAVA_HOME=/path/to/jdk \
         PROJECT=Generic \
         ARCH=x86_64 \
+        make release 
+        
+* Following command will run the Raspberry Pi build
+ 
+        ANT_HOME=/path/to/ant/home \
+        JAVA_HOME=/path/to/jdk \
+        PROJECT=RPi \
+        ARCH=arm \
+        make release 
+        
+* Following command will run the Raspberry Pi2 build
+ 
+        ANT_HOME=/path/to/ant/home \
+        JAVA_HOME=/path/to/jdk \
+        PROJECT=RPi2 \
+        ARCH=arm \
         make release 
         
 **Verification of sources**
