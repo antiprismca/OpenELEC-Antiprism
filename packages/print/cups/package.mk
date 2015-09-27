@@ -63,6 +63,8 @@ pre_configure_target() {
 makeinstall_target() {
   $ROOT/$TOOLCHAIN/bin/make -j1 DESTDIR=$SYSROOT_PREFIX install-libs install-headers
   make DESTDIR=$INSTALL install-libs
-
+  if test -d $INSTALL/usr/lib64; then
+    mv $INSTALL/usr/lib64 $INSTALL/usr/lib
+  fi
 }
 

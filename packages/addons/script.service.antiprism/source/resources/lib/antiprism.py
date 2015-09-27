@@ -765,6 +765,7 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 		rules += "-A FORWARD -j DROP\\n"
 		rules += "-A INPUT -i lo -j ACCEPT\\n"
 		rules += "-A INPUT -p icmp --icmp-type any -j ACCEPT\\n"
+		rules += "-A INPUT -p udp --dport 67:68 --sport 67:68 -j ACCEPT\\n"
 		rules += "-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT\\n"
 		rules += "-A INPUT -j DROP\\n"
 		os.environ["ANTIPRISM_IPTABLES"] = rules

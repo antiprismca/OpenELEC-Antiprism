@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="gnupg"
-PKG_VERSION="1.4.18"
+PKG_VERSION="1.4.19"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"

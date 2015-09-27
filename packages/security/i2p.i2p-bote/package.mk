@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="i2p.i2p-bote"
-PKG_VERSION="0.2.10-b158"
-PKG_GIT_HASH="e030e9ed5f44a6a737e13ed29973893f5cd937ae"
+PKG_VERSION="0.4"
+PKG_GIT_HASH="i2pbote-0.4"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://i2pbote.i2p"
-PKG_URL="https://github.com/i2p/$PKG_NAME/archive/$PKG_GIT_HASH.zip http://z093.zebra.fastwebserver.de/apache-james-3.0-beta5-20140722-app.zip http://subethasmtp.googlecode.com/files/subethasmtp-3.1.7.zip"
+PKG_URL="https://github.com/i2p/$PKG_NAME/archive/$PKG_GIT_HASH.zip http://download.i2p2.de/mirror/lib/james-server-app-3.0.0-beta5-20150627.102412-1076-app.zip http://subethasmtp.googlecode.com/files/subethasmtp-3.1.7.zip https://maven.java.net/content/repositories/releases/com/sun/mail/mailapi/1.5.4/mailapi-1.5.4.jar http://downloads.bouncycastle.org/java/bcprov-jdk15on-152.jar"
 PKG_DEPENDS_TARGET="i2p i2p.Seedless"
 PKG_BUILD_DEPENDS_TARGET="toolchain i2p i2p.Seedless"
 PKG_PRIORITY="optional"
@@ -35,29 +35,28 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 APACHE_JAMES_FILES_TO_EXTRACT="\
-  apache-james-imap-api-0.4-20140521.052406-677.jar \
-  apache-james-imap-message-0.4-20140521.052432-676.jar \
-  apache-james-imap-processor-0.4-20140521.052450-675.jar \
-  apache-james-mailbox-api-0.6-20140722.040047-433.jar \
-  apache-james-mailbox-store-0.6-20140722.040110-430.jar \
-  apache-mime4j-core-0.7.2.jar \
-  apache-mime4j-dom-0.7.2.jar \
-  commons-codec-1.5.jar \
+  apache-james-mailbox-api-0.6-20150508.040939-710.jar \
+  apache-james-mailbox-store-0.6-20150508.041003-704.jar \
+  apache-mime4j-core-0.8.0-20150617.024907-738.jar \
+  apache-mime4j-dom-0.8.0-20150617.024927-735.jar \
+  commons-codec-1.7.jar \
   commons-collections-3.2.1.jar \
-  commons-configuration-1.6.jar \
-  commons-io-2.0.1.jar \
+  commons-configuration-1.9.jar \
+  commons-io-2.4.jar \
   commons-lang-2.6.jar \
-  james-server-lifecycle-api-3.0.0-beta5-20140722.101248-779.jar \
-  james-server-protocols-imap4-3.0.0-beta5-20140722.101923-649.jar \
-  james-server-protocols-library-3.0.0-beta5-20140722.101428-756.jar \
-  james-server-util-3.0.0-beta5-20140722.101359-761.jar \
+  james-server-filesystem-api-3.0.0-beta5-SNAPSHOT.jar \
+  james-server-lifecycle-api-3.0.0-beta5-SNAPSHOT.jar \
+  james-server-protocols-imap4-3.0.0-beta5-SNAPSHOT.jar \
+  james-server-protocols-library-3.0.0-beta5-SNAPSHOT.jar \
+  james-server-util-3.0.0-beta5-SNAPSHOT.jar \
   jutf7-1.0.0.jar \
+  log4j-1.2.17.jar \
   netty-3.3.1.Final.jar \
-  protocols-api-1.6.4-20140722.113145-504.jar \
-  protocols-imap-1.6.4-20140722.113327-357.jar \
-  protocols-netty-1.6.4-20140722.113152-470.jar \
-  slf4j-api-1.6.1.jar \
-  slf4j-jcl-1.7.7.jar"
+  protocols-api-1.6.4-20150617.121129-1080.jar \
+  protocols-imap-1.6.4-20150617.121245-927.jar \
+  protocols-netty-1.6.4-20150617.121137-1044.jar \
+  slf4j-api-1.7.2.jar \
+  slf4j-log4j12-1.7.2.jar"
 
 
 unpack() {
@@ -73,11 +72,12 @@ unpack() {
     unzip -o "$sourceDir/$FILE"
     if test $? -ne 0; then echo "Cannot extract from $sourceDir/$FILE"; exit 1; fi
     mv "$PKG_NAME-$PKG_GIT_HASH" "$PKG_NAME-$PKG_VERSION")
-  (cd "$BUILD/$PKG_NAME-$PKG_VERSION/WebContent/WEB-INF/lib"
-    unzip -oj "$sourceDir/apache-james-3.0-beta5-20140722-app.zip" `prepare_file_list_to_unzip $APACHE_JAMES_FILES_TO_EXTRACT`
+  (cd "$BUILD/$PKG_NAME-$PKG_VERSION/lib"
+    unzip -oj "$sourceDir/james-server-app-3.0.0-beta5-20150627.102412-1076-app.zip" `prepare_file_list_to_unzip $APACHE_JAMES_FILES_TO_EXTRACT`
     if test $? -ne 0; then exit 1; fi
     unzip -oj "$sourceDir/subethasmtp-3.1.7.zip" `prepare_file_list_to_unzip subethasmtp-3.1.7.jar`
-    if test $? -ne 0; then exit 1; fi)
+    if test $? -ne 0; then exit 1; fi
+    cp "$sourceDir/mailapi-1.5.4.jar" "$sourceDir/bcprov-jdk15on-152.jar" .)
 }
 
 configure_target() {
@@ -106,7 +106,7 @@ makeinstall_target() {
   (echo ""; echo "version=${PKG_VERSION}-patched"; echo "date=$BUILD_DATE") >>"$INSTALL/usr/lib/i2p/dist-plugins/plugins/i2pbote/plugin.config"
   cp plugin/webapps.config "$INSTALL/usr/lib/i2p/dist-plugins/plugins/i2pbote/console"
   cp i2pbote-plugin.war "$INSTALL/usr/lib/i2p/dist-plugins/plugins/i2pbote/console/webapps/i2pbote.war"
-  cp WebContent/WEB-INF/lib/* "$INSTALL/usr/lib/i2p/dist-plugins/plugins/i2pbote/lib"
+  cp lib/* "$INSTALL/usr/lib/i2p/dist-plugins/plugins/i2pbote/lib"
 }
 
 unset -f prepare_file_list_to_unzip

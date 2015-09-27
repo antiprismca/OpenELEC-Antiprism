@@ -7,6 +7,7 @@ cat << EOF | iptables-restore -v >/dev/null
 :FORWARD DROP [0:0]
 -A INPUT -i lo -j ACCEPT
 -A INPUT -p icmp --icmp-type any -j ACCEPT
+-A INPUT -p udp --dport 67:68 --sport 67:68 -j ACCEPT
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 -A INPUT -j DROP
 COMMIT

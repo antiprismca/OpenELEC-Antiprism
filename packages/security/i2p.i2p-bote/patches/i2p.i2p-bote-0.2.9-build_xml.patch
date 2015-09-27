@@ -9,7 +9,7 @@
      <property name="jstllib" value="${i2pbase}/apps/susidns/src/WEB-INF/lib"/>
      <property name="lib" value="WebContent/WEB-INF/lib"/>
      <property name="makeplugin" value="../i2p.scripts/plugin/makeplugin.sh"/>
-@@ -67,8 +67,8 @@
+@@ -105,8 +105,8 @@
          <pathelement location="${i2plib}/javax.servlet.jar" />
          <pathelement location="${i2plib}/commons-logging.jar" />
          <pathelement location="${i2plib}/commons-el.jar" />
@@ -17,10 +17,10 @@
 -        <pathelement location="${i2plib}/standard.jar" />
 +        <pathelement location="${jstllib}/jstl.jar" />
 +        <pathelement location="${jstllib}/standard.jar" />
-         <pathelement location="${lib}/mailapi.jar" />
-         <pathelement location="${lib}/bcprov-ecc-jdk16-146.jar" />
-         <pathelement location="${lib}/ntruenc-1.2.jar" />
-@@ -133,6 +133,7 @@
+         <pathelement location="${lib}/${mailapi.filename}" />
+         <pathelement location="${lib}/${bcprov.filename}" />
+         <pathelement location="${lib}/${ntruenc.filename}" />
+@@ -197,6 +197,7 @@
              includeAntRuntime="false"
              destdir="./ant_build/classes"
              classpathref="cp"

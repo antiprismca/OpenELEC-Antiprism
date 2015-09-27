@@ -34,7 +34,7 @@ Var "DRIVE_NAME"
 
 !define DRIVELIST_PREFIX "=DRIVELIST="
 !define MOUNTED_PREFIX "=MOUNTED="
-!define LOG_FILE "$EXEDIR\installer-log.txt"
+!define LOG_FILE "installer-log.txt"
 !define ANTIPRISM_FMT "3rdparty\format\antiprism-fmt.exe"
 
 !define MUI_ICON "openelec.ico"

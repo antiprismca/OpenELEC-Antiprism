@@ -17,11 +17,11 @@
 ################################################################################
 
 PKG_NAME="cryptsetup"
-PKG_VERSION="1.6.4"
+PKG_VERSION="1.6.8"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPL"
-PKG_SITE="https://code.google.com/p/cryptsetup"
+PKG_SITE="https://gitlab.com/cryptsetup/cryptsetup"
 PKG_URL="https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain LVM2 popt"
 PKG_BUILD_DEPENDS_TARGET="toolchain LVM2 popt"

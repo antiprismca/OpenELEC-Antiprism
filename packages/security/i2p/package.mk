@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="i2p"
-PKG_VERSION="0.9.20"
+PKG_VERSION="0.9.22"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
