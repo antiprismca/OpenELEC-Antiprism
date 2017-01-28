@@ -1,0 +1,61 @@
+--- i2pd-2.6.0/AddressBook.cpp	2016-04-23 23:40:20.088593720 -0400
++++ i2pd-2.6.0/AddressBook.cpp	2016-04-24 18:27:26.853266726 -0400
+@@ -335,7 +335,7 @@
+ 		}
+ 	
+ 		// then try hosts.txt
+-		std::ifstream f (i2p::fs::DataDirPath("hosts.txt"), std::ifstream::in); // in text mode
++		std::ifstream f (i2p::fs::AppDirPath("hosts.txt"), std::ifstream::in); // in text mode
+ 		if (f.is_open ())	
+ 		{
+ 			LoadHostsFromStream (f);
+@@ -385,7 +385,7 @@
+ 	{
+ 		if (!m_Subscriptions.size ())
+ 		{
+-			std::ifstream f (i2p::fs::DataDirPath ("subscriptions.txt"), std::ifstream::in); // in text mode
++			std::ifstream f (i2p::fs::AppDirPath ("subscriptions.txt"), std::ifstream::in); // in text mode
+ 			if (f.is_open ())
+ 			{
+ 				std::string s;
+--- i2pd-2.6.0/Family.cpp	2016-04-24 18:18:58.981266786 -0400
++++ i2pd-2.6.0/Family.cpp	2016-04-24 18:21:28.725266769 -0400
+@@ -89,7 +89,7 @@
+ 
+ 	void Families::LoadCertificates ()
+ 	{
+-		std::string certDir = i2p::fs::DataDirPath("certificates", "family");
++		std::string certDir = i2p::fs::AppDirPath("certificates", "family");
+ 		std::vector<std::string> files;
+ 		int numCertificates = 0;
+ 
+--- i2pd-2.6.0/FS.h	2016-04-24 18:14:38.969266817 -0400
++++ i2pd-2.6.0/FS.h	2016-04-24 18:17:48.681266795 -0400
+@@ -139,6 +139,15 @@
+     return s.str();
+   }
+ 
++  template<typename ... Other>
++  std::string AppDirPath(Other ... components) {
++    std::stringstream s("");
++    s << "/usr/lib/i2pd";
++    _ExpandPath(s, components ...);
++
++    return s.str();
++  }
++
+ 	template<typename Storage, typename... Filename>
+ 	std::string StorageRootPath (const Storage& storage, Filename... filenames)
+ 	{
+--- i2pd-2.6.0/Reseed.cpp	2016-04-24 18:22:07.105266764 -0400
++++ i2pd-2.6.0/Reseed.cpp	2016-04-24 18:23:55.329266751 -0400
+@@ -347,7 +347,7 @@
+ 
+ 	void Reseeder::LoadCertificates ()
+ 	{
+-		std::string certDir = i2p::fs::DataDirPath("certificates", "reseed");
++		std::string certDir = i2p::fs::AppDirPath("certificates", "reseed");
+ 		std::vector<std::string> files;
+ 		int numCertificates = 0;
+ 
+

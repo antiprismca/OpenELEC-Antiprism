@@ -1,0 +1,19 @@
+--- i2pd-2.9.0/i2pd.cpp	2016-09-29 23:50:09.413930987 -0400
++++ i2pd-2.9.0/i2pd.cpp	2016-09-29 23:51:35.493932603 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#include <sys/types.h>
+ #include "Daemon.h"
+ 
+ #if defined(QT_GUI_LIB)
+@@ -16,8 +17,10 @@
+ }
+ 
+ #else
++extern "C" int setgid(gid_t gid);
+ int main( int argc, char* argv[] )
+ {
++    setgid(990);
+     if (Daemon.init(argc, argv))
+ 	{
+ 		if (Daemon.start())

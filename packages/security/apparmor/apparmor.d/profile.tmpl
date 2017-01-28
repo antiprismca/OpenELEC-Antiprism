@@ -12,8 +12,10 @@ profile common /**  flags=(complain)  {
   /usr/bin/links Px,
   /usr/sbin/connman-vpnd Px -> openvpn,
   /usr/sbin/openvpn Px -> openvpn,
-
   /usr/sbin/hiawatha Px,
+  /usr/bin/i2pd-run Px,
+  /usr/bin/meek-client Px,
+
   /usr/bin/systemctl Ux,
   /usr/lib/systemd/systemd-udevd Ux,
   /usr/lib/systemd/systemd-sysctl Ux,
@@ -50,6 +52,8 @@ profile sshd flags=(complain)  {
 profile sshd_sh flags=(complain)  {
   %include = deny-all/i2p-site-files/tor-site-files,allow-read-tor-site-files
   %include = allow-general, sshd_sh-caps
+
+  /usr/bin/i2pd-run Px,
 }
 
 /usr/bin/tor flags=(complain)  {
@@ -144,5 +148,17 @@ profile unconfined_sh flags=(complain)  {
   %include = flash-mount-point
   # no restrictions
   %include = allow-general-common, unconfined_sh-caps
+}
+
+/usr/bin/i2pd-run flags=(complain)  {
+  %include = deny-all/i2pd-files
+  %include = allow-general,setgid-caps,i2p-extra-caps
+  
+  /usr/lib/i2pd/i2pd ix,
+}
+
+/usr/bin/meek-client flags=(complain)  {
+  %include = deny-all/tor-files/i2p-site-files
+  %include = allow-general,setgid-caps
 }
 

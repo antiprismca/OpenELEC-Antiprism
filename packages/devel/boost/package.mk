@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="boost"
-PKG_VERSION="1_57_0"
+PKG_VERSION="1_62_0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://www.boost.org/"
-PKG_URL="$SOURCEFORGE_SRC/boost/boost/1.56.0/${PKG_NAME}_${PKG_VERSION}.tar.bz2"
+PKG_URL="$SOURCEFORGE_SRC/boost/boost/1.62.0/${PKG_NAME}_${PKG_VERSION}.tar.bz2"
 PKG_SOURCE_DIR="${PKG_NAME}_${PKG_VERSION}"
 PKG_DEPENDS_HOST=""
 PKG_DEPENDS_TARGET="toolchain boost:host Python:host zlib bzip2"
@@ -45,8 +45,8 @@ makeinstall_host() {
 }
 
 pre_configure_target() {
-  export CFLAGS="$CFLAGS -fPIC"
-  export CXXFLAGS="$CXXFLAGS -fPIC"
+  export CFLAGS="$CFLAGS -DOPENSSL_NO_SSL3 -fPIC"
+  export CXXFLAGS="$CXXFLAGS -DOPENSSL_NO_SSL3 -fPIC"
   export LDFLAGS="$LDFLAGS -fPIC"
 }
 
@@ -55,7 +55,7 @@ configure_target() {
                   --with-bjam=$ROOT/$TOOLCHAIN/bin/bjam \
                   --with-python=$ROOT/$TOOLCHAIN/bin/python \
 
-  echo "using gcc : `$TARGET_CC -v 2>&1  | tail -n 1 |awk '{print $3}'` : $TARGET_CC  : <compileflags>\"$CFLAGS\" <linkflags>\"$LDFLAGS\" ;" \
+  echo "using gcc : `$TARGET_CXX -v 2>&1  | tail -n 1 |awk '{print $3}'` : $TARGET_CXX  : <compileflags>\"$CXXFLAGS\" <linkflags>\"$LDFLAGS\" ;" \
     > tools/build/src/user-config.jam
 }
 
@@ -74,6 +74,8 @@ makeinstall_target() {
                                 --with-serialization \
                                 --with-filesystem \
                                 --with-chrono \
+                                --with-date_time \
+                                --with-program_options \
                                 --with-regex -sICU_PATH="$SYSROOT_PREFIX/usr" \
                                 -sICU_PATH="$SYSROOT_PREFIX/usr" \
                                 install

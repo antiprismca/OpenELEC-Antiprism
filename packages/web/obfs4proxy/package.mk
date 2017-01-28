@@ -1,9 +1,10 @@
 
 PKG_NAME="obfs4proxy"
-PKG_VERSION="0.0.3"
+PKG_VERSION="0.0.7"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
+PKG_URL="https://github.com/Yawning/obfs4/archive/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain go"
 PKG_PRIORITY="optional"
 PKG_SECTION="web"
@@ -26,9 +27,13 @@ get_go_arch() {
   esac
 }
 
+post_unpack() {
+  [ -d "$BUILD/obfs4-$PKG_NAME-$PKG_VERSION" ] && mv "$BUILD/obfs4-$PKG_NAME-$PKG_VERSION" "$BUILD/$PKG_NAME-$PKG_VERSION"
+}
+
 make_target() {
   BIN_GO=$SYSROOT_PREFIX/usr/share/gopath/bin/go
-  [ -d $ROOT/$PKG_BUILD/obfs4proxy ] || git clone https://git.torproject.org/pluggable-transports/obfs4.git $ROOT/$PKG_BUILD
+#  [ -d $ROOT/$PKG_BUILD/obfs4proxy ] || git clone https://git.torproject.org/pluggable-transports/obfs4.git $ROOT/$PKG_BUILD
   cd $ROOT/$PKG_BUILD/obfs4proxy
   export GOHOSTARCH=$(get_go_arch $HOST_NAME)
   export GOARCH=$(get_go_arch $TARGET_NAME)

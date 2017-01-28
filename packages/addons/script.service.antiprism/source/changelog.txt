@@ -1,5 +1,11 @@
 
-Current Version : 1.2.24
+Current Version : 1.2.25
+
+Use default Tor bridges for meek, obfs4, obfs3 if custom bridges are not provided
+Obsoleted obfs2 & obfsproxy, replaced it with fteproxy
+Use Tor bridges is now mutually exclusive with running a relay
+
+Version : 1.2.24
 
 Anonymizers data in RAM added
 Updated manual

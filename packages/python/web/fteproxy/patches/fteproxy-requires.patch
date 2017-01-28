@@ -1,0 +1,11 @@
+diff -rupN fteproxy/bin/fteproxy fteproxy-patched/bin/fteproxy
+--- fteproxy/bin/fteproxy	2016-12-17 16:55:35.970022347 -0500
++++ fteproxy-patched/bin/fteproxy	2016-12-17 16:56:00.298022609 -0500
+@@ -11,7 +11,6 @@ else:
+     sys.path.append(
+         os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+ 
+-import fteproxy.requires
+ import fteproxy.cli
+ 
+ if __name__ == '__main__':

@@ -1,0 +1,13 @@
+--- curl-7.37.1/lib/vtls/openssl.c	2016-09-25 21:12:14.623517369 -0400
++++ curl-7.37.1.patch/lib/vtls/openssl.c	2016-09-25 21:13:11.267516399 -0400
+@@ -1540,9 +1540,7 @@
+     if(data->set.ssl.authtype == CURL_TLSAUTH_SRP)
+       return CURLE_SSL_CONNECT_ERROR;
+ #endif
+-    req_method = SSLv3_client_method();
+-    use_sni(FALSE);
+-    break;
++    return CURLE_SSL_CONNECT_ERROR;
+   }
+ 
+   if(connssl->ctx)

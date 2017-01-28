@@ -17,13 +17,13 @@
 ################################################################################
 
 PKG_NAME="i2p.i2p-bote"
-PKG_VERSION="0.4"
-PKG_GIT_HASH="i2pbote-0.4"
+PKG_VERSION="0.4.4"
+PKG_GIT_HASH="7e9bbe614abe58d6e9a4606af0cd5797a6315385"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="http://i2pbote.i2p"
-PKG_URL="https://github.com/i2p/$PKG_NAME/archive/$PKG_GIT_HASH.zip http://download.i2p2.de/mirror/lib/james-server-app-3.0.0-beta5-20150627.102412-1076-app.zip http://subethasmtp.googlecode.com/files/subethasmtp-3.1.7.zip https://maven.java.net/content/repositories/releases/com/sun/mail/mailapi/1.5.4/mailapi-1.5.4.jar http://downloads.bouncycastle.org/java/bcprov-jdk15on-152.jar"
+PKG_URL="https://github.com/i2p/$PKG_NAME/archive/$PKG_GIT_HASH.zip http://download.i2p2.de/mirror/lib/james-server-app-3.0.0-beta5-20150627.102412-1076-app.zip http://www.java2s.com/Code/JarDownload/subethasmtp/subethasmtp-3.1.7.jar.zip https://maven.java.net/content/repositories/releases/com/sun/mail/mailapi/1.5.4/mailapi-1.5.4.jar http://downloads.bouncycastle.org/java/bcprov-jdk15on-152.jar http://ftp.halifax.rwth-aachen.de/apache/james/mime4j/0.7.2/apache-mime4j-0.7.2-bin.zip https://repo1.maven.org/maven2/org/owasp/csrfguard/3.1.0/csrfguard-3.1.0.jar"
 PKG_DEPENDS_TARGET="i2p i2p.Seedless"
 PKG_BUILD_DEPENDS_TARGET="toolchain i2p i2p.Seedless"
 PKG_PRIORITY="optional"
@@ -37,8 +37,6 @@ PKG_AUTORECONF="no"
 APACHE_JAMES_FILES_TO_EXTRACT="\
   apache-james-mailbox-api-0.6-20150508.040939-710.jar \
   apache-james-mailbox-store-0.6-20150508.041003-704.jar \
-  apache-mime4j-core-0.8.0-20150617.024907-738.jar \
-  apache-mime4j-dom-0.8.0-20150617.024927-735.jar \
   commons-codec-1.7.jar \
   commons-collections-3.2.1.jar \
   commons-configuration-1.9.jar \
@@ -58,6 +56,9 @@ APACHE_JAMES_FILES_TO_EXTRACT="\
   slf4j-api-1.7.2.jar \
   slf4j-log4j12-1.7.2.jar"
 
+# Temporary taken out from APACHE_JAMES_FILES_TO_EXTRACT
+#  apache-mime4j-core-0.8.0-20150617.024907-738.jar \
+#  apache-mime4j-dom-0.8.0-20150617.024927-735.jar \
 
 unpack() {
   local FILE="$PKG_GIT_HASH.zip"
@@ -75,9 +76,14 @@ unpack() {
   (cd "$BUILD/$PKG_NAME-$PKG_VERSION/lib"
     unzip -oj "$sourceDir/james-server-app-3.0.0-beta5-20150627.102412-1076-app.zip" `prepare_file_list_to_unzip $APACHE_JAMES_FILES_TO_EXTRACT`
     if test $? -ne 0; then exit 1; fi
-    unzip -oj "$sourceDir/subethasmtp-3.1.7.zip" `prepare_file_list_to_unzip subethasmtp-3.1.7.jar`
+    unzip -oj "$sourceDir/subethasmtp-3.1.7.jar.zip" `prepare_file_list_to_unzip subethasmtp-3.1.7.jar`
     if test $? -ne 0; then exit 1; fi
-    cp "$sourceDir/mailapi-1.5.4.jar" "$sourceDir/bcprov-jdk15on-152.jar" .)
+    cp "$sourceDir/mailapi-1.5.4.jar" "$sourceDir/bcprov-jdk15on-152.jar" .
+    if test $? -ne 0; then exit 1; fi
+    unzip -oj "$sourceDir/apache-mime4j-0.7.2-bin.zip" `prepare_file_list_to_unzip apache-mime4j-core-0.7.2.jar`
+    if test $? -ne 0; then exit 1; fi
+    cp "$sourceDir/csrfguard-3.1.0.jar" .
+    if test $? -ne 0; then exit 1; fi)
 }
 
 configure_target() {

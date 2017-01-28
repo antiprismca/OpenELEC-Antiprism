@@ -57,7 +57,7 @@ post_unpack() {
   [ -f $truecrypt/Crypto/pkcs11f.h ] || cp $PKG_DIR/Crypto/pkcs11f.h $truecrypt/Crypto/pkcs11f.h
   if [ ! -d wxWidgets-2.8.12 ]
   then
-    wget http://tcpdiag.dl.sourceforge.net/project/wxwindows/2.8.12/wxWidgets-2.8.12.tar.bz2
+    wget http://heanet.dl.sourceforge.net/project/wxwindows/2.8.12/wxWidgets-2.8.12.tar.bz2
     tar -xjvf wxWidgets-2.8.12.tar.bz2
   fi
   cd -

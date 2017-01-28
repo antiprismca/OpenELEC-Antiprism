@@ -1,12 +1,13 @@
 --- openjdk-8-src-b129-06_feb_2014/hotspot/src/share/vm/oops/oop.hpp	2014-02-24 21:16:33.577857234 -0500
 +++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/src/share/vm/oops/oop.hpp	2014-02-24 21:20:56.485852239 -0500
-@@ -113,7 +113,7 @@
-   bool is_instanceMirror()     const;
-   bool is_instanceRef()        const;
-   bool is_array()              const;
--  bool is_objArray()           const;
-+  bool is_objArray()           const __attribute__((noinline));
-   bool is_typeArray()          const;
+@@ -113,8 +113,8 @@
+   bool is_instanceMirror()      const;
+   bool is_instanceClassLoader() const;
+   bool is_instanceRef()         const;
+   bool is_array()               const;
+-  bool is_objArray()            const;
++  bool is_objArray()            const __attribute__((noinline));
+   bool is_typeArray()           const;
  
   private:
 @@ -157,7 +157,7 @@

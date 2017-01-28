@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################################################################################
-# Copyright (c) 2014-2015, AntiPrism.ca
+# Copyright (c) 2014-2016, AntiPrism.ca
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are
@@ -40,8 +40,8 @@ import antiprism
 __plugin__ = 'AntiPrism'
 __author__ = 'AntiPrism.ca'
 __url__ = 'http://www.antiprism.ca/'
-__date__ = '05-04-2015'
-__version__ = '1.2.24'
+__date__ = '01-01-2017'
+__version__ = '1.2.25'
 THEME = 'Default'
 
 if __name__ == '__main__':

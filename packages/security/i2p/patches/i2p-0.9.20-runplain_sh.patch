@@ -1,5 +1,5 @@
---- i2p-0.9.20/installer/resources/runplain.sh	2015-06-03 22:44:53.564082922 -0400
-+++ i2p-0.9.20.patch/installer/resources/runplain.sh	2015-06-03 22:49:52.012088521 -0400
+--- i2p-0.9.28/installer/resources/runplain.sh	2016-12-12 11:15:26.000000000 -0500
++++ i2p-0.9.28/installer/resources/runplain.sh	2017-01-02 11:40:42.891546171 -0500
 @@ -11,8 +11,9 @@
  # Note that (percent)INSTALL_PATH and (percent)SYSTEM_java_io_tmpdir
  # should have been replaced by the izpack installer.
@@ -12,16 +12,16 @@
  
  # Having IPv6 enabled can cause problems with certain configurations. Changing the
  # next value to true may help.
-@@ -39,9 +40,13 @@
+@@ -43,9 +44,13 @@
  if [ $(uname -s) = "Darwin" ]; then
      export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
  fi
--JAVAOPTS="-Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt"
+-JAVAOPTS="${MAXMEMOPT} -Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt"
 +PROXYOPTS=""
 +[ "$USE_PROXY" = "1" ] && PROXYOPTS="-Drouter.reseedProxyEnable=true -Drouter.reseedProxyHost=127.0.0.1 -Drouter.reseedProxyPort=8118"
 +[ -f "$I2PCONFIG/i2p/wrapper.log.old" ] && rm -f "$I2PCONFIG/i2p/wrapper.log.old"
 +[ -f "$I2PCONFIG/i2p/wrapper.log" ] && mv "$I2PCONFIG/i2p/wrapper.log" "$I2PCONFIG/i2p/wrapper.log.old"
-+JAVAOPTS="-Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt -Di2p.dir.config=${I2PCONFIG}/i2p"
++JAVAOPTS="${MAXMEMOPT} -Djava.net.preferIPv4Stack=${PREFERv4} -Djava.library.path=${I2P}:${I2P}/lib -Di2p.dir.base=${I2P} -DloggerFilenameOverride=logs/log-router-@.txt -Di2p.dir.config=${I2PCONFIG}/i2p"
  (
 -    nohup ${JAVA} -cp \"${CP}\" ${JAVAOPTS} net.i2p.router.RouterLaunch > /dev/null 2>&1
 +    nohup ${JAVA} -cp \"${CP}\" ${JAVAOPTS} ${PROXYOPTS} net.i2p.router.RouterLaunch > /dev/null 2>&1

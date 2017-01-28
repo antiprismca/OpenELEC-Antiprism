@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: AntiPrism
 # Addon id: script.service.antiprism
-# Addon version: 1.2.24
+# Addon version: 1.2.25
 # Addon Provider: AntiPrism.ca
 
 msgctxt "Addon Summary"
@@ -362,15 +362,15 @@ msgstr "        Порт для принятия соединений"
 
 msgctxt "#32179"
 msgid "        Enable obfuscation"
-msgstr "        Включить Obfsproxy"
+msgstr "        Включить обфускацию"
 
 msgctxt "#32180"
-msgid "            Enable obfs2"
-msgstr "            Включить obfs2"
+msgid "            Enable Fteproxy"
+msgstr "            Включить Fteproxy"
 
 msgctxt "#32181"
-msgid "                obfs2 port"
-msgstr "                Порт obfs2"
+msgid "                Fteproxy port"
+msgstr "                Порт Fteproxy"
 
 msgctxt "#32182"
 msgid "            Enable obfs3"
@@ -493,8 +493,8 @@ msgid "      Use Meek"
 msgstr "      Использовать Meek"
  
 msgctxt "#32213"
-msgid "      Use Obfsproxy"
-msgstr "      Использовать Obfsproxy"
+msgid "      Use Fteproxy"
+msgstr "      Использовать Fteproxy"
  
 msgctxt "#32214"
 msgid "      Use Obfs4proxy"

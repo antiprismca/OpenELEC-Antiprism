@@ -17,13 +17,22 @@
 ################################################################################
 
 PKG_NAME="openjdk"
-PKG_VERSION="8-src-b129-06_feb_2014"
+PKG_VERSION="jdk8u66-b17"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="https://www.oracle.com"
-PKG_URL="download.java.net/openjdk/jdk8/ri/$PKG_NAME-$PKG_VERSION.zip"
-PKG_DEPENDS_TARGET="cups libXtst"
+PKG_URL="\
+    http://hg.openjdk.java.net/jdk8u/jdk8u/archive/a482cd45f31d.zip
+    http://hg.openjdk.java.net/jdk8u/jdk8u/corba/archive/efb736c1edb9.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/archive/9ae2a5adabba.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/jaxp/archive/4ae0c2d6dd24.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/jaxws/archive/f3e9f0fcf556.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/archive/fd2fe69089ac.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/langtools/archive/ee701de614ad.zip \
+    http://hg.openjdk.java.net/jdk8u/jdk8u/nashorn/archive/39bfb9eb75dc.zip"
+
+PKG_DEPENDS_TARGET="cups libXtst llvm"
 PKG_BUILD_DEPENDS_TARGET="toolchain cups libXtst"
 PKG_PRIORITY="optional"
 PKG_SECTION="security"
@@ -32,6 +41,30 @@ PKG_LONGDESC="Open JDK"
 
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
+
+unpack() {
+  for url in $PKG_URL; do
+    local folder=$(echo $url |\
+        sed 's%/jdk8u/archive/%/jdk8u/jdk8u/archive/%;s%^http://hg.openjdk.java.net/jdk8u/jdk8u/%%;s%/archive/.*$%%')
+    local hash=$(basename "$url" .zip)
+    local filename="$SOURCES/$PKG_NAME/${hash}.zip"
+    if test ! -f "$filename"; then echo "File $filename not found"; exit 2; fi
+    local target_dir="$BUILD/$PKG_NAME-$PKG_VERSION"
+    mkdir -p "$target_dir"
+    target_name="$BUILD/$PKG_NAME-$PKG_VERSION/${folder}-${hash}"
+    unzip "$filename" -d "$target_dir"
+    if test $? -ne 0; then echo "ERROR $?"; exit 2; fi
+    if test ! -d "$target_dir/${folder}-${hash}"; then echo "Directory $target_dir/${folder}-${hash} not found"; exit 2; fi
+    mv "$target_dir/${folder}-${hash}" "$target_dir/$folder"
+    if test $? -ne 0; then echo "ERROR $?"; exit 2; fi
+  done
+  (cd $target_dir
+    mv corba hotspot jaxp jaxws jdk langtools nashorn jdk8u
+    if test ! -f jdk8u/configure; then echo "File jdk8u/configure not found"; exit 2; fi
+    chmod +x jdk8u/configure
+    mv jdk8u/* .)
+    if test $? -ne 0; then echo "ERROR $?"; exit 2; fi
+}
 
 configure_target() {
   test -n "$JAVA_HOME" || JAVA_HOME="`which javac | xargs -i{} readlink -f {}  | sed s%/bin/javac\$%% 2>/dev/null`"
@@ -96,14 +129,6 @@ make_target() {
       USE_PRECOMPILED_HEADER=0 \
       POST_STRIP_CMD= \
       images
-}
-
-unpack() {
-  local FILE=`basename "$PKG_URL"`
-  local NAME=`basename "$FILE" .zip`
-  unzip -q "$SOURCES/$PKG_NAME/$FILE" -d "$BUILD"
-  mv "$BUILD/$PKG_NAME" "$BUILD/$NAME"
-  chmod +x "$BUILD/$NAME/configure"
 }
 
 makeinstall_target() {

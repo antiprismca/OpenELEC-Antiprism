@@ -8,9 +8,9 @@ PKG_SITE="http://www.antiprism.ca"
 PKG_URL=""
 
 if [ "$TARGET_ARCH" = "arm" ]; then
-  PKG_DEPENDS_TARGET="nasm:host LVM2 cryptsetup script.service.antiprism script.web.viewer obfsproxy python-gnupg tor privoxy ecc-tools jq meek obfs4proxy v4l2grab hiawatha pyserial"
+  PKG_DEPENDS_TARGET="nasm:host LVM2 cryptsetup script.service.antiprism script.web.viewer fteproxy python-gnupg tor privoxy ecc-tools jq meek obfs4proxy v4l2grab hiawatha pyserial"
 else
-  PKG_DEPENDS_TARGET="rufus:host nasm:host rxvt-unicode gdk-pixbuf LVM2 cryptsetup script.service.antiprism truecrypt plugin.program.truecrypt plugin.program.linksbrowser obfsproxy plugin.program.i2p python-gnupg tor i2p privoxy i2p.Seedless i2p.i2p-bote ecc-tools jq meek obfs4proxy v4l2grab hiawatha pyserial"
+  PKG_DEPENDS_TARGET="rufus:host nasm:host rxvt-unicode gdk-pixbuf LVM2 cryptsetup script.service.antiprism truecrypt plugin.program.truecrypt plugin.program.linksbrowser fteproxy plugin.program.i2p python-gnupg tor i2p privoxy i2p.Seedless i2p.i2p-bote ecc-tools jq meek obfs4proxy v4l2grab hiawatha pyserial"
 fi
 
 PKG_PRIORITY="optional"

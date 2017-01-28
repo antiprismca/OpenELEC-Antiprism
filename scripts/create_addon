@@ -30,6 +30,23 @@ if [ -n "$PKG_ARCH" -a ! "$PKG_ARCH" = "any" ]; then
   echo "$PKG_ARCH" | grep -q "\-$TARGET_ARCH" && exit 0
 fi
 
+if [ -n "$PKG_ADDON_PROJECTS" -a ! "$PKG_ADDON_PROJECTS" = "any" ]; then
+  for _PROJECT in $PKG_ADDON_PROJECTS ; do
+    if [ "$_PROJECT" = "$PROJECT" ] ; then
+      PROJECT_SUPPORTED="yes"
+    fi
+  done
+  if [ ! "$PROJECT_SUPPORTED" = "yes" ] ; then
+    echo "*** ERROR: $PKG_ADDON_ID: '$PROJECT' not supported ***"
+    exit 0
+  fi
+fi
+
+if [ -n "$PKG_ADDON_REPOVERSION" -a ! "$PKG_ADDON_REPOVERSION" = "$ADDON_VERSION" ]; then
+  echo "*** ERROR: $PKG_ADDON_ID: ADDON_VERSION '$ADDON_VERSION' not supported ***"
+  exit 0
+fi
+
 if [ "$PKG_IS_ADDON" = "yes" ] ; then
   $SCRIPTS/build $@
 
@@ -94,15 +111,20 @@ if [ "$PKG_IS_ADDON" = "yes" ] ; then
        -e "s|@PKG_LONGDESC@|$PKG_LONGDESC|g" \
        -e "s|@PKG_DISCLAIMER@|$PKG_DISCLAIMER|g" \
        -e "s|@PROVIDER_NAME@|$PROVIDER_NAME|g" \
+       -e "s|@PKG_ADDON_PROVIDES@|$PKG_ADDON_PROVIDES|g" \
        -i $ADDON_BUILD/$PKG_ADDON_ID/addon.xml
 
   if [ "$2" != "-test" ] ; then
+    ADDON_INSTALL_DIR="$TARGET/$ADDONS/$ADDON_VERSION/$PROJECT/$TARGET_ARCH/$PKG_ADDON_ID"
+    if [ -f $ADDON_INSTALL_DIR/$PKG_ADDON_ID-$ADDON_VERSION.$PKG_REV.zip ] ; then
+      echo "*** WARNING: $PKG_ADDON_ID-$ADDON_VERSION.$PKG_REV.zip already exists. not overwriting it ***"
+      exit 0
+    fi
     cd $ADDON_BUILD
     echo "*** compressing Addon $PKG_ADDON_ID ... ***"
     zip -rq $PKG_ADDON_ID-$ADDON_VERSION.$PKG_REV.zip $PKG_ADDON_ID;
     cd - &>/dev/null
 
-    ADDON_INSTALL_DIR="$TARGET/$ADDONS/$ADDON_VERSION/$PROJECT/$TARGET_ARCH/$PKG_ADDON_ID"
     mkdir -p $ADDON_INSTALL_DIR
     cp $ADDON_BUILD/$PKG_ADDON_ID-$ADDON_VERSION.$PKG_REV.zip $ADDON_INSTALL_DIR
     if [ -f $PKG_DIR/changelog.txt ]; then

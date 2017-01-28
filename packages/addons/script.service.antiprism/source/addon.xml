@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.service.antiprism" name="AntiPrism" version="1.2.24" provider-name="AntiPrism.ca">
+<addon id="script.service.antiprism" name="AntiPrism" version="1.2.25" provider-name="AntiPrism.ca">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 	</requires>
@@ -16,7 +16,7 @@
 		<description lang="en">
 			AntiPrism is about browsing, emailing, chatting, talking, publishing safely and anonymously online.
 
-			Copyright (c) 2014-2015, AntiPrism.ca
+			Copyright (c) 2014-2017, AntiPrism.ca
 			All rights reserved.
 			For more privacy tools, visit http://www.antiprism.ca
 

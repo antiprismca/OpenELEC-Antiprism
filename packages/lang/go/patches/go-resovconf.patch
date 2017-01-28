@@ -1,0 +1,13 @@
+--- go-1.7.3/src/net/resolvconf.go	2016-12-13 21:54:12.435051989 -0500
++++ go-1.7.3/src/net/resolvconf.go	2016-12-13 22:50:20.199934260 -0500
+@@ -0,0 +1,10 @@
++package net
++var OverrideResolvConfPath string
++
++func getResolvConfPath() string {
++	if OverrideResolvConfPath != "" {
++		return OverrideResolvConfPath
++	}
++	return "/etc/" + "resolv.conf"
++}
++

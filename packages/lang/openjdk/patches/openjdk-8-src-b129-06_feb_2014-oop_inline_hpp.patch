@@ -1,12 +1,12 @@
 --- openjdk-8-src-b129-06_feb_2014/hotspot/src/share/vm/oops/oop.inline.hpp	2014-02-24 21:46:41.109822872 -0500
 +++ openjdk-8-src-b129-06_feb_2014.patch/hotspot/src/share/vm/oops/oop.inline.hpp	2014-02-24 21:49:23.173819789 -0500
-@@ -151,7 +151,7 @@
- inline bool oopDesc::is_instanceMirror()     const { return klass()->oop_is_instanceMirror(); }
- inline bool oopDesc::is_instanceRef()        const { return klass()->oop_is_instanceRef(); }
- inline bool oopDesc::is_array()              const { return klass()->oop_is_array(); }
--inline bool oopDesc::is_objArray()           const { return klass()->oop_is_objArray(); }
-+inline bool oopDesc::is_objArray()           const { asm (""); return klass()->oop_is_objArray(); }
- inline bool oopDesc::is_typeArray()          const { return klass()->oop_is_typeArray(); }
+@@ -153,7 +153,7 @@
+ inline bool oopDesc::is_instanceMirror()      const { return klass()->oop_is_instanceMirror(); }
+ inline bool oopDesc::is_instanceRef()         const { return klass()->oop_is_instanceRef(); }
+ inline bool oopDesc::is_array()               const { return klass()->oop_is_array(); }
+-inline bool oopDesc::is_objArray()            const { return klass()->oop_is_objArray(); }
++inline bool oopDesc::is_objArray()            const { asm (""); return klass()->oop_is_objArray(); }
+ inline bool oopDesc::is_typeArray()           const { return klass()->oop_is_typeArray(); }
  
  inline void*     oopDesc::field_base(int offset)        const { return (void*)&((char*)this)[offset]; }
 @@ -222,8 +222,8 @@

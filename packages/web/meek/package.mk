@@ -1,6 +1,6 @@
 
 PKG_NAME="meek"
-PKG_VERSION="0.0.1"
+PKG_VERSION="0.25"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -26,15 +26,20 @@ get_go_arch() {
   esac
 }
 
+unpack() {
+  [ -d $ROOT/$PKG_BUILD/meek-client ] || git clone https://git.torproject.org/pluggable-transports/meek.git $ROOT/$PKG_BUILD
+  cd $ROOT/$PKG_BUILD
+  git checkout $PKG_VERSION
+  cd -
+}
+
 make_target() {
   BIN_GO=$SYSROOT_PREFIX/usr/share/gopath/bin/go
-  [ -d $ROOT/$PKG_BUILD/meek-client ] || git clone https://git.torproject.org/pluggable-transports/meek.git $ROOT/$PKG_BUILD
   cd $ROOT/$PKG_BUILD/meek-client
   export GOHOSTARCH=$(get_go_arch $HOST_NAME)
   export GOARCH=$(get_go_arch $TARGET_NAME)
   export GOPATH=$SYSROOT_PREFIX/usr/share/gopath
   echo "GOPATH=$GOPATH"
-#  $BIN_GO get -v ./...
   $BIN_GO get git.torproject.org/pluggable-transports/goptlib.git
   $BIN_GO build -i -p 1 -v .
   $STRIP meek-client

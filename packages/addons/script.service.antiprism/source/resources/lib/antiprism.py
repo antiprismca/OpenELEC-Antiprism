@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################################################################################
-# Copyright (c) 2014-2015, AntiPrism.ca
+# Copyright (c) 2014-2017, AntiPrism.ca
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are
@@ -92,8 +92,9 @@ if __addon__.getSetting('use_truecrypt') == 'true':
 	TC_ADDON = xbmcaddon.Addon(id='plugin.program.truecrypt')
 	TC_HELPER = os.path.join(TC_ADDON.getAddonInfo('path'), 'bin', 'truecrypt.sh')
 	CRYPTO_HELPER = 'ANTIPRISM=1 ' + TC_HELPER
-OBFSPROXY = "/usr/bin/obfsproxy"
+FTEPROXY = "/bin/fteproxy"
 OBFS4PROXY = "/usr/bin/obfs4proxy"
+I2P_RUN = "@I2P_RUN@"
 
 shellCharsToBeEscaped = ["$", "\"", "\\", "`"]
 def escapeCharsForShell(string):
@@ -286,8 +287,8 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 
 	def backendInit(self):
 		random.seed()
-		if int(__addon__.getSetting('tor_obfs2port')) == -1:
-			__addon__.setSetting('tor_obfs2port', str(random.randint(1024, 65534)))
+		if int(__addon__.getSetting('tor_fteport')) == -1:
+			__addon__.setSetting('tor_fteport', str(random.randint(1024, 65534)))
 		if int(__addon__.getSetting('tor_obfs3port')) == -1:
 			__addon__.setSetting('tor_obfs3port', str(random.randint(1024, 65534)))
 		if int(__addon__.getSetting('tor_obfs4port')) == -1:
@@ -504,7 +505,10 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 		elif controlID == 1100 or controlID == 204:
 			if __addon__.getSetting('enable_privoxy') == 'true':
 				proxy_string = "-http-proxy 127.0.0.1:8118 -https-proxy 127.0.0.1:8118"
-				homepage = "index.html"
+				if __addon__.getSetting('enable_i2p') == 'true':
+					homepage = "index.html"
+				else:
+					homepage = "index2.html"
 			elif __addon__.getSetting('enable_tor') == 'true':
 				proxy_string = "-socks-proxy 127.0.0.1:" + __addon__.getSetting('tor_socksport')
 				homepage = "index2.html"
@@ -601,7 +605,10 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 			tor_path = __addon__.getSetting('mountpoint')
 			if __addon__.getSetting('use_ram') == "true":
 				tor_path = "/var/run"
-			cmd = "PROFILE_PATH=\"" + tor_path + "\" /usr/bin/tor & "
+			cmd = "HOME=\"" + __addon__.getSetting("mountpoint") + "\" PROFILE_PATH=\"" + tor_path + "\" /usr/bin/tor"
+			if __addon__.getSetting('logging') == "true":
+				cmd += (" >" + tor_path + "/tor.err.log 2>&1")
+			cmd += " & "
 			return subprocess.call(cmd, shell=True)
 		except:
 			return -1
@@ -717,7 +724,7 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 				i2p_path = __addon__.getSetting('mountpoint')
 				if __addon__.getSetting('use_ram') == "true":
 					i2p_path = "/var/run"
-				returnCode = subprocess.call("I2PCONFIG=\"" + i2p_path  + "\" I2PTEMP=\"" + i2p_path + "\"" + use_proxy + use_log + " i2p-runplain", shell=True)
+				returnCode = subprocess.call("I2PCONFIG=\"" + i2p_path  + "\" I2PTEMP=\"" + i2p_path + "\"" + use_proxy + use_log + " " + I2P_RUN, shell=True)
 				if returnCode != 0:
 					err = err + "\n" + T(32029)
 
@@ -754,10 +761,13 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 		subprocess.call("killall privoxy && while pidof privoxy ; do sleep 1; killall -g privoxy; done; sync", shell=True)
 		subprocess.call("killall tor && while pidof tor ; do sleep 1; killall -g tor; done; sync", shell=True)
 		subprocess.call("killall java && while pidof java ; do sleep 1; killall -g java; done; sync", shell=True)
+		# subprocess.call("killall i2pd && while pidof i2pd ; do sleep 1; killall -g i2pd; done; sync", shell=True)
 		subprocess.call("killall openvpn && while pidof openvpn ; do sleep 1; killall -g openvpn; done; sync", shell=True)
 		subprocess.call("killall hiawatha && while pidof hiawatha ; do sleep 1; killall -g hiawatha; done; sync", shell=True)
 		clearDirFiles(__addon__.getSetting('mountpoint') + "/i2p/i2p*.tmp")
-		subprocess.call("cat /tmp/resolv.conf.bkp > /etc/resolv.conf", shell=True)
+
+		if os.path.exists("/tmp/resolv.conf.bkp"):
+			subprocess.call("cat /tmp/resolv.conf.bkp > /etc/resolv.conf", shell=True)
 
 		# Unmount
 		rules =  "-F\\n"
@@ -797,24 +807,52 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 		rules = ""
 		rules += "SocksPort 0.0.0.0:" + __addon__.getSetting('tor_socksport') + "\\n"
 		if __addon__.getSetting('tor_usebridges') == "true":
+			rules += "UseBridges 1\\n"
 			if __addon__.getSetting('tor_usemeekbridge') == "true":
 				# use Meek transport
-				rules += "UseBridges 1\\n"
-				rules += "Bridge meek 0.0.2.0:1 url=https://meek-reflect.appspot.com/ front=www.google.com\\n"
-				rules += "Bridge meek 0.0.2.0:2 url=https://d2zfqthxsdq309.cloudfront.net/ front=a0.awsstatic.com\\n"
-				rules += "Bridge meek 0.0.2.0:3 url=https://az668014.vo.msecnd.net/ front=ajax.aspnetcdn.com\\n"
-				rules += "ClientTransportPlugin meek exec /usr/bin/meek-client"
+				rules += "Bridge meek 0.0.2.0:2 B9E7141C594AF25699E0079C1F0146F409495296 url=https://d2zfqthxsdq309.cloudfront.net/ front=a0.awsstatic.com\\n"
+				rules += "Bridge meek 0.0.2.0:3 A2C13B7DFCAB1CBF3A884B6EB99A98067AB6EF44 url=https://az786092.vo.msecnd.net/ front=ajax.aspnetcdn.com\\n"
+				rules += "ClientTransportPlugin meek exec /usr/bin/meek-client --resolvconf /tmp/resolv.conf.bkp"
 				if __addon__.getSetting('logging') == "true":
 					rules += " --log " + __addon__.getSetting('mountpoint') + "/meek-client.log"
 				rules += "\\n"
 			else:
+				if __addon__.getSetting('tor_useftebridge') == "true":
+					rules += "ClientTransportPlugin fte exec " + FTEPROXY + " --managed\\n"
+					rules += "Bridge fte 131.252.210.150:8080 0E858AC201BF0F3FA3C462F64844CBFFC7297A42\\n"
+					rules += "Bridge fte 128.105.214.161:8080 1E326AAFB3FCB515015250D8FCCC8E37F91A153B\\n"
+					rules += "Bridge fte 128.105.214.162:8080 FC562097E1951DCC41B7D7F324D88157119BB56D\\n"
+					rules += "Bridge fte 128.105.214.163:8080 A17A40775FBD2CA1184BF80BFC330A77ECF9D0E9\\n"
+				else: 
+					rules += "ClientTransportPlugin obfs3,obfs4 exec " + OBFS4PROXY
+					if __addon__.getSetting('logging') == "true":
+						rules += " -enableLogging"		
+					rules += "\\n"
+					rules += "Bridge obfs4 154.35.22.10:9332 8FB9F4319E89E5C6223052AA525A192AFBC85D55 cert=GGGS1TX4R81m3r0HBl79wKy1OtPPNR2CZUIrHjkRg65Vc2VR8fOyo64f9kmT1UAFG7j0HQ iat-mode=0\\n"
+					rules += "Bridge obfs4 198.245.60.50:443 752CF7825B3B9EA6A98C83AC41F7099D67007EA5 cert=xpmQtKUqQ/6v5X7ijgYE/f03+l2/EuQ1dexjyUhh16wQlu/cpXUGalmhDIlhuiQPNEKmKw iat-mode=0\\n"
+					rules += "Bridge obfs4 192.99.11.54:443 7B126FAB960E5AC6A629C729434FF84FB5074EC2 cert=VW5f8+IBUWpPFxF+rsiVy2wXkyTQG7vEd+rHeN2jV5LIDNu8wMNEOqZXPwHdwMVEBdqXEw iat-mode=0\\n"
+					rules += "Bridge obfs4 109.105.109.165:10527 8DFCD8FB3285E855F5A55EDDA35696C743ABFC4E cert=Bvg/itxeL4TWKLP6N1MaQzSOC6tcRIBv6q57DYAZc3b2AzuM+/TfB7mqTFEfXILCjEwzVA iat-mode=0\\n"
+					rules += "Bridge obfs4 83.212.101.3:50001 A09D536DD1752D542E1FBB3C9CE4449D51298239 cert=lPRQ/MXdD1t5SRZ9MquYQNT9m5DV757jtdXdlePmRCudUU9CFUOX1Tm7/meFSyPOsud7Cw iat-mode=0\\n"
+					rules += "Bridge obfs4 109.105.109.147:13764 BBB28DF0F201E706BE564EFE690FE9577DD8386D cert=KfMQN/tNMFdda61hMgpiMI7pbwU1T+wxjTulYnfw+4sgvG0zSH7N7fwT10BI8MUdAD7iJA iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.11:7920 A832D176ECD5C7C6B58825AE22FC4C90FA249637 cert=YPbQqXPiqTUBfjGFLpm9JYEFTBvnzEJDKJxXG5Sxzrr/v2qrhGU4Jls9lHjLAhqpXaEfZw iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.12:80 00DC6C4FA49A65BD1472993CF6730D54F11E0DBB cert=N86E9hKXXXVz6G7w2z8wFfhIDztDAzZ/3poxVePHEYjbKDWzjkRDccFMAnhK75fc65pYSg iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.10:80 8FB9F4319E89E5C6223052AA525A192AFBC85D55 cert=GGGS1TX4R81m3r0HBl79wKy1OtPPNR2CZUIrHjkRg65Vc2VR8fOyo64f9kmT1UAFG7j0HQ iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.10:443 8FB9F4319E89E5C6223052AA525A192AFBC85D55 cert=GGGS1TX4R81m3r0HBl79wKy1OtPPNR2CZUIrHjkRg65Vc2VR8fOyo64f9kmT1UAFG7j0HQ iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.11:443 A832D176ECD5C7C6B58825AE22FC4C90FA249637 cert=YPbQqXPiqTUBfjGFLpm9JYEFTBvnzEJDKJxXG5Sxzrr/v2qrhGU4Jls9lHjLAhqpXaEfZw iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.11:80 A832D176ECD5C7C6B58825AE22FC4C90FA249637 cert=YPbQqXPiqTUBfjGFLpm9JYEFTBvnzEJDKJxXG5Sxzrr/v2qrhGU4Jls9lHjLAhqpXaEfZw iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.9:7013 C73ADBAC8ADFDBF0FC0F3F4E8091C0107D093716 cert=gEGKc5WN/bSjFa6UkG9hOcft1tuK+cV8hbZ0H6cqXiMPLqSbCh2Q3PHe5OOr6oMVORhoJA iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.9:80 C73ADBAC8ADFDBF0FC0F3F4E8091C0107D093716 cert=gEGKc5WN/bSjFa6UkG9hOcft1tuK+cV8hbZ0H6cqXiMPLqSbCh2Q3PHe5OOr6oMVORhoJA iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.9:443 C73ADBAC8ADFDBF0FC0F3F4E8091C0107D093716 cert=gEGKc5WN/bSjFa6UkG9hOcft1tuK+cV8hbZ0H6cqXiMPLqSbCh2Q3PHe5OOr6oMVORhoJA iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.12:4148 00DC6C4FA49A65BD1472993CF6730D54F11E0DBB cert=N86E9hKXXXVz6G7w2z8wFfhIDztDAzZ/3poxVePHEYjbKDWzjkRDccFMAnhK75fc65pYSg iat-mode=0\\n"
+					rules += "Bridge obfs4 154.35.22.13:6041 FE7840FE1E21FE0A0639ED176EDA00A3ECA1E34D cert=fKnzxr+m+jWXXQGCaXe4f2gGoPXMzbL+bTBbXMYXuK0tMotd+nXyS33y2mONZWU29l81CA iat-mode=0\\n"
+					rules += "Bridge obfs4 192.95.36.142:443 CDF2E852BF539B82BD10E27E9115A31734E378C2 cert=qUVQ0srL1JI/vO6V6m/24anYXiJD3QP2HgzUKQtQ7GRqqUvs7P+tG43RtAqdhLOALP7DJQ iat-mode=0\\n"
+					rules += "Bridge obfs3 83.212.101.3:80 A09D536DD1752D542E1FBB3C9CE4449D51298239\\n"
+					rules += "Bridge obfs3 169.229.59.74:31493 AF9F66B7B04F8FF6F32D455F05135250A16543C9\\n"
+					rules += "Bridge obfs3 169.229.59.75:46328 AF9F66B7B04F8FF6F32D455F05135250A16543C9\\n"
+					rules += "Bridge obfs3 109.105.109.163:38980 1E05F577A0EC0213F971D81BF4D86A9E4E8229ED\\n"
+					rules += "Bridge obfs3 109.105.109.163:47779 4C331FA9B3D1D6D8FB0D8FBBF0C259C360D97E6A\\n"
 				bridges = __addon__.getSetting('tor_bridges')
 				if bridges != "":
-					rules += "UseBridges 1\\n"
-					if __addon__.getSetting('tor_useobfs4bridge') == "true": 
-						rules += "ClientTransportPlugin obfs2,obfs3,obfs4 exec " + OBFS4PROXY + "\\n"
-					else:
-						rules += "ClientTransportPlugin obfs2,obfs3 exec " + OBFSPROXY + " --managed\\n"
 					for b in bridges.split(","):
 						rules += ("Bridge " + b + "\\n")
 	
@@ -823,26 +861,24 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 				rules += "BridgeRelay 1\\n"
 			rules += "ORPort " + __addon__.getSetting('tor_orport') + "\\n"
 			rules += "ORListenAddress 0.0.0.0:" + __addon__.getSetting('tor_orlistenport') + "\\n"
-			if __addon__.getSetting('tor_obfsproxy') == "true":
+			if __addon__.getSetting('tor_obfs4proxy') == "true":
 				transport = ""
-				if __addon__.getSetting('tor_obfs2on') == "true":
-					transport += "obfs2"
-					rules += "ServerTransportListenAddr obfs2 0.0.0.0:" + __addon__.getSetting('tor_obfs2port') + "\\n"
 				if __addon__.getSetting('tor_obfs3on') == "true":
-					if transport != "":
-						transport += ","
-					transport += "obfs3"
+					transport = "obfs3"
 					rules += "ServerTransportListenAddr obfs3 0.0.0.0:" + __addon__.getSetting('tor_obfs3port') + "\\n"
-				if __addon__.getSetting('tor_obfs4on') == "true" and __addon__.getSetting('tor_obfs4proxy') == "true":
+				if __addon__.getSetting('tor_obfs4on') == "true":
 					if transport != "":
 						transport += ","
 					transport += "obfs4"
 					rules += "ServerTransportListenAddr obfs4 0.0.0.0:" + __addon__.getSetting('tor_obfs4port') + "\\n"
 				if transport != "":
-					if __addon__.getSetting('tor_obfsproxy') == "true":
-						rules += "ServerTransportPlugin " + transport + " exec " + OBFSPROXY + " --managed\\n"
-					else:
-						rules += "ServerTransportPlugin " + transport + " exec " + OBFS4PROXY + " --managed\\n"
+					rules += "ServerTransportPlugin " + transport + " exec " + OBFS4PROXY
+					if __addon__.getSetting('logging') == "true":
+						rules += " -enableLogging"	 
+					rules += "\\n"
+			if __addon__.getSetting('tor_fteproxy') == "true":
+				rules += "ServerTransportListenAddr fte 0.0.0.0:" + __addon__.getSetting('tor_fteport') + "\\n"
+				rules += "ServerTransportPlugin fte exec " + FTEPROXY + " --mode server --managed\\n"
 		rules += "ExitPolicy reject *:*\\n"
 		if __addon__.getSetting('tor_entrynodes'):
 			rules += "EntryNodes " + __addon__.getSetting('tor_entrynodes') + "\\n"
@@ -897,9 +933,7 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 		if __addon__.getSetting('enable_tor') == "true":
 			rules += "-A INPUT -m state --state NEW -m tcp -p tcp --dport " + __addon__.getSetting('tor_orport') + " -j ACCEPT\\n"
 			rules += "-A INPUT -m state --state NEW -m tcp -p tcp --dport " + __addon__.getSetting('tor_socksport') + " " + src + " -j ACCEPT\\n"
-			if __addon__.getSetting('tor_obfsproxy') == "true":
-				if __addon__.getSetting('tor_obfs2on') == "true":
-					rules += "-A INPUT -m state --state NEW -m tcp -p tcp --dport " + __addon__.getSetting('tor_obfs2port') + " -j ACCEPT\\n"
+			if __addon__.getSetting('tor_obfs4proxy') == "true":
 				if __addon__.getSetting('tor_obfs3on') == "true":
 					rules += "-A INPUT -m state --state NEW -m tcp -p tcp --dport " + __addon__.getSetting('tor_obfs3port') + " -j ACCEPT\\n"
 				if __addon__.getSetting('tor_obfs4on') == "true" and __addon__.getSetting('tor_obfs4proxy') == "true":
@@ -913,6 +947,8 @@ class AntiPrismWindow(xbmcgui.WindowXML):
 				rules += "-A OUTPUT -t nat -o lo -j RETURN\\n"
 				rules += "-A OUTPUT -t nat -m owner --gid-owner 990 -j RETURN\\n"
 				rules += "-A OUTPUT -t nat -p udp --dport 53 -j REDIRECT --to-ports 53\\n"
+				rules += "-A OUTPUT -t nat -d 10.192.0.0/10 -p tcp -j REDIRECT --to-ports 9040\\n"
+				rules += "-A PREROUTING -t nat -i " + __addon__.getSetting('tor_routefrom') + " -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040\\n"
 				for clearnet in non_tor:
 					rules += "-A OUTPUT -t nat -d " + clearnet + " -j RETURN\\n"
 					rules += "-A PREROUTING -t nat -i " + __addon__.getSetting('tor_routefrom') + " -d " + clearnet + " -j RETURN\\n"

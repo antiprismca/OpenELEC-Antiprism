@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="tor"
-PKG_VERSION="0.2.6.10"
+PKG_VERSION="0.2.9.8"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
@@ -34,7 +34,8 @@ PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_TARGET="\
               --enable-upnp \
-              --enable-libevent"
+              --enable-libevent \
+              --disable-gcc-hardening"
 
 post_install() {
   add_user tor x 990 990 "Tor Server" "/storage" "/bin/sh"

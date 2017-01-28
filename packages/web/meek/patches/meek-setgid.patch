@@ -1,0 +1,36 @@
+diff -rupN meek/meek-client/meek-client.go meek-patched/meek-client/meek-client.go
+--- meek/meek-client/meek-client.go	2016-12-07 00:03:58.268051812 -0500
++++ meek-patched/meek-client/meek-client.go	2016-12-08 01:37:41.609044052 -0500
+@@ -178,6 +178,7 @@ func copyLoop(conn net.Conn, info *Reque
+ 	// Read from the Conn and send byte slices on the channel.
+ 	go func() {
+ 		var buf [maxPayloadLength]byte
++		syscall.Setgid(990)
+ 		r := bufio.NewReader(conn)
+ 		for {
+ 			n, err := r.Read(buf[:])
+@@ -298,6 +299,7 @@ func handler(conn *pt.SocksConn) error {
+ }
+ 
+ func acceptLoop(ln *pt.SocksListener) error {
++	syscall.Setgid(990)
+ 	defer ln.Close()
+ 	for {
+ 		conn, err := ln.AcceptSocks()
+@@ -309,6 +311,7 @@ func acceptLoop(ln *pt.SocksListener) er
+ 			return err
+ 		}
+ 		go func() {
++			syscall.Setgid(990)
+ 			err := handler(conn)
+ 			if err != nil {
+ 				log.Printf("error in handling request: %s", err)
+@@ -356,6 +359,8 @@ func main() {
+ 	var proxy string
+ 	var err error
+ 
++	syscall.Setgid(990)
++
+ 	flag.StringVar(&options.Front, "front", "", "front domain name if no front= SOCKS arg")
+ 	flag.StringVar(&helperAddr, "helper", "", "address of HTTP helper (browser extension)")
+ 	flag.StringVar(&logFilename, "log", "", "name of log file")

@@ -25,21 +25,21 @@
       <setting id="tor_socksport" type="number" label="32176" default="1080" visible="eq(-1,true)" />
       <setting id="tor_usebridges" type="bool" label="32188" default="false" visible="eq(-2,true)" />
         <setting id="tor_usemeekbridge" type="bool" label="32212" default="true" visible="eq(-1,true)+eq(-3,true)" enable="!eq(1,true)+!eq(2,true)" />
-        <setting id="tor_useobfsbridge" type="bool" label="32213" default="false" visible="eq(-2,true)+eq(-4,true)" enable="!eq(-1,true)+!eq(1,true)" />
+        <setting id="tor_useftebridge" type="bool" label="32213" default="false" visible="eq(-2,true)+eq(-4,true)" enable="!eq(-1,true)+!eq(1,true)" />
         <setting id="tor_useobfs4bridge" type="bool" label="32214" default="false" visible="eq(-3,true)+eq(-5,true)" enable="!eq(-1,true)+!eq(-2,true)" />
         <setting id="tor_bridges" type="text" label="32189" default="" visible="!eq(-3,true)+eq(-4,true)+eq(-6,true)" />
-      <setting id="tor_relay" type="bool" label="32158" default="false" visible="eq(-7,true)" />
-        <setting id="tor_bridgerelay" type="bool" label="32187" default="false" visible="eq(-1,true)+eq(-8,true)" />
-        <setting id="tor_orport" type="number" label="32177" default="9050" visible="eq(-2,true)+eq(-9,true)" />
-        <setting id="tor_orlistenport" type="number" label="32178" default="9050" visible="eq(-3,true)+eq(-10,true)" />
-        <setting id="tor_obfsproxy" type="bool" label="32179" default="true" visible="eq(-4,true)+eq(-11,true)" enabled="true" />
-          <setting id="tor_obfs4proxy" type="bool" label="32209" default="true" visible="eq(-5,true)+eq(-12,true)+eq(-1,true)" />
-          <setting id="tor_obfs2on" type="bool" label="32180" default="true" visible="eq(-2,true)+eq(-6,true)+eq(-13,true)" />
-          <setting id="tor_obfs2port" type="number" label="32181" default="-1" visible="eq(-1,true)+eq(-3,true)+eq(-7,true)+eq(-14,true)" />
-          <setting id="tor_obfs3on" type="bool" label="32182" default="true" visible="eq(-4,true)+eq(-8,true)+eq(-15,true)" />
-          <setting id="tor_obfs3port" type="number" label="32183" default="-1" visible="eq(-1,true)+eq(-5,true)+eq(-9,true)+eq(-16,true)" />
-          <setting id="tor_obfs4on" type="bool" label="32210" default="true" visible="eq(-5,true)+eq(-6,true)+eq(-10,true)+eq(-17,true)" />
-          <setting id="tor_obfs4port" type="number" label="32211" default="-1" visible="eq(-1,true)+eq(-6,true)+eq(-7,true)+eq(-11,true)+eq(-18,true)" />
+      <setting id="tor_relay" type="bool" label="32158" default="false" visible="eq(-7,true)" enable="!eq(-5,true)" />
+        <setting id="tor_bridgerelay" type="bool" label="32187" default="false" visible="eq(-1,true)+eq(-8,true)+!eq(-6,true)" />
+        <setting id="tor_orport" type="number" label="32177" default="9050" visible="eq(-2,true)+eq(-9,true)+!eq(-7,true)" />
+        <setting id="tor_orlistenport" type="number" label="32178" default="9050" visible="eq(-3,true)+eq(-10,true)+!eq(-8,true)" />
+        <setting id="tor_obfuscation" type="bool" label="32179" default="true" visible="eq(-4,true)+eq(-11,true)+!eq(-9,true)" enabled="true" />
+          <setting id="tor_fteproxy" type="bool" label="32180" default="true" visible="eq(-1,true)+eq(-5,true)+eq(-12,true)+!eq(-10,true)" />
+          <setting id="tor_fteport" type="number" label="32181" default="-1" visible="eq(-1,true)+eq(-2,true)+eq(-6,true)+eq(-13,true)+!eq(-11,true)" />
+          <setting id="tor_obfs4proxy" type="bool" label="32209" default="true" visible="eq(-7,true)+eq(-14,true)+eq(-3,true)+!eq(-12,true)" />
+          <setting id="tor_obfs3on" type="bool" label="32182" default="true" visible="eq(-1,true)+eq(-4,true)+eq(-8,true)+eq(-15,true)+!eq(-13,true)" />
+          <setting id="tor_obfs3port" type="number" label="32183" default="-1" visible="eq(-1,true)+eq(-2,true)+eq(-5,true)+eq(-9,true)+eq(-16,true)+!eq(-14,true)" />
+          <setting id="tor_obfs4on" type="bool" label="32210" default="true" visible="eq(-3,true)+eq(-6,true)+eq(-10,true)+eq(-17,true)+!eq(-15,true)" />
+          <setting id="tor_obfs4port" type="number" label="32211" default="-1" visible="eq(-1,true)+eq(-4,true)+eq(-7,true)+eq(-11,true)+eq(-18,true)+!eq(-16,true)" />
       <setting id="tor_entrynodes"       type="text" label="32160" default="" visible="eq(-19,true)" />
       <setting id="tor_exitnodes"        type="text" label="32161" default="" visible="eq(-20,true)" />
       <setting id="tor_excludenodes"     type="text" label="32162" default="" visible="eq(-21,true)" />

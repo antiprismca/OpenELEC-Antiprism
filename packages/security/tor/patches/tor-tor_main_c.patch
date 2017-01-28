@@ -1,5 +1,5 @@
---- tor-0.2.5.10/src/or/tor_main.c	2015-04-03 19:47:59.550643128 -0400
-+++ tor-0.2.5.10.patch/src/or/tor_main.c	2015-04-03 19:49:45.846641109 -0400
+--- tor-0.2.8.8/src/or/tor_main.c	2015-04-03 19:47:59.550643128 -0400
++++ tor-0.2.8.8.patch/src/or/tor_main.c	2015-04-03 19:49:45.846641109 -0400
 @@ -3,6 +3,9 @@
   * Copyright (c) 2007-2013, The Tor Project, Inc. */
  /* See LICENSE for licensing information */
@@ -15,6 +15,6 @@
  main(int argc, char *argv[])
  {
 +  setgid(990);
-   return tor_main(argc, argv);
- }
- 
+   int r = tor_main(argc, argv);
+   if (r < 0 || r > 255)
+     return 1;

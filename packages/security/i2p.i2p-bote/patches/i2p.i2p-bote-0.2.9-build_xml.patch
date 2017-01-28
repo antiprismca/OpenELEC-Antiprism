@@ -1,14 +1,16 @@
---- i2p.i2p-bote-0.2.9/build.xml	2014-04-12 20:23:04.905378961 -0400
-+++ i2p.i2p-bote-0.2.9.patch/build.xml	2014-04-12 20:25:52.113373248 -0400
-@@ -5,7 +5,7 @@
+--- i2p.i2p-bote-0.4/build.xml	2015-08-20 22:20:25.000000000 -0400
++++ i2p.i2p-bote-0.4/build.xml	2016-11-27 16:27:41.031332525 -0500
+@@ -5,8 +5,8 @@
          <isset property="env.I2P"/>
      </condition>
  
 -    <property name="i2plib" value="${i2pbase}/lib"/>
+-    <property name="jstllib" value="${i2pbase}/apps/susidns/src/WEB-INF/lib"/>
 +    <property name="i2plib" value="${i2pbase}/build"/>
-     <property name="jstllib" value="${i2pbase}/apps/susidns/src/WEB-INF/lib"/>
-     <property name="lib" value="WebContent/WEB-INF/lib"/>
++    <property name="jstllib" value="${i2pbase}/apps/susidns/src/lib"/>
+     <property name="lib" value="lib"/>
      <property name="makeplugin" value="../i2p.scripts/plugin/makeplugin.sh"/>
+     
 @@ -105,8 +105,8 @@
          <pathelement location="${i2plib}/javax.servlet.jar" />
          <pathelement location="${i2plib}/commons-logging.jar" />

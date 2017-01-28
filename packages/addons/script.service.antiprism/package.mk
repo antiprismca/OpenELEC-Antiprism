@@ -1,7 +1,7 @@
 
 
 PKG_NAME="script.service.antiprism"
-PKG_VERSION="1.2.24"
+PKG_VERSION="1.2.25"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="BSD"
@@ -28,6 +28,12 @@ makeinstall_target() {
   mkdir -p $INSTALL/usr/share/xbmc/addons/$PKG_NAME
   mkdir -p $INSTALL/usr/share/xbmc/addons/$PKG_NAME/bin
   cp -R $PKG_DIR/source/* $INSTALL/usr/share/xbmc/addons/$PKG_NAME
+
+  if [ "$TARGET_ARCH" = "arm" ]; then
+    sed -ie 's/@I2P_RUN@/i2pd-run/g' $INSTALL/usr/share/xbmc/addons/$PKG_NAME/resources/lib/antiprism.py
+  else
+    sed -ie 's/@I2P_RUN@/i2p-runplain/g' $INSTALL/usr/share/xbmc/addons/$PKG_NAME/resources/lib/antiprism.py
+  fi
 
   python -Wi -t -B $ROOT/$TOOLCHAIN/lib/python2.7/compileall.py $INSTALL/usr/share/xbmc/addons/$PKG_NAME/resources/lib/ -f
   rm -rf `find $INSTALL/usr/share/xbmc/addons/$PKG_NAME/resources/lib/ -name "*.py"`

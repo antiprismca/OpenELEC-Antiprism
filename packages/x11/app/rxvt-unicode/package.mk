@@ -1,6 +1,6 @@
 
 PKG_NAME="rxvt-unicode"
-PKG_VERSION="9.21"
+PKG_VERSION="9.22"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

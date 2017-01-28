@@ -1,0 +1,78 @@
+diff -rupN go/src/syscall/syscall_linux_386.go go-patched/src/syscall/syscall_linux_386.go
+--- go/src/syscall/syscall_linux_386.go	2016-12-10 18:45:20.139572097 -0500
++++ go-patched/src/syscall/syscall_linux_386.go	2016-12-10 22:39:42.211723721 -0500
+@@ -68,7 +68,9 @@ func Pipe2(p []int, flags int) (err erro
+ //sysnb	Getegid() (egid int) = SYS_GETEGID32
+ //sysnb	Geteuid() (euid int) = SYS_GETEUID32
+ //sysnb	Getgid() (gid int) = SYS_GETGID32
++//sys	Setgid(gid int) (err error) = SYS_SETGID32
+ //sysnb	Getuid() (uid int) = SYS_GETUID32
++//sys	Setuid(uid int) (err error) = SYS_SETUID32
+ //sysnb	InotifyInit() (fd int, err error)
+ //sys	Ioperm(from int, num int, on int) (err error)
+ //sys	Iopl(level int) (err error)
+diff -rupN go/src/syscall/syscall_linux_amd64.go go-patched/src/syscall/syscall_linux_amd64.go
+--- go/src/syscall/syscall_linux_amd64.go	2016-12-10 18:45:33.691572243 -0500
++++ go-patched/src/syscall/syscall_linux_amd64.go	2016-12-10 22:39:19.135723472 -0500
+@@ -17,8 +17,10 @@ const (
+ //sysnb	Getegid() (egid int)
+ //sysnb	Geteuid() (euid int)
+ //sysnb	Getgid() (gid int)
++//sys	Setgid(gid int) (err error)
+ //sysnb	Getrlimit(resource int, rlim *Rlimit) (err error)
+ //sysnb	Getuid() (uid int)
++//sys	Setuid(uid int) (err error)
+ //sysnb	InotifyInit() (fd int, err error)
+ //sys	Ioperm(from int, num int, on int) (err error)
+ //sys	Iopl(level int) (err error)
+diff -rupN go/src/syscall/syscall_linux_arm64.go go-patched/src/syscall/syscall_linux_arm64.go
+--- go/src/syscall/syscall_linux_arm64.go	2016-12-10 18:46:06.043572592 -0500
++++ go-patched/src/syscall/syscall_linux_arm64.go	2016-12-10 22:41:03.223724594 -0500
+@@ -17,8 +17,10 @@ const (
+ //sysnb	Getegid() (egid int)
+ //sysnb	Geteuid() (euid int)
+ //sysnb	Getgid() (gid int)
++//sys	Setgid(gid int) (err error)
+ //sysnb	Getrlimit(resource int, rlim *Rlimit) (err error)
+ //sysnb	Getuid() (uid int)
++//sys	Setuid(uid int) (err error)
+ //sys	Listen(s int, n int) (err error)
+ //sys	Pread(fd int, p []byte, offset int64) (n int, err error) = SYS_PREAD64
+ //sys	Pwrite(fd int, p []byte, offset int64) (n int, err error) = SYS_PWRITE64
+diff -rupN go/src/syscall/syscall_linux_arm.go go-patched/src/syscall/syscall_linux_arm.go
+--- go/src/syscall/syscall_linux_arm.go	2016-12-10 18:45:52.923572450 -0500
++++ go-patched/src/syscall/syscall_linux_arm.go	2016-12-10 22:40:17.135724097 -0500
+@@ -89,7 +89,9 @@ func Seek(fd int, offset int64, whence i
+ //sysnb	Getegid() (egid int) = SYS_GETEGID32
+ //sysnb	Geteuid() (euid int) = SYS_GETEUID32
+ //sysnb	Getgid() (gid int) = SYS_GETGID32
++//sys	Setgid(gid int) (err error) = SYS_SETGID32
+ //sysnb	Getuid() (uid int) = SYS_GETUID32
++//sys	Setuid(uid int) (err error) = SYS_SETUID32
+ //sysnb	InotifyInit() (fd int, err error)
+ //sys	Lchown(path string, uid int, gid int) (err error) = SYS_LCHOWN32
+ //sys	Listen(s int, n int) (err error)
+diff -rupN go/src/syscall/syscall_linux.go go-patched/src/syscall/syscall_linux.go
+--- go/src/syscall/syscall_linux.go	2016-12-08 01:27:05.977037199 -0500
++++ go-patched/src/syscall/syscall_linux.go	2016-12-10 18:46:42.975572990 -0500
+@@ -871,20 +871,6 @@ func Getpgrp() (pid int) {
+ //sysnb	Setpgid(pid int, pgid int) (err error)
+ //sysnb	Setsid() (pid int, err error)
+ //sysnb	Settimeofday(tv *Timeval) (err error)
+-
+-// issue 1435.
+-// On linux Setuid and Setgid only affects the current thread, not the process.
+-// This does not match what most callers expect so we must return an error
+-// here rather than letting the caller think that the call succeeded.
+-
+-func Setuid(uid int) (err error) {
+-	return EOPNOTSUPP
+-}
+-
+-func Setgid(gid int) (err error) {
+-	return EOPNOTSUPP
+-}
+-
+ //sys	Setpriority(which int, who int, prio int) (err error)
+ //sys	Setxattr(path string, attr string, data []byte, flags int) (err error)
+ //sys	Sync()

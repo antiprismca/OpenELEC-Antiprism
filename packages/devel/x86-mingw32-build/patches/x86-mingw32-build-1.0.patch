@@ -67,11 +67,15 @@
       option GCC_JAVA_BASE_OPTIONS       --disable-libgcj-debug
       option GCC_JAVA_BASE_OPTIONS       --disable-java-awt
       option GCC_JAVA_BASE_OPTIONS       --enable-java-gc=boehm
-@@ -138,11 +138,13 @@
+@@ -138,11 +138,17 @@
  #
       option CFLAGS_FOR_BINUTILS          -O2
       option CFLAGS_FOR_BINUTILS          -fno-exceptions
 +     option CFLAGS_FOR_BINUTILS          -Wno-error=unused-but-set-variable
++     option CFLAGS_FOR_BINUTILS          -Wno-error=unused-but-set-parameter
++     option CFLAGS_FOR_BINUTILS          -Wno-error=unused-value
++     option CFLAGS_FOR_BINUTILS          -Wno-error=unused-function
++     option CFLAGS_FOR_BINUTILS          -Wno-error=maybe-uninitialized
  #
       option LDFLAGS_FOR_BINUTILS         -s
  #

@@ -1,13 +1,13 @@
---- links-2.8/os_dep.c	2014-09-03 00:03:11.530225591 -0400
-+++ links-2.8-patched/os_dep.c	2014-09-03 01:14:29.330109410 -0400
-@@ -2676,19 +2676,7 @@ int can_resize_window(struct terminal *t
+--- links-2.12/os_dep.c	2015-12-08 22:39:27.089957431 -0500
++++ links-2.12.patched/os_dep.c	2015-12-08 22:41:34.069953984 -0500
+@@ -2949,19 +2949,7 @@ int can_resize_window(struct terminal *t
  
  int can_open_os_shell(int environment)
  {
 -#ifdef OS2
 -	if (environment & ENV_XWIN) return 0;
 -#endif
--#ifdef WIN32
+-#ifdef WIN
 -	if (!F && !(environment & ENV_WIN32)) return 0;
 -#endif
 -#ifdef BEOS

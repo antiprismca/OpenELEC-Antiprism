@@ -1,0 +1,23 @@
+--- meek-0.25/meek-client/meek-client.go	2016-12-18 20:14:07.276866766 -0500
++++ meek-0.25/meek-client/meek-client.go	2016-12-18 20:17:24.028866742 -0500
+@@ -358,6 +358,7 @@
+ 	var logFilename string
+ 	var proxy string
+ 	var err error
++	var resolvConf string
+ 
+ 	syscall.Setgid(990)
+ 
+@@ -366,8 +367,12 @@
+ 	flag.StringVar(&logFilename, "log", "", "name of log file")
+ 	flag.StringVar(&proxy, "proxy", "", "proxy URL")
+ 	flag.StringVar(&options.URL, "url", "", "URL to request if no url= SOCKS arg")
++	flag.StringVar(&resolvConf, "resolvconf", "", "use this file instead of /etc/resolv.conf")
+ 	flag.Parse()
+ 
++	if resolvConf != "" {
++		net.OverrideResolvConfPath = resolvConf
++	}
+ 	if logFilename != "" {
+ 		f, err := os.OpenFile(logFilename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
+ 		if err != nil {

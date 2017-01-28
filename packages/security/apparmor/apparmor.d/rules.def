@@ -8,7 +8,7 @@
 /** Px -> common,
 
 [deny-all]
-%include = flash-mount-point,i2p-all-files,tor-files,exchange-files,links-files,gnupg-files,openvpn-files,ssh-files,v4l2grab-files
+%include = flash-mount-point,i2p-all-files,i2pd-files,tor-files,exchange-files,links-files,gnupg-files,openvpn-files,ssh-files,v4l2grab-files
 
 [flash-mount-point]
 audit deny /flash/* wkl,
@@ -32,6 +32,11 @@ audit deny /**/i2p/router.config wkl,
 
 [i2p-all-files]
 %include=i2p-all-but-site-files,i2pbote-profile-files,i2p-router-config-file,i2p-site-files
+
+[i2pd-files]
+audit deny /**/.i2pd/{addressbook,peerProfiles,netDb,destinations}/  mrwkl,
+audit deny /**/.i2pd/{addressbook,peerProfiles,netDb,destinations}/**  mrwkl,
+audit deny /**/.i2pd/{i2pd.pid,router.keys,i2pd.log,router.info,tunnels.cfg,tunnels.conf,privKeys.dat}  mrwkl,
 
 [tor-torrc-file]
 audit deny /**/.torrc mrwkl,

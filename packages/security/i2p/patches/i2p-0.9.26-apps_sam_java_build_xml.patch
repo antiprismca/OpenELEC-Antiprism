@@ -1,0 +1,11 @@
+--- i2p-0.9.28/apps/sam/java/build.xml	2017-01-02 11:43:35.175549405 -0500
++++ i2p-0.9.28/apps/sam/java/build.xml	2017-01-02 11:47:00.963553269 -0500
+@@ -22,7 +22,7 @@
+         </depend>
+     </target>
+ 
+-    <property name="javac.compilerargs7" value="" />
++    <property name="javac.compilerargs7" value="-encoding utf8" />
+     <property name="javac.version" value="1.7" />
+ 
+     <!-- compile everything including client classes -->

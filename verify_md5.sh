@@ -7,7 +7,7 @@ if ! [ -f "$VERIFY_LIST" ]; then
   echo "# Created: `date`" > "$VERIFY_LIST"
   echo "# Confirm the md5 are correct!" >> "$VERIFY_LIST"
   echo "#" >> "$VERIFY_LIST"
-  if find sources/ -name *.md5 | while read f; do cat "$f" >> "$VERIFY_LIST"; done; then
+  if find sources/ -name '*.md5' | while read f; do cat "$f" >> "$VERIFY_LIST"; done; then
     echo "`md5sum \"$VERIFY_LIST\"`" > "$VERIFY_LIST.md5"
     chmod a-w "$VERIFY_LIST"
     chmod a-w "$VERIFY_LIST.md5"
@@ -46,7 +46,7 @@ done
 
 echo -n "Updating $VERIFY_LIST..."
 rm -f "$VERIFY_LIST.tmp" 2>/dev/null
-find sources/ -name *.md5 | while read f; do \
+find sources/ -name '*.md5' | while read f; do \
   if ! grep "$f" "$VERIFY_LIST"; then \
     cat "$f" >> "$VERIFY_LIST.tmp"; \
   fi; \

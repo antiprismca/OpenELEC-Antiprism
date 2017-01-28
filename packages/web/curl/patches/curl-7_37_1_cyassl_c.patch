@@ -1,0 +1,12 @@
+--- curl-7.37.1/lib/vtls/cyassl.c	2016-09-25 21:12:23.751517213 -0400
++++ curl-7.37.1.patch/lib/vtls/cyassl.c	2016-09-25 21:15:19.947514193 -0400
+@@ -117,8 +117,7 @@
+     req_method = TLSv1_2_client_method();
+     break;
+   case CURL_SSLVERSION_SSLv3:
+-    req_method = SSLv3_client_method();
+-    break;
++    return CURLE_SSL_CONNECT_ERROR;
+   default:
+     req_method = TLSv1_client_method();
+   }

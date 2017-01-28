@@ -63,6 +63,7 @@ mountdrive() {
 		[ -f "$drive/.hiawatha/hiawatha.conf" ] || sed -e "s|\$HOME|$drive|g" /etc/hiawatha/hiawatha.conf.tmpl > "$drive/.hiawatha/hiawatha.conf"
 		[ -f "$drive/.hiawatha/cgi-wrapper.conf" ] || sed -e "s|\$HOME|$drive|g" /etc/hiawatha/cgi-wrapper.conf.tmpl > "$drive/.hiawatha/cgi-wrapper.conf"
 		[ -f "$drive/.hiawatha/mimetype.conf" ] || cp /etc/hiawatha/mimetype.conf "$drive/.hiawatha/mimetype.conf" >&2
+		chmod -R og-rx "$drive/.hiawatha" >&2
 		mkdir -p "$drive/.keys" >&2
 		if [ $? -eq 0 ]; then
 			echo "$pass" | /usr/bin/ecc_key_gen "$drive/.keys/key_file.dat" >&2

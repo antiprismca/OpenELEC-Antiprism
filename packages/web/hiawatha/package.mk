@@ -1,6 +1,6 @@
 
 PKG_NAME="hiawatha"
-PKG_VERSION="9.14"
+PKG_VERSION="10.1"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -33,8 +33,8 @@ post_makeinstall_target() {
   ${TARGET_STRIP} "$INSTALL/usr/sbin/cgi-wrapper"
   ${TARGET_STRIP} "$INSTALL/usr/sbin/hiawatha"
   ${TARGET_STRIP} "$INSTALL/usr/sbin/wigwam"
-  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedtls.so.2.0.0"
-  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedx509.so.2.0.0"
-  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedcrypto.so.2.0.0"
+  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedtls.so.2.2.1"
+  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedx509.so.2.2.1"
+  ${TARGET_STRIP} "$INSTALL/usr/lib/hiawatha/libmbedcrypto.so.2.2.1"
 }
 
